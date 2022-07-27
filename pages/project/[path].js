@@ -1,17 +1,20 @@
-import {
-  StarIcon,
-  WatchIcon,
-  BugIcon,
-  GithubIcon,
-  projectIcons,
-} from '../../components/Icons';
+import { StarIcon, WatchIcon, BugIcon, GithubIcon, projectIcons } from '../../components/Icons';
+import Head from 'next/head';
 import Link from 'next/link';
 import { projects } from '../../utils/projectsData';
 
 function Project({ project }) {
   const Icon = projectIcons[project.id];
+  console.log(project);
   return (
     <div className="project">
+      <Head>
+        <title> {project.name} </title>
+        <meta name="description" content="plain description" />
+        <meta name='og:title' content={"og title from path: " + project.name} />
+        <meta name="og:description" content={"og description from path: " + project.slug} />
+        <meta name="og:image" content={Icon} />
+      </Head>
       <aside>
         <h3>You can deploy...</h3>
         <ul>
@@ -30,6 +33,7 @@ function Project({ project }) {
           </li>
         </ul>
       </aside>
+
       <main>
         <div className="card-big">
           <Icon w={249} h={278} />
@@ -58,14 +62,8 @@ function Project({ project }) {
           </div>
           <p className="description">{project.description}</p>
           <div className="cta">
-            <a
-              className="button-github"
-              href={project.html_url}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <GithubIcon w={24} h={24} />
-              Learn more...
+            <a className="button-github" href={project.html_url} target="_blank" rel="noreferrer" >
+              <GithubIcon w={24} h={24} /> Learn more...
             </a>
           </div>
         </div>
@@ -75,10 +73,10 @@ function Project({ project }) {
 }
 
 export async function getStaticPaths() {
-  const paths = projects.map((project) => ({
+  const paths = projects.map((project) =>
+  ({
     params: { path: project.slug },
-  }));
-
+  }))
   return { paths, fallback: false };
 }
 
