@@ -1,0 +1,30 @@
+/* backgroud color */
+.primary-bg-color {
+    background:  #faa422;
+}
+
+.bg-custom {
+    background: #fefce5;
+}
+
+.bg-white {
+    background: #ffffff;
+}
+
+/* border */
+.border-none {
+    border: none;
+}
+
+.border-radius-4 {
+    border-radius: 4px;
+}
+
+.border-radius-50 {
+    border-radius: 50%;
+}
+
+.border-radius-40 {
+    border-radius: 40px;
+}
+

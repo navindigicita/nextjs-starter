@@ -1,0 +1,27 @@
+.input-field {
+    background: transparent;
+    width: 100%;
+    outline: none;
+    border-color: lightgray;
+    border-width: 1px;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+/* floating text for text box */
+/* input:focus ~ .floating-label-penName,
+input:not(:focus):valid ~ .floating-label-penName{
+    top: 6px;
+    bottom: 20px;
+    left: 20px;
+    font-size: 11px;
+    opacity: 1;
+}
+
+.floating-label-penName {
+    position: absolute;
+    pointer-events: none;
+    left: 24px;
+    top: 28px;
+    transition: 0.2s ease all;
+  } */

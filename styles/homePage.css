@@ -1,0 +1,166 @@
+.vertical-line {
+    border-left: 1px solid lightgray;
+    height: auto;
+}
+
+.card-shadow {
+    border: none;
+    box-shadow: 0px 4px 7px #888888 !important;
+}
+
+.error-msg {
+    color: red;
+    font-weight: 500;
+    font-size: 14px;
+    /* display: block; */
+}
+
+.button-new-publication {
+    border-radius: 4px;
+    background-color: #e98c37;
+    color: #fff;
+    border: none;
+    padding: 5px 20px;
+}
+
+.active div{
+    background-color: #e98c37!important;
+  } 
+
+  .interest-card-bg{
+    background-color: #e98c37!important;
+  } 
+/* thinkly setting card text line height modified in build-in class */
+.line-height-align .MuiTypography-body1 {
+    line-height: 1 !important;
+}
+.line-height-align .MuiTypography-body2 {
+    line-height: 1 !important;
+}
+/* end thinkly setting line height */
+
+.interest-textbox {
+    border-radius: 4px;
+    border: solid 1px #ffa800;
+    background-color: #fff;
+    width: 100%;
+    outline: 0;
+    padding: 2px 8px 2px;
+}
+.bottomline-textbox {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: solid 2px #ffa800;
+    background-color: #fff;
+    width: 100%;
+    outline: 0;
+    padding: 2px 8px 2px;
+}
+.card-interest {
+    margin-top: 10px;
+    margin-left: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    text-align: center;
+    padding: 25px 43px 25px 44px;
+}
+
+/* card fixed for profile part */
+.card-fixed {
+    border: none !important;
+    background: transparent !important;
+    height: 700px !important;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    /* padding-left: 70px; */
+    /* padding-right: 10px; */
+}
+
+.account-list-card {
+    border-radius: 8px;
+}
+
+.account-list-card:active {
+    background: #ffe7cc;
+}
+
+
+.type-file-hide > input {
+    display: none;
+}
+
+.interest-card {
+    border: none !important;
+    background: transparent !important;
+    height: 320px !important;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.sub-interest-card {
+    /* margin-top: 10px; */
+    /* margin-left: 10px; */
+    width: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px 0 rgb(0 0 0 / 15%);
+    background-color: #fff;
+    text-align: center;
+    padding: 10px 5px
+}
+
+/* modal popup scrollable */
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-dialog .scroll{
+    height: 90vh;
+    overflow-y: auto;
+}
+
+/* react quill editor */
+
+.ql-editor{
+    height: 160px !important;
+    /* resize: vertical; */
+    overflow: auto;
+}
+
+/* default selected background color */
+.MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover {
+    background-color: #ffe7cc !important;
+}
+
+.addReadMore.showlesscontent .SecSec,
+    .addReadMore.showlesscontent .readLess {
+        display: none;
+    }
+
+    .addReadMore.showmorecontent .readMore {
+        display: none;
+    }
+
+    .addReadMore .readMore,
+    .addReadMore .readLess {
+        font-weight: bold;
+        margin-left: 2px;
+        color: black;
+        cursor: pointer;
+    }
+
+    .addReadMoreWrapTxt.showmorecontent .SecSec,
+    .addReadMoreWrapTxt.showmorecontent .readLess {
+        display: block;
+    }
+
+/* .content {
+    height:100px;
+    overflow:hidden;
+    margin-bottom:10px;
+  }
+  
+  .content.visible {
+    height:auto;
+    overflow:visible;
+  } */

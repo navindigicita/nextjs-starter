@@ -1,0 +1,56 @@
+
+input {
+    background-color: transparent;
+}
+input.email-link:focus {
+    outline-width: 0;
+}
+
+input.email-link::placeholder {
+    color: lightgray;
+}
+
+button.close:focus {
+    outline-width: 0;
+}
+
+.appDownloadImg { 
+    width: 125px;
+    height: 49px;
+}
+
+@media only screen and (min-width: 601px) {
+    input.email-link {
+        border: none;
+        width: 300px;
+    }
+    .button-sign-in {
+        width: 300px;
+    }
+    .button-social-link {
+        border: 1px solid #e98c37;
+        width: 300px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    input.email-link {
+        border: none;
+        width: 90%;
+    }
+    .button-sign-in {
+        width: 90%;
+    }
+    input.email-link1 {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-color: lightgray;
+        border-width: 1px;
+        width: 80%;
+    }
+    .button-social-link {
+        border: 1px solid #e98c37;
+        width: 90%;
+    }
+}

@@ -1,0 +1,374 @@
+body {
+    font-family: 'Roboto', Arial, Helevtica, sans-serif;
+}
+
+.card {
+    border: none !important;
+}
+
+@media only screen and (min-width: 768px) {
+    .body-align {
+        padding: 2rem !important;
+        height: auto;
+        /* margin-top: 7rem; */
+    }
+
+    .body-img {
+        /* height: 330px; */
+        /* height: -moz-fit-content; */
+    }
+
+    .body-img img {
+        width: 40rem;
+        height: 350px;
+        object-fit: cover;
+    }
+
+    .body-content-align {
+        margin-right: 20px !important;
+        margin-top: 10px;
+    }
+
+    .body-left-content-align {
+        margin-top: 10px;
+        margin-left: 3rem !important;
+        margin-right: 20px !important;
+    }
+
+    .fixedElement {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+    }
+
+    .downloadLink-button {
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 4px;
+        color: #ffff;
+        background-color: #e98c37;
+        width: 117px;
+        height: 35px;
+        border: none;
+    }
+
+    .left-sec-align {
+        margin-left: 12px !important;
+    }
+
+    .card-align {
+        border: none !important;
+        background-color: #fffcef !important;
+        height: 250px !important;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+    }
+
+    .card-align-no-data {
+        border: none !important;
+        background-color: #fffcef !important;
+        height: 90px !important;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+    }
+
+    .video-icon-align {
+        position: absolute !important;
+        z-index: 1;
+        margin-top: 150px !important;
+        margin-left: 300px !important;
+    }
+
+    .video-icon {
+        font-size: 70px !important;
+        color: #282828;
+    }
+
+    .video-icon :hover {
+        color: #FF0000;
+    }
+
+    .spotify-resize {
+        width: 102%;
+        height: 90%;
+    }
+}
+
+.downloadLink-button:hover {
+    /* background-color: #ff7c02; */
+}
+
+.header-font {
+    font-size: 16px;
+}
+
+.subheader-font {
+    font-size: 14px;
+}
+
+.left-content-font {
+    font-size: 14px;
+}
+
+.mid-content-font {
+    font-size: 16px;
+}
+
+.right-content-font {
+    font-size: 14px;
+}
+
+
+/*  */
+div .sticky-left-section {
+    position: relative;
+    top: 340px;
+}
+
+.fade-in-bottom {
+    animation: fade-in-bottom 1s ease-in-out both;
+}
+
+/*  */
+
+@media only screen and (max-width: 760px) {
+    .tabView {
+        display: none;
+    }
+
+    .mobileView {
+        visibility: visible;
+    }
+
+    .body-align {
+        margin-left: 0rem !important;
+        margin-right: 0rem !important;
+        /* margin-top: 7rem; */
+    }
+
+    .body-img {
+        text-align: center;
+    }
+
+    .body-img img {
+        width: 34rem;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .body-content-align {
+        margin-left: 5px !important;
+        margin-right: 3px !important;
+        margin-top: 10px;
+    }
+
+    .body-left-content-align {
+        margin-left: 5px !important;
+        margin-right: 3px !important;
+        margin-top: 10px;
+    }
+
+    .downloadLink-button {
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 3px;
+        color: #ffff;
+        background-color: #e98c37;
+        width: auto;
+        height: 30px;
+        border: 0;
+        padding: 0 10px;
+    }
+
+    .comment-top-align {
+        margin-top: -1rem;
+    }
+
+    .card-align {
+        border: none !important;
+        background-color: #fffcef !important;
+        height: 250px !important;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+    }
+
+    .card-align-no-data {
+        border: none !important;
+        background-color: #fffcef !important;
+        height: 90px !important;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+    }
+
+    .video-icon-align {
+        position: absolute !important;
+        z-index: 1;
+        margin-top: 80px !important;
+        margin-left: 165px !important;
+    }
+
+    .video-icon {
+        font-size: 70px !important;
+        color: #282828;
+    }
+
+    .video-icon :hover {
+        color: #FF0000;
+    }
+
+    .spotify-resize {
+        width: 100%;
+    }
+}
+
+div a {
+    text-decoration: none;
+    color: #3c7493;
+}
+
+div a:hover {
+    color: #295064;
+    text-decoration: none;
+}
+
+div a:active {
+    color: #3c7493;
+    text-decoration: none;
+}
+
+/* comment css */
+#align-hidden-comment {
+    margin-left: 65px !important;
+}
+
+#align-hidden-comment1 {
+    margin-left: 68px !important;
+}
+
+/* to  hide scroll bar width visibility still scrollable */
+div ::-webkit-scrollbar {
+    width: 0px;
+}
+
+
+/* to customize carousal indicator */
+.carousel-indicators {
+    bottom: 5px !important;
+}
+
+.carousel-indicators button {
+    background-color: darkgray;
+    border-radius: 50%;
+    height: 0px;
+    width: 20px;
+    border: none;
+    margin-left: 10px;
+}
+
+.carousel-indicators button:focus {
+    outline: none;
+}
+
+/* Fix for flickering carousel */
+.carousel-inner .carousel-item {
+    opacity: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: block;
+    position: absolute;
+}
+
+.carousel-inner .carousel-item:first-of-type {
+    position: relative;
+}
+
+.carousel-inner .active {
+    opacity: 1;
+}
+
+/* End of fix */
+
+/* <a> connect class */
+a.connect {
+    font-weight: bold;
+}
+
+
+/* bottomsheet for pai thinkly */
+.shell-container.show {
+    transform: translateY(0);
+}
+
+.shell-container {
+    overflow-y: hidden;
+    position: fixed;
+    z-index: 2 !important;
+    bottom: 0;
+    transform: translateY(100%);
+    left: 0;
+    width: 100%;
+    background-color: #ffa51d;
+    box-shadow: 0px -40px 40px #fff0d9;
+    font-family: var(--font-sofia);
+    transition: transform .2000s ease-in-out;
+    -webkit-animation: fadein 3s;
+    -moz-animation: fadein 3s;
+    -ms-animation: fadein 3s;
+    -o-animation: fadein 3s;
+    animation: fadein 3s;
+}
+
+.stop-scrolling {
+    /* height: 100%; */
+    overflow: hidden !important;
+}
+
+.blur-body {
+    transition-delay: 3s;
+    filter: blur(1px);
+    pointer-events: none;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.subscribe-button {
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    color: #e98c37;
+    background-color: #fff;
+    width: 174px;
+    height: 44px;
+    border: none;
+}
+
+.bottom-section-mob {
+    background: rgba(var(--d87, 255, 255, 255), .95);
+    bottom: 0;
+    height: auto;
+    left: 0;
+    /* padding: 5px; */
+    position: fixed;
+    width: 100%;
+    z-index: 9;
+}
+
+.top-hr-colored {
+    background: linear-gradient(to right, #e98c37, #66360a);
+    height: 4px;
+    opacity: 85%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 99;
+}
