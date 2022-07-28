@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build:local && next export",
+    "build": "next build:dev && next export",
     "dev": "next dev",
     "fix": "next lint --fix",
     "lint": "next lint",
