@@ -1,3 +1,4 @@
+// handle gmail signin using popup
 import firebase from 'firebase/compat/app'
 import FirebaseApp from '../../components/firebase/firebaseApp' //imp don't remove
 import router from 'next/router'
@@ -11,7 +12,7 @@ const HandleGmailSignIn = () => {
             const arr = user._delegate.providerData
             let obj = arr.find(o => o.providerId === 'google.com');
             localStorage.setItem('emailForSignIn', obj.email);
-            router.push({ pathname: '/', query: obj })
+            router.push({ pathname: '/user/userAuth', query: obj })
         }).catch(function (error) {
             console.log(error);
         });
