@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import Axios from "axios";
 import $ from "jquery";
+import Image from 'next/image';
 import { CircularProgress, ListItemText } from '@material-ui/core';
 import { baseUrl } from "../../pages/api/api.jsx";
 import NewThinkly from "./newThinkly.jsx";
@@ -137,7 +138,7 @@ const Thinklies = (props) => {
                 }
                 return (<>
                     <div className="row" key={index}>
-                        <div class="col-md-10">
+                        <div className="col-md-10">
                             <ListItemText
                                 primary={<span className="ff-lora fs-18 fw-bold">{obj.postData.postTitle}</span>}
                                 secondary={<div>
@@ -153,7 +154,7 @@ const Thinklies = (props) => {
                             </div>
 
                             {obj.postData.postImages !== undefined && obj.postData.postImages.length > 0 &&
-                                <img alt="thinkly Image" src={image_url.charAt(0) === '@' ? image_url.substring(1) : image_url}
+                                <Image alt="thinkly Image" src={image_url.charAt(0) === '@' ? image_url.substring(1) : image_url}
                                     style={{ width: '80px', height: '80px', objectFit: 'cover', objectPosition: 'center', borderRadius: '4px', float: 'right' }} />
                             }
                         </div>

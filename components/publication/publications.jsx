@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import Axios from "axios";
+import Image from 'next/image';
 import { Avatar, ListItemText, CircularProgress } from "@material-ui/core"
 import { AssignmentIndOutlined } from "@material-ui/icons"
 import { Card } from 'react-bootstrap'
@@ -93,7 +94,7 @@ const Publication = (props) => {
                         <div className='row cursor' onClick={() => handlePubicationClick(name)}>
                             <div className='col-1'>
                                 {obj.publicationImage !== undefined ?
-                                    <img alt="publication Image" style={{ width: '50px', height: '50px', objectFit: 'cover' }}
+                                    <Image alt="publication Image" style={{ width: '50px', height: '50px', objectFit: 'cover' }}
                                         src={obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage} />
                                     : <Avatar style={{ width: '120px', height: '120px' }} src={<AssignmentIndOutlined />} />
                                 }

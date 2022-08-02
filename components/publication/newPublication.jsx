@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import $ from 'jquery'
 import Axios from "axios";
+import Image from 'next/image';
 import { Card } from 'react-bootstrap';
 import { List, ListItem, ListItemAvatar, ListItemText } from '@material-ui/core'
 import { PeopleAltOutlined, Edit, EventAvailableOutlined, EmailOutlined } from '@material-ui/icons';
@@ -68,7 +69,7 @@ const NewPublication = (props) => {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(myRenamedFile);
             fileReader.addEventListener("load", function () {
-                imgPreview.innerHTML = '<img src="' + this.result + '" />';
+                imgPreview.innerHTML = '<Image src="' + this.result + '" alt="pImage" />';
             });
         }
         setshowImage(true)
@@ -354,11 +355,11 @@ const NewPublication = (props) => {
     }
 
     return (<>
-        <div id="newPublication" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modal-background">
-                    <button type="button" class="close text-right pr-2" data-dismiss="modal" onClick={() => closeFunction()} >&times;</button>
-                    {welcomeSlide ? <div class="modal-body py-3 px-5">
+        <div id="newPublication" className="modal fade in" tabIndex="-1" role="dialog" data-backdrop="static">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content modal-background">
+                    <button type="button" className="close text-right pr-2" data-dismiss="modal" onClick={() => closeFunction()} >&times;</button>
+                    {welcomeSlide ? <div className="modal-body py-3 px-5">
                         <h6 className='text-center' style={{ fontSize: '18px', fontWeight: 'bold' }}> Create Your Publication </h6>
                         <p className='text-center'> Thinkly provides a one stop solution for all your publication needs.</p>
                         <List style={{ display: 'grid', justifyContent: 'center' }}>
@@ -378,14 +379,14 @@ const NewPublication = (props) => {
                                 <ListItemAvatar>
                                     <EventAvailableOutlined style={{ color: '#c37d8d', width: '28px', height: '28px' }} />
                                 </ListItemAvatar>
-                                <i class="fa-solid fa-indian-rupee-sign"></i>
+                                <i className="fa-solid fa-indian-rupee-sign"></i>
                                 <ListItemText primary={<b>Get Paid</b>} secondary="Earn through your content" />
                             </ListItem>
                         </List>
                         <div className='text-center my-4'>
                             <button className='button-new-publication' style={{ width: '40%' }} onClick={() => hideWelcomeAndShowAbout()}>START</button>
                         </div>
-                    </div> : aboutSlide ? <div class="modal-body py-3 px-5">
+                    </div> : aboutSlide ? <div className="modal-body py-3 px-5">
                         <div className='row d-flex'>
                             <p className='mx-auto' style={{ fontSize: '18px', fontWeight: 'bold' }}> About publication </p>
                         </div>
@@ -412,7 +413,7 @@ const NewPublication = (props) => {
                         <div className='text-center my-4'>
                             <button className='button-new-publication' style={{ width: '40%' }} onClick={() => hideAboutandShowDescription()}>NEXT</button>
                         </div>
-                    </div> : descriptionSlide ? <div class="modal-body py-3 px-5">
+                    </div> : descriptionSlide ? <div className="modal-body py-3 px-5">
                         <div className='row d-flex'>
                             <p className='mx-auto' style={{ fontSize: '18px', fontWeight: 'bold' }}> Publication Description </p>
                         </div>
@@ -433,7 +434,7 @@ const NewPublication = (props) => {
                                 {penNameResponse === false || (webUrl.length > 1 && webUrl.length < 5) ? <div id="penNameError" className='error-msg'></div> : ''}
                             </div>
                             <div className='col-12 mb-2'>
-                                <label style={{ fontSize: '12px', fontFamily: 'Lora', fontWeight: 'bold' }}>What's it about?*</label>
+                                <label style={{ fontSize: '12px', fontFamily: 'Lora', fontWeight: 'bold' }}>What is it about?*</label>
                                 <input type="text" id='pub-about' className='interest-textbox' minLength='2' maxLength='50' placeholder='E.g. "Fitness is forever" (max 50 characters)'
                                     value={shortDescription} onChange={(e) => setshortDescription(e.target.value)} />
                                 {shortDescription === '' ? <div id="shortDescriptionError" className='error-msg'></div> : ''}
@@ -451,10 +452,10 @@ const NewPublication = (props) => {
                             {/* <button className='button-new-publication mr-4' style={{ width: '40%', background: '#fff', color: '#e98c37', border: 'solid 2px #e98c37' }} onClick={() => hideWelcomeAndShowAbout()}>BACK</button> */}
                             <button className='button-new-publication' style={{ width: '40%' }} onClick={() => hideDescriptionAndShowPlan()}>NEXT</button>
                         </div>
-                    </div> : subscriptionSlide ? <div class="modal-body py-3 px-5">
+                    </div> : subscriptionSlide ? <div className="modal-body py-3 px-5">
                         <div className='row d-flex'>
                             <h6 className='mx-auto' style={{ fontSize: '22px', fontWeight: 'bold' }}>Subscription Plan</h6>
-                            <p>For paid plans, you will get paid in Starts which can be redeemed from the "My Stars" page.</p>
+                            <p>For paid plans, you will get paid in Starts which can be redeemed from the &quot;My Stars&quot; page.</p>
                         </div>
                         {/* free */}
                         <div className='row mt-4 px-3' selected={planIndex === 0} onClick={(event) => handleSubscription(event, 0)}>
@@ -498,13 +499,13 @@ const NewPublication = (props) => {
                             {/* <button className='button-new-publication mr-4' style={{ width: '40%' }} onClick={() => hideAboutandShowDescription()}>BACK</button> */}
                             <button className='button-new-publication' style={{ width: '40%' }} onClick={() => hidePlanAndShowInterest()}>NEXT</button>
                         </div>
-                    </div> : InterestSlide ? <div class="modal-body py-3 px-5">
+                    </div> : InterestSlide ? <div className="modal-body py-3 px-5">
                         <h6 className='text-center' style={{ fontSize: '20px', fontWeight: 'bold' }}>Tag Interests*</h6>
                         <p className='text-center'>People with these interests will be able to discover this Publication</p>
                         <div className='interest-card'>
                             <div className='row d-flex'>
                                 {Interest !== undefined && Interest.map((obj, index) => {
-                                    return (<div className='col-4 mb-3' onClick={() => handleInterest(obj.CategoryID)}>
+                                    return (<div key={index} className='col-4 mb-3' onClick={() => handleInterest(obj.CategoryID)}>
                                         <Card key={index} id={`${obj.CategoryID}`} className='sub-interest-card mx-auto my-auto' >
                                             {obj.CategoryDescription}
                                         </Card>
@@ -517,7 +518,7 @@ const NewPublication = (props) => {
                             {/* <button className='button-new-publication mr-4' style={{ width: '40%' }} onClick={() => hideDescriptionAndShowPlan()}>BACK</button> */}
                             <button className='button-new-publication' style={{ width: '40%' }} onClick={() => hideInterestAndShowSuccess()}>NEXT</button>
                         </div>
-                    </div> : successSlide && <div class="modal-body py-3 px-5">
+                    </div> : successSlide && <div className="modal-body py-3 px-5">
                         <p className='text-center' style={{ fontSize: '22px', fontWeight: 'bold' }}>Congratulations, your Publication is ready!</p>
                         <div className='row d-flex'>
                             <label className='mx-auto text-center' style={{ fontSize: '18px', fontWeight: 'bold', background: '#ffe7cc', width: '80%' }}>www.thinkly.me/{pen_name_pub}</label>

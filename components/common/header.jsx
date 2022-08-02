@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Axios from "axios";
 import $ from 'jquery'
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { isMobile } from "react-device-detect"
 import { Avatar, Card } from '@material-ui/core'
@@ -162,7 +163,7 @@ const Header = (props, { parentCallback }) => {
                 <div className="container">
                     <div className="row d-flex">
                         <div className="col-md-6">
-                            <img className="header-logo" src={'/thinkly-logo-.png'} alt="Header Logo" />
+                            <Image className="header-logo" src={'/thinkly-logo-.png'} alt="Header Logo" />
                             {!isMobile && !customDashboard ? <h6 className="mobheader" style={{ marginTop: '-44px', marginLeft: '168px', marginRight: '-110px' }}>
                                 <span className="sideline" >Where the world comes to think</span>
                             </h6> : <>
@@ -175,10 +176,10 @@ const Header = (props, { parentCallback }) => {
                                     <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}> <ShareRounded /> </Card>
                                     <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px' }}>
                                         {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
-                                            <img src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '22px', height: '22px', borderRadius: '50%' }} />
+                                            <Image src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '22px', height: '22px', borderRadius: '50%' }} />
                                             : <Avatar style={{ width: '22px', height: '22px' }} src={<AssignmentIndOutlined />} />}
                                         <ArrowDropDown onClick={() => handleUserProfle()} />
-                                        <div class="dropdown-user" >
+                                        <div className="dropdown-user" >
                                             <a onClick={() => handleViewProfile()}>View My Page</a>
                                             <a onClick={() => handleLogout()}>Sign out</a>
                                         </div>
@@ -192,7 +193,7 @@ const Header = (props, { parentCallback }) => {
                                     <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px', height: '34px' }}>
                                         <Avatar style={{ width: '22px', height: '22px', marginTop: '3px' }} src={<AssignmentIndOutlined />} />
                                         <ArrowDropDown onClick={() => handleUserProfle()} style={{ marginTop: '-50px', marginLeft: '20px' }} />
-                                        <div class="dropdown-user" >
+                                        <div className="dropdown-user" >
                                             <a onClick={() => handleLogout()}>Sign In</a>
                                         </div>
                                     </Card>
@@ -223,9 +224,9 @@ const Header = (props, { parentCallback }) => {
                                 <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px' }}>
                                     <Menu />
                                     {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
-                                        <img src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '25px', height: '25px', borderRadius: '50%' }} />
+                                        <Image src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '25px', height: '25px', borderRadius: '50%' }} />
                                         : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
-                                    <div class="dropdown-user">
+                                    <div className="dropdown-user">
                                         <a onClick={() => handleViewProfile()}>View My Page</a>
                                         <a onClick={() => handleLogout()}>Sign out</a>
                                     </div>
@@ -253,10 +254,10 @@ const Header = (props, { parentCallback }) => {
                                     <Menu />
                                     {user_status === 'Success' ? <>
                                         {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
-                                            <img src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '25px', height: '25px', borderRadius: '50%' }} />
+                                            <Image src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '25px', height: '25px', borderRadius: '50%' }} />
                                             : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
                                     </> : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
-                                    <div class="dropdown-user">
+                                    <div className="dropdown-user">
                                         {/* <a onClick={() => handleViewProfile()}>View My Page</a> */}
                                         {user_status === 'Success' ? <a onClick={() => handleLogout()}>Sign Out</a> : <a onClick={() => handleLogout()}>Sign In</a>}
                                     </div>
@@ -273,11 +274,11 @@ const Header = (props, { parentCallback }) => {
         {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} />}
 
         {/* modal popup for email trigger */}
-        <div id="myModal" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modal-background">
-                    <button type="button" class="close text-right pr-2" data-dismiss="modal" onClick={() => setEmail(false)}>&times;</button>
-                    <div class="modal-body px-4 py-2">
+        <div id="myModal" className="modal fade in" tabIndex="-1" role="dialog" data-backdrop="static">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content modal-background">
+                    <button type="button" className="close text-right pr-2" data-dismiss="modal" onClick={() => setEmail(false)}>&times;</button>
+                    <div className="modal-body px-4 py-2">
                         <div className="row">
                             {!getEmail ? <div className='col-12 text-center'>
                                 <p className="font-weight-bold fs-20">Download the App for a richer experience!</p>
@@ -286,12 +287,12 @@ const Header = (props, { parentCallback }) => {
                                     <div className="row text-center mb-3">
                                         <div className="col-6 text-right">
                                             <a href={openInAppUrl}>
-                                                <img src={'/playStore.svg'} style={{ width: '9rem', borderRadius: '10px' }} alt="Download button for Play store" />
+                                                <Image src={'/playStore.svg'} style={{ width: '9rem', borderRadius: '10px' }} alt="Download button for Play store" />
                                             </a>
                                         </div>
                                         <div className="col-6 text-left">
                                             <a href={openInAppUrl}>
-                                                <img src={'/appstore.svg'} style={{ width: '8rem' }} alt="Download button for App store" />
+                                                <Image src={'/appstore.svg'} style={{ width: '8rem' }} alt="Download button for App store" />
                                             </a>
                                         </div>
                                     </div>
@@ -304,8 +305,8 @@ const Header = (props, { parentCallback }) => {
                             </div> : <div className='col-12 text-center'>
                                 <CheckCircleOutline style={{ color: 'green', width: '80px', height: '80px' }} /> <br />
                                 <h3>Download link sent</h3> <br />
-                                <p style={{ marginTop: '-24px' }}>If you didn't get the email, check your spam folder</p>
-                                <button type="button" class="button1 mt-3 mb-4" data-dismiss="modal" onClick={() => setEmail(false)}>OK</button>
+                                <p style={{ marginTop: '-24px' }}>If you did not get the email, check your spam folder</p>
+                                <button type="button" className="button1 mt-3 mb-4" data-dismiss="modal" onClick={() => setEmail(false)}>OK</button>
                             </div>}
                         </div>
                     </div>

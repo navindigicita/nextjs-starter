@@ -17,8 +17,8 @@ const Faq = () => {
     return (<div className='row'>
         <div className='col-12'>
             <p className='font-weight-bold fs-30'> FAQs</p>
-            {faq.map((obj) => {
-                return (<Card className='mb-4' style={{ boxShadow: 'none' }}>
+            {faq.map((obj, index) => {
+                return (<Card className='mb-4' key={index} style={{ boxShadow: 'none' }}>
                     <p className='fw-bold fs-20'>{obj.question}</p>
                     <p className='fs-18'>{obj.ans}</p>
                 </Card>)

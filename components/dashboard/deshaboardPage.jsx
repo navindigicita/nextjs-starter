@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Card, CircularProgress, ListItemText } from '@material-ui/core'
 import { CheckCircleOutline, FavoriteBorder, Star } from '@material-ui/icons'
 import Axios from "axios";
+import Image from 'next/image';
 import { isMobile } from 'react-device-detect'
 import { baseUrlThinkly } from '../../pages/api/api';
 import ShareLink from '../common/shareLink';
@@ -106,11 +107,11 @@ const DashboardPage = (props) => {
         </div>
 
         {/* modal for redeem */}
-        <div id="redeemModal" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modal-background">
-                    <button type="button" class="close text-right pr-2" data-dismiss="modal" onClick={() => setEmail(false)}>&times;</button>
-                    <div class="modal-body px-4 py-2">
+        <div id="redeemModal" className="modal fade in" tabIndex="-1" role="dialog" data-backdrop="static">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content modal-background">
+                    <button type="button" className="close text-right pr-2" data-dismiss="modal" onClick={() => setEmail(false)}>&times;</button>
+                    <div className="modal-body px-4 py-2">
                         <div className="row">
                             {!getEmail ? <div className='col-12 text-center'>
                                 <p className="font-weight-bold fs-20">Download the App to instantly redeem your income 😍</p>
@@ -119,12 +120,12 @@ const DashboardPage = (props) => {
                                     <div className="row text-center mb-3">
                                         <div className="col-6 text-right">
                                             <a href={openInAppUrl}>
-                                                <img src={'playStore.svg'} style={{ width: '9rem', borderRadius: '10px' }} alt="Download button for Play store" />
+                                                <Image src={'playStore.svg'} style={{ width: '9rem', borderRadius: '10px' }} alt="Download button for Play store" />
                                             </a>
                                         </div>
                                         <div className="col-6 text-left">
                                             <a href={openInAppUrl}>
-                                                <img src={'appstore.svg'} style={{ width: '8rem' }} alt="Download button for App store" />
+                                                <Image src={'appstore.svg'} style={{ width: '8rem' }} alt="Download button for App store" />
                                             </a>
                                         </div>
                                     </div>
@@ -137,8 +138,8 @@ const DashboardPage = (props) => {
                             </div> : <div className='col-12 text-center'>
                                 <CheckCircleOutline style={{ color: 'green', width: '80px', height: '80px' }} /> <br />
                                 <h3>Download link sent</h3> <br />
-                                <p style={{ marginTop: '-24px' }}>If you didn't get the email, check your spam folder</p>
-                                <button type="button" class="button1 mt-3 mb-4" data-dismiss="modal" onClick={() => setEmail(false)}>OK</button>
+                                <p style={{ marginTop: '-24px' }}>If you did not get the email, check your spam folder</p>
+                                <button type="button" className="button1 mt-3 mb-4" data-dismiss="modal" onClick={() => setEmail(false)}>OK</button>
                             </div>}
                         </div>
                     </div>

@@ -18,11 +18,11 @@ const SharePage = (props) => {
     }, [])
 
     return (
-        <div class="modal fade" id="ShareProfile" role="dialog">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <button type="button" class="close text-right pr-2" data-dismiss="modal">&times;</button>
-                    <div class="modal-body text-center p-4">
+        <div className="modal fade" id="ShareProfile" role="dialog">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                    <button type="button" className="close text-right pr-2" data-dismiss="modal">&times;</button>
+                    <div className="modal-body text-center p-4">
                         <h2 style={{ fontSize: '20px', fontWeight: 'bold' }}>Share your page with the world.</h2>
                         <div className='row d-flex'>
                             {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?

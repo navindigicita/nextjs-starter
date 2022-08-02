@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Avatar, ListItemText, Card, CircularProgress } from "@material-ui/core"
 import { AssignmentIndOutlined } from "@material-ui/icons"
+import Image from 'next/image';
 
 const SideBar = (props) => {
     const [profileData, setProfileData] = useState();
@@ -79,7 +80,7 @@ const SideBar = (props) => {
         {profileData !== undefined && profileData !== null ? <>
             <div className='row' onClick={() => handleUserProfile()} style={{ cursor: 'pointer' }}>
                 {profileData.profileDetails.profileImage !== undefined && profileData.profileDetails.profileImage !== null ?
-                    <img src={profileData.profileDetails.profileImage.charAt(0) === '@' ? profileData.profileDetails.profileImage.substring(1) : profileData.profileDetails.profileImage} alt="user profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                    <Image src={profileData.profileDetails.profileImage.charAt(0) === '@' ? profileData.profileDetails.profileImage.substring(1) : profileData.profileDetails.profileImage} alt="user profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
                     : <Avatar style={{ width: '50px', height: '50px' }} src={<AssignmentIndOutlined />} />
                 }
                 <ListItemText style={{ marginTop: '7px', marginLeft: '15px' }} //onClick={() => props.profileDetail('ProfileDetail')}
@@ -91,7 +92,7 @@ const SideBar = (props) => {
             </div>
             <div className='row mt-4'>
                 <div className='col-1 p-0'>
-                    <img src={'bio-link.svg'} alt='Bio_link' />
+                    <Image src={'bio-link.svg'} alt='Bio_link' />
                 </div>
                 <div className='col-11' style={{ lineHeight: '0.9' }}>
                     {/* <a style={{ fontSize: '12px', color: '#3c7493', overflowWrap: 'break-word' }} id="userShareUrl">{profileData.profileDetails.profileUrl}</a> <br /> */}

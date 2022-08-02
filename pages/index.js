@@ -13,8 +13,8 @@ import DashboardPage from '../components/dashboard/deshaboardPage';
 
 const HomePage = (props) => {
   const BASE_URL = useContext(baseUrl);
-  const userID = props.router.query.userID;
-  const userStatus = props.router.query.userStatus;
+  const userIDQuery = props.router.query.userID;
+  const userStatusQuery = props.router.query.userStatus;
   const [user_ID, setuser_ID] = useState()
   const [user_status, setuser_status] = useState()
   const [thinklyConfigData, setthinklyConfigData] = useState()
@@ -29,24 +29,28 @@ const HomePage = (props) => {
       console.log("inside fetchData@@@@@@@");
       const remoteConfigData = await RemoteConfiguration()
       console.log("remote Config Json", remoteConfigData);
+      const remoteConfigJson = JSON.parse(remoteConfigData)
+      setthinklyConfigData(remoteConfigJson)
       if (props.userID !== undefined && props.userStatus !== undefined) {  //from multi account
         console.log("inside props data condition", props.userID, props.userStatus);
         setuser_ID(props.userID)
         setuser_status(props.userStatus)
-        fetchUserProfileData(props.userID)  //api call
-        fetchSupporterData(props.userID)  //api call
-      } else if (userID !== undefined && userStatus !== undefined) {  //from single account
-        console.log("inside history data props", userID, userStatus);
-        setuser_ID(userID)
-        setuser_status(userStatus)
-        fetchUserProfileData(userID)   //api call
-        fetchSupporterData(userID)   //api call
+      } else if (userIDQuery !== undefined && userStatusQuery !== undefined) {  //from single account
+        console.log("inside history data props", userIDQuery, userStatusQuery);
+        setuser_ID(userIDQuery)
+        setuser_status(userStatusQuery)
       }
-      const remoteConfigJson = JSON.parse(remoteConfigData)
-      setthinklyConfigData(remoteConfigJson)
     }
     fetchData()
-  }, [props]);
+  }, []);
+
+  useEffect(() => {
+    if (user_ID !== undefined) {
+      fetchUserProfileData(user_ID)
+      fetchSupporterData(user_ID)
+    }
+  }, [user_ID])
+
 
   function fetchUserProfileData(authorID) {
     console.log("inside fetch user profile data@@@@@@", authorID, BASE_URL);

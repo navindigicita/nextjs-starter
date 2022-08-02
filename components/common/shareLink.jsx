@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
+import Image from 'next/image';
 
 const ShareLink = (props) => {
-    const [penName, setpenName] = useState()
+    const [penName, setpenName] = useState(props.linkUrl)
     const [CopyUrl, setCopyUrl] = useState(false)
     const [Path, setPath] = useState()
 
     useEffect(() => {
-        console.log("inside share link component props data", props.linkUrl);
-        if (props.linkUrl != undefined) {
-            console.log("inside share link component props data", props.linkUrl);
-            setpenName(props.linkUrl)
-        }
-    }, [])
+        console.log("inside share link component props data", penName);
+        // if (props.linkUrl != undefined) {
+        //     console.log("inside share link component props data", props.linkUrl);
+        //     setpenName(props.linkUrl)
+        // }
+    }, [penName])
 
     useEffect(() => {
         console.log("penName", penName);
@@ -78,10 +79,10 @@ const ShareLink = (props) => {
 
     return (<>
         <p className='fs-18 mb-3 fc-link mb-4 pointer' id="userShareUrl" onClick={() => handleUrlClick()}> {Path}</p>
-        <img src={'facebook.svg'} className="px-3 pointer" onClick={() => shareFacebook()} />
-        <img src={'twitter.svg'} className="px-3 pointer" onClick={() => shareTwitter()} />
-        <img src={'linkend.svg'} className="px-3 pointer" onClick={() => shareLinkedin()} />
-        <img src={'whatsapp.svg'} className="px-3 pointer" onClick={() => shareWhatsapp()} />
+        <Image src={'facebook.svg'} alt="facebook" className="px-3 pointer" onClick={() => shareFacebook()} />
+        <Image src={'twitter.svg'} alt="twitter" className="px-3 pointer" onClick={() => shareTwitter()} />
+        <Image src={'linkend.svg'} alt="linkend" className="px-3 pointer" onClick={() => shareLinkedin()} />
+        <Image src={'whatsapp.svg'} alt="whatsapp" className="px-3 pointer" onClick={() => shareWhatsapp()} />
         <div className='row d-flex'>
             <button type='button' onClick={() => shareLink()} className='button-sign-in mt-4 mx-auto fw-bold border-radius-4 fc-white border-none primary-bg-color height-button fs-18 ff-roboto' style={isMobile ? { width: '78%' } : { width: '50%' }} > {CopyUrl ? 'Copied' : 'Copy Link'} </button>
         </div>

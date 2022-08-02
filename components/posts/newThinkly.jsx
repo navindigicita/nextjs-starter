@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import $ from 'jquery'
 import Axios from "axios";
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 // import "quill-paste-smart";
@@ -8,10 +9,6 @@ import { Card } from 'react-bootstrap';
 import { CircularProgress, List, ListItem, ListItemAvatar, ListItemText, Tooltip } from '@material-ui/core'
 import { ToggleOff, ToggleOn, CheckCircleOutline, AddPhotoAlternate } from '@material-ui/icons';
 import { baseUrl, baseUrlThinkly } from '../../pages/api/api';
-
-// import Text from '../Images/text.svg'
-// import Audio from '../Images/audio.svg'
-// import Video from '../Images/vedio.svg'
 
 const NewThinkly = (props) => {
     const BASE_URL = useContext(baseUrl);
@@ -155,7 +152,7 @@ const NewThinkly = (props) => {
             const fileReader = new FileReader();
             fileReader.readAsDataURL(myRenamedFile);
             fileReader.addEventListener("load", function () {
-                imgPreview.innerHTML = '<img src="' + this.result + '" />';
+                imgPreview.innerHTML = '<Image src="' + this.result + '" alt="image" />';
             });
         }
         setthinklyImage(myRenamedFile)
@@ -343,31 +340,31 @@ const NewThinkly = (props) => {
     }
 
     return (<>
-        <div id="createThinkly" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static" >
-            <div class={!tContentSlide ? "modal-dialog modal-dialog-centered" : "modal-dialog modal-xl modal-dialog-centered"}>
-                <div class="modal-content modal-background">
-                    <button type="button" class="close text-right pr-2" data-dismiss="modal" onClick={() => closeFunction()} >&times;</button>
-                    {selectTypeSlide ? <div class="modal-body py-3 px-5">
+        <div id="createThinkly" className="modal fade in" tabIndex="-1" role="dialog" data-backdrop="static" >
+            <div className={!tContentSlide ? "modal-dialog modal-dialog-centered" : "modal-dialog modal-xl modal-dialog-centered"}>
+                <div className="modal-content modal-background">
+                    <button type="button" className="close text-right pr-2" data-dismiss="modal" onClick={() => closeFunction()} >&times;</button>
+                    {selectTypeSlide ? <div className="modal-body py-3 px-5">
                         <h6 className='text-center' style={{ fontSize: '18px', fontWeight: 'bold' }}> What are you creating today? </h6>
                         <p className='text-center'> Choose your Thinkly type</p> <br />
                         <List style={{ display: 'grid', justifyContent: 'center' }}>
                             <ListItem alignItems="flex-start" style={{ cursor: 'pointer' }} selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0)}>
                                 <ListItemAvatar>
-                                    {/* <img src={Text} /> */}
+                                    <Image src={'/text.svg'} alt="text" />
                                 </ListItemAvatar>
                                 <ListItemText className='mt-3' primary={<b>Blog</b>} />
                             </ListItem>
                             {/* <ListItem alignItems="flex-start" selected={selectedIndex === 1} onClick={(event) => handleListItemClick(event, 1)}> */}
                             <ListItem alignItems="flex-start" style={{ cursor: 'not-allowed' }} selected={selectedIndex === 1} disabled>
                                 <ListItemAvatar>
-                                    {/* <img src={Audio} /> */}
+                                    <Image src={'/audio.svg'} alt="audio" />
                                 </ListItemAvatar>
                                 <ListItemText className='mt-3' primary={<b>Audio</b>} />
                             </ListItem>
                             {/* <ListItem alignItems="flex-start" selected={selectedIndex === 2} onClick={(event) => handleListItemClick(event, 2)}> */}
                             <ListItem alignItems="flex-start" style={{ cursor: 'not-allowed' }} selected={selectedIndex === 2} disabled>
                                 <ListItemAvatar>
-                                    {/* <img src={Video} /> */}
+                                    <Image src={'/vedio.svg'} alt="video" />
                                 </ListItemAvatar>
                                 <ListItemText className='mt-3' primary={<b>Video</b>} />
                             </ListItem>
@@ -376,7 +373,7 @@ const NewThinkly = (props) => {
                         <div className='text-center my-4'>
                             <button className='button-new-publication' style={{ width: '40%' }} onClick={() => hideTypeAndShowPubList()}>NEXT</button>
                         </div>
-                    </div> : selectPublication ? <div class="modal-body px-5">
+                    </div> : selectPublication ? <div className="modal-body px-5">
                         <h6 className='text-center' style={{ fontSize: '18px', fontWeight: 'bold' }}> New Thinkly </h6>
                         <p className='text-center'>Under which publication do you wish to publish this Thinkly?</p>
                         {publicationList !== undefined && publicationList.length > 0 ? <>
@@ -399,7 +396,7 @@ const NewThinkly = (props) => {
                         </> : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
                             <CircularProgress aria-label="Loading..." />
                         </div>}
-                    </div> : tContentSlide ? <div class="modal-body scroll px-3">
+                    </div> : tContentSlide ? <div className="modal-body scroll px-3">
                         <p className='text-center' style={{ fontSize: '18px', fontWeight: 'bold' }}>New Thinkly</p>
                         <div className='row d-flex'>
                             <div className='mx-auto'>
@@ -467,7 +464,7 @@ const NewThinkly = (props) => {
                         <div className='text-center mt-4 my-4'>
                             <button className='button-new-publication' style={{ width: '20%' }} onClick={() => hidethinklyAndShowSettingOrInterest()}>NEXT</button>
                         </div>
-                    </div> : settingSlide ? <div class="modal-body px-4">
+                    </div> : settingSlide ? <div className="modal-body px-4">
                         <p className='text-center' style={{ fontSize: '18px', fontWeight: 'bold' }}>New Thinkly</p>
                         <div className='row'>
                             <div className='col-10'>
@@ -490,9 +487,9 @@ const NewThinkly = (props) => {
                         </div>
                         {contest && <div className='row mt-4'>
                             {thinklyRemoteConfigJson !== undefined && thinklyRemoteConfigJson.contest.map((obj, index) => {
-                                return (<div className='col-6 mb-2' onClick={() => handleContest(index)}>
+                                return (<div key={index} className='col-6 mb-2' onClick={() => handleContest(index)}>
                                     <Card className='px-2 py-2' style={{ background: '#ffe7cc', border: 'none', width: '100%', height: '70px' }}>
-                                        <img src={obj.contestImageURL} alt='' style={{ width: '60px', height: '60px' }} />
+                                        <Image src={obj.contestImageURL} alt='contest' style={{ width: '60px', height: '60px' }} />
                                         <ListItemText className="line-height-align" style={{ marginTop: '-60px', marginLeft: '70px' }}
                                             primary={<span style={{ fontSize: '14px' }}>{obj.contestTitle}</span>}
                                             secondary={<span style={{ color: '#3c7493', fontSize: '12px', fontWeight: 'bold', lineHeight: '0' }}>{obj.contestID}</span>} />
@@ -506,13 +503,13 @@ const NewThinkly = (props) => {
                         <div className='text-center my-4'>
                             <button className='button-new-publication' style={{ width: '20%' }} onClick={() => hideSettingAndShowInterest()}>NEXT</button>
                         </div>
-                    </div> : InterestSlide ? <div class="modal-body px-3">
+                    </div> : InterestSlide ? <div className="modal-body px-3">
                         <h6 className='text-center' style={{ fontSize: '20px', fontWeight: 'bold' }}>New Thinkly</h6>
                         <p className='text-center'>People with these interests* will be able to discover this Thinkly</p>
                         <div className='interest-card'>
                             <div className='row d-flex'>
                                 {Interest !== undefined && Interest.map((obj, index) => {
-                                    return (<div className='col-4 mb-3' onClick={() => handleInterest(obj.CategoryID)}>
+                                    return (<div key={index} className='col-4 mb-3' onClick={() => handleInterest(obj.CategoryID)}>
                                         <Card key={index} id={`${obj.CategoryID}`} className='sub-interest-card mx-auto my-auto' >
                                             {obj.CategoryDescription}
                                         </Card>
@@ -526,7 +523,7 @@ const NewThinkly = (props) => {
                                 {publishLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#fff' }} /> : 'Publish'}
                             </button>
                         </div>
-                    </div> : successSlide && <div class="modal-body px-5 text-center" style={{ marginTop: '100px', marginBottom: '100px' }}>
+                    </div> : successSlide && <div className="modal-body px-5 text-center" style={{ marginTop: '100px', marginBottom: '100px' }}>
                         <CheckCircleOutline style={{ color: '#ea7f00', width: '80px', height: '80px' }} /> <br />
                         <h3 className='mt-4' style={{ fontSize: '20px', fontWeight: 'bold' }}>Congratulations!</h3> <br />
                         <p style={{ marginTop: '-25px', fontSize: '20px' }}>Your Thinkly has been successfully posted</p>
