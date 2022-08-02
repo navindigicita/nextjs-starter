@@ -2,21 +2,19 @@ import React, { useContext, useState, useEffect } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
 import Axios from "axios";
-import { useRouter, withRouter } from 'next/router';
+import { withRouter } from 'next/router';
 import { baseUrl } from './api/api'
 import { RemoteConfiguration } from '../config/individualThinkly';
 import Header from '../components/common/header';
-
-// import Profile from "./profile";
-// import Publication from './publication';
-// import ProfileDetail from './profileDetail';
-// import Feed from './feed.jsx';
-// import DashboardPage from './dashboard.jsx';
+import SideBar from '../components/dashboard/sidebar';
+import Thinklies from '../components/posts/thinklies';
+import Publication from '../components/publication/publications';
+import DashboardPage from '../components/dashboard/deshaboardPage';
 
 const HomePage = (props) => {
   const BASE_URL = useContext(baseUrl);
-  const userID = JSON.parse(props.router.query.userID);
-  const userStatus = JSON.parse(props.router.query.userStatus);
+  const userID = props.router.query.userID;
+  const userStatus = props.router.query.userStatus;
   const [user_ID, setuser_ID] = useState()
   const [user_status, setuser_status] = useState()
   const [thinklyConfigData, setthinklyConfigData] = useState()
@@ -106,20 +104,19 @@ const HomePage = (props) => {
     {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
         authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} />
-      <div className='row'>
-        {/* <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>
+      <div className='row' style={{ marginTop: '5rem' }}>
+        <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>
           {getIsValue ? <>
-            {value === 'ProfileDetail' ? <ProfileDetail />
-              : value === 'Publication' ? <Publication authorID={user_ID} profileJson={profileData} />
-                : value === 'Thinkly' ? <Feed authorID={user_ID} profileJson={profileData} />
-                  : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
+            {value === 'Publication' ? <Publication authorID={user_ID} profileJson={profileData} />
+              : value === 'Thinkly' ? <Thinklies authorID={user_ID} profileJson={profileData} />
+                : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
           </> : <DashboardPage profileJson={profileData} supporterData={supporterData} />}
-        </div> */}
+        </div>
         <div style={{ background: 'lightgray', height: 'auto', width: '1px', marginRight: '-40px', marginLeft: '38px' }}></div>
         {!isMobile && <>
           <div className='col-1'></div>
           <div className='col-3 card-fixed'>
-            <Profile profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} userStatus={user_status} supporterData={supporterData} />
+            <SideBar profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} userStatus={user_status} supporterData={supporterData} />
           </div>
         </>}
       </div>

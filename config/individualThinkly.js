@@ -1,6 +1,7 @@
 // Individual thinkly and contest json from remote config
 
 import { fetchAndActivate, getRemoteConfig, getValue } from "@firebase/remote-config";
+import FirebaseApp from "../components/firebase/firebaseApp";
 
 export const RemoteConfiguration = async () => {
     const remoteConfig = getRemoteConfig();

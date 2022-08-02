@@ -1,6 +1,4 @@
-import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -22,33 +20,11 @@ import "react-multi-carousel/lib/styles.css"
 
 // This default export is required in a new `pages/_app.js` file.
 export default function MyApp({ Component, pageProps }) {
-  const router = useRouter();
-  const [user, setUser] = useState(null);
-  const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
-    // import("bootstrap/dist/js/bootstrap");
-    // on initial load - run auth check 
-    authCheck(router.asPath);
+    require("bootstrap/dist/js/bootstrap");
+    require("bootstrap/dist/js/bootstrap.bundle.min.js");
   }, [])
-
-
-  function authCheck(url) {
-    console.log("_app authcheck@@@",url);
-    // redirect to login page if accessing a private page and not logged in 
-    // setUser(userService.userValue);
-    // const publicPaths = ['/account/login', '/account/register'];
-    // const path = url.split('?')[0];
-    // if (!userService.userValue && !publicPaths.includes(path)) {
-    //   setAuthorized(false);
-    //   router.push({
-    //     pathname: '/account/login',
-    //     query: { returnUrl: router.asPath }
-    //   });
-    // } else {
-    //   setAuthorized(true);
-    // }
-  }
 
   return (
     <div>
