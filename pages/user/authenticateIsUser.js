@@ -1,8 +1,9 @@
 // user authentication after userAuth.js called
 import firebase from 'firebase/compat/app'
-import router from "next/router";
+import { useRouter } from 'next/router'
 
 const AuthenticateIsUser = async (email) => {
+    const router = useRouter()
     console.log("inside authenticateIsUser function1");
     if (firebase.auth().isSignInWithEmailLink(router.asPath)) {
         console.log("inside if isSignInWithEmailLink condition -> authenticateIsUser function1");
