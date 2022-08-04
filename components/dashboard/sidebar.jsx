@@ -92,7 +92,7 @@ const SideBar = (props) => {
             </div>
             <div className='row mt-4'>
                 <div className='col-1 p-0'>
-                    <Image src={'bio-link.svg'} alt='Bio_link' />
+                    <Image src={'/bio-link.svg'} alt='Bio_link' />
                 </div>
                 <div className='col-11' style={{ lineHeight: '0.9' }}>
                     {/* <a style={{ fontSize: '12px', color: '#3c7493', overflowWrap: 'break-word' }} id="userShareUrl">{profileData.profileDetails.profileUrl}</a> <br /> */}

@@ -163,8 +163,8 @@ const Header = (props, { parentCallback }) => {
                 <div className="container">
                     <div className="row d-flex">
                         <div className="col-md-6">
-                            <Image className="header-logo" src={'/thinkly-logo-.png'} alt="Header Logo" />
-                            {!isMobile && !customDashboard ? <h6 className="mobheader" style={{ marginTop: '-44px', marginLeft: '168px', marginRight: '-110px' }}>
+                            <Image src={'/thinkly-logo-.png'} height={40} width={130} alt="Header Logo" />
+                            {!isMobile && !customDashboard ? <h6 className="mobheader" style={{ marginTop: '-44px', marginLeft: '140px', marginRight: '-110px' }}>
                                 <span className="sideline" >Where the world comes to think</span>
                             </h6> : <>
                                 {(getPath === 'signup') ? <span className='float-right mt-1'>Existing User?
