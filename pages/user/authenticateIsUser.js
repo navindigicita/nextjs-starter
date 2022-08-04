@@ -1,3 +1,5 @@
+// user authentication after userAuth.js called
+import firebase from 'firebase/compat/app'
 import router from "next/router";
 
 const AuthenticateIsUser = async (email) => {

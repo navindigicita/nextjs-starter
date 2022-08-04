@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
-import HandleGmailSignIn from './user/authenticate'
 import Header from '../components/common/header'
 import Image from 'next/image';
+import HandleGplusSignIn from './user/gPlusSignIn';
 
 const SignUp = (props) => {
     const [getPath, setPath] = useState()
@@ -16,7 +16,7 @@ const SignUp = (props) => {
     }, [])
 
     const handleGmailSignIn = () => {
-        HandleGmailSignIn()
+        HandleGplusSignIn()
     }
 
     return (<>

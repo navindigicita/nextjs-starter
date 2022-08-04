@@ -3,7 +3,7 @@ import firebase from 'firebase/compat/app'
 import FirebaseApp from '../../components/firebase/firebaseApp' //imp don't remove
 import router from 'next/router'
 
-const HandleGmailSignIn = () => {
+const HandleGplusSignIn = () => {
     const GoogleAuth = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(GoogleAuth)
         .then(function (result) {
@@ -18,4 +18,4 @@ const HandleGmailSignIn = () => {
         });
 }
 
-export default HandleGmailSignIn
+export default HandleGplusSignIn

@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Axios from "axios";
-// import { authenticateIsUser } from '../loginPage/auth'
 import { CircularProgress } from '@material-ui/core';
 import { baseUrlThinkly } from '../api/api'
 import { withRouter, useRouter } from 'next/router'

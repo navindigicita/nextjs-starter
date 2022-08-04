@@ -1,3 +1,4 @@
+//handle signin with email link
 import firebase from 'firebase/compat/app'
 import Router from 'next/router';
 
@@ -7,11 +8,10 @@ const AuthenticateIsUser = async (email) => {
         await firebase.auth().signInWithEmailLink(email, window.location.href)
             .then((result) => {
                 console.log("inside .then -> authenticateIsUser function", result);
-                // window.localStorage.removeItem('emailForSignIn');
-                window.sessionStorage.setItem('signInStatus', 'Success');
+                localStorage.setItem('signInStatus', 'Success');
             })
             .catch((error) => {
-                window.localStorage.setItem('signInStatus', error.code);
+                localStorage.setItem('signInStatus', error.code);
                 console.log(error);
             });
     }
