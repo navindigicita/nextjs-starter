@@ -5,9 +5,9 @@ import { useRouter, withRouter } from 'next/router';
 
 const UserCheck = (props) => {
     const router = useRouter();
-    const userData = JSON.parse(props.router.query.data);
+    const userData = props.router.query.data //JSON.parse(props.router.query.data);
     const loginStatus = props.router.query.status;
-    const GplusData = JSON.parse(props.router.query.state);
+    const GplusData = props.router.query.state //JSON.parse(props.router.query.state);
     const [userType, setUserType] = useState()
 
     useEffect(() => {
@@ -18,7 +18,8 @@ const UserCheck = (props) => {
     }, [])
 
     function checkEmail() {
-        const userResponse = JSON.parse(userData.responseData)
+        const data = JSON.parse(userData)
+        const userResponse = JSON.parse(data.responseData)
         console.log("user data from checkUser api from auth@@@@@@", userResponse);
         if (userData.responseCode === '00') {  //user exist with 1 account type
             console.log("single user data########", userResponse);
