@@ -17,7 +17,7 @@ const UserAuth = (props) => {
         async function fetchData() {
             var email = ParaByNameFromUrl('email', router.asPath);
             console.log("filtered email from url -> calling authenticate isUser now", email);
-            await AuthenticateIsUser(email)
+            await AuthenticateIsUser(email, router.asPath)
             const status = localStorage.getItem('signInStatus')
             if (status === 'Success') {
                 console.log("user signInStatus success", email);
