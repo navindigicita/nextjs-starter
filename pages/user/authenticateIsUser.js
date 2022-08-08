@@ -2,7 +2,7 @@
 import firebase from 'firebase/compat/app'
 
 const AuthenticateIsUser = async (email) => {
-    console.log("inside authenticateIsUser function1");
+    console.log("inside authenticateIsUser function1", window.location.href);
     if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
         console.log("inside if isSignInWithEmailLink condition -> authenticateIsUser function1");
         await firebase.auth().signInWithEmailLink(email, window.location.href)
