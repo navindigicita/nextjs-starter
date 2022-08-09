@@ -14,6 +14,13 @@ const UserAuth = (props) => {
 
     useEffect(() => {
         console.log("inside user auth@@@", props.router.query);
+        if (propsDataFromSignUp !== undefined && propsDataFromSignUp.providerId === "google.com") {
+            console.log("propsDataFromSignUp@@@ ", propsDataFromSignUp);
+            checkEmail(propsDataFromSignUp.email, "Success")
+        } else {
+            fetchData()
+        }
+
         async function fetchData() {
             var email = ParaByNameFromUrl('email', router.asPath);
             console.log("filtered email from url -> calling authenticate isUser now", email);
@@ -26,12 +33,6 @@ const UserAuth = (props) => {
                 console.log("user signInStatus failed");
                 router.push('/login')
             }
-        }
-        if (propsDataFromSignUp !== undefined && propsDataFromSignUp.providerId === "google.com") {
-            console.log("propsDataFromSignUp@@@ ", propsDataFromSignUp);
-            checkEmail(propsDataFromSignUp.email, "Success")
-        } else {
-            fetchData()
         }
     }, []);
 
