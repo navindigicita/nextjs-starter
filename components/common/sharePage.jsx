@@ -2,6 +2,7 @@ import { Avatar } from '@material-ui/core'
 import { AssignmentIndOutlined } from '@material-ui/icons'
 import React, { useEffect, useState } from 'react'
 import ShareLink from './shareLink'
+import Image from 'next/image';
 
 const SharePage = (props) => {
     const [userPenName, setuserPenName] = useState()
@@ -26,7 +27,7 @@ const SharePage = (props) => {
                         <h2 style={{ fontSize: '20px', fontWeight: 'bold' }}>Share your page with the world.</h2>
                         <div className='row d-flex'>
                             {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
-                                <img className='my-3 mx-auto' src={userProfileImage} alt='profile' style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }} />
+                                <Image className='my-3 mx-auto' src={userProfileImage} alt='profile' style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }} />
                                 : <Avatar className='mx-auto' style={{ width: '100px', height: '100px' }} src={<AssignmentIndOutlined />} />}
                         </div>
                         <h2 style={{ fontSize: '20px', fontWeight: 'bold' }}>{userPenName !== undefined && userPenName}</h2>
