@@ -3,8 +3,8 @@ import Axios from "axios";
 import { CircularProgress } from '@material-ui/core';
 import { baseUrlThinkly } from '../api/api'
 import { withRouter, useRouter } from 'next/router'
-import AuthenticateIsUser from './authenticateIsUser';
-import ParaByNameFromUrl from '../../components/common/paraByNameFromUrl';
+// import AuthenticateIsUser from './authenticateIsUser';
+// import ParaByNameFromUrl from '../../components/common/paraByNameFromUrl';
 
 
 const UserAuth = (props) => {
@@ -22,19 +22,19 @@ const UserAuth = (props) => {
             // fetchData()
         }
 
-        async function fetchData() {
-            var email = ParaByNameFromUrl('email', router.asPath);
-            console.log("filtered email from url -> calling authenticate isUser now", email);
-            await AuthenticateIsUser(email)
-            const status = localStorage.getItem('signInStatus')
-            if (status === 'Success') {
-                console.log("user signInStatus success", email);
-                checkEmail(email, status)
-            } else {
-                console.log("user signInStatus failed");
-                router.push('/login')
-            }
-        }
+        // async function fetchData() {
+        //     var email = ParaByNameFromUrl('email', router.asPath);
+        //     console.log("filtered email from url -> calling authenticate isUser now", email);
+        //     await AuthenticateIsUser(email)
+        //     const status = localStorage.getItem('signInStatus')
+        //     if (status === 'Success') {
+        //         console.log("user signInStatus success", email);
+        //         checkEmail(email, status)
+        //     } else {
+        //         console.log("user signInStatus failed");
+        //         router.push('/login')
+        //     }
+        // }
     }, []);
 
     function checkEmail(email_id, signIn_status) {
