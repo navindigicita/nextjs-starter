@@ -12,7 +12,7 @@ const HandleGplusSignIn = () => {
             const arr = user._delegate.providerData
             let obj = arr.find(o => o.providerId === 'google.com');
             localStorage.setItem('emailForSignIn', obj.email);
-            router.push({ pathname: '/user/userAuth', query: obj })
+            router.push({ pathname: '/userAuth', query: obj })
         }).catch(function (error) {
             console.log(error);
         });
