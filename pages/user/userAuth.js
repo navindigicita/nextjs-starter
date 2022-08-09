@@ -18,7 +18,8 @@ const UserAuth = (props) => {
             console.log("propsDataFromSignUp@@@ ", propsDataFromSignUp);
             checkEmail(propsDataFromSignUp.email, "Success")
         } else {
-            fetchData()
+            console.log("inside");
+            // fetchData()
         }
 
         async function fetchData() {
