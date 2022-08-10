@@ -19,9 +19,10 @@ const UserCheck = (props) => {
 
     function checkEmail() {
         const data = JSON.parse(userData)
+        console.log("inside check email", data);
         const userResponse = JSON.parse(data.responseData)
         console.log("user data from checkUser api from auth@@@@@@", userResponse);
-        if (userData.responseCode === '00') {  //user exist with 1 account type
+        if (data.responseCode === '00') {  //user exist with 1 account type
             console.log("single user data########", userResponse);
             const author_id = userResponse.UserDetails[0].UserID
             // user exist but registered with email only then checkF penName availability and act accordingly
@@ -37,10 +38,10 @@ const UserCheck = (props) => {
                     query: { googleData: GplusData, updateCall: author_id }
                 })
             }
-        } else if (userData.responseCode === '01') { //user exist with multiple account type
+        } else if (data.responseCode === '01') { //user exist with multiple account type
             console.log("inside multiple type account@@@@@");
             setUserType('multiple')
-        } else if (userData.responseCode === '02') { // user not exist
+        } else if (data.responseCode === '02') { // user not exist
             console.log("inside no user found by this mail, 02");
             router.push({
                 pathname: '/complete-your-profile',

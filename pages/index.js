@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
 import Axios from "axios";
-import { withRouter } from 'next/router';
+import { withRouter, useRouter } from 'next/router';
 import { baseUrl } from './api/api'
 import { RemoteConfiguration } from '../config/individualThinkly';
 import Header from '../components/common/header';
@@ -12,6 +12,7 @@ import Publication from '../components/publication/publications';
 import DashboardPage from '../components/dashboard/deshaboardPage';
 
 const HomePage = (props) => {
+  const router = useRouter()
   const BASE_URL = useContext(baseUrl);
   const userIDQuery = props.router.query.userID;
   const userStatusQuery = props.router.query.userStatus;
@@ -26,11 +27,11 @@ const HomePage = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      console.log("inside fetchData@@@@@@@");
-      const remoteConfigData = await RemoteConfiguration()
-      console.log("remote Config Json", remoteConfigData);
-      const remoteConfigJson = JSON.parse(remoteConfigData)
-      setthinklyConfigData(remoteConfigJson)
+      // console.log("inside fetchData@@@@@@@");
+      // const remoteConfigData = await RemoteConfiguration()
+      // console.log("remote Config Json", remoteConfigData);
+      // const remoteConfigJson = JSON.parse(remoteConfigData)
+      // setthinklyConfigData(remoteConfigJson)
       if (props.userID !== undefined && props.userStatus !== undefined) {  //from multi account
         console.log("inside props data condition", props.userID, props.userStatus);
         setuser_ID(props.userID)
@@ -39,6 +40,8 @@ const HomePage = (props) => {
         console.log("inside history data props", userIDQuery, userStatusQuery);
         setuser_ID(userIDQuery)
         setuser_status(userStatusQuery)
+      } else {
+        router.push('/login')
       }
     }
     fetchData()

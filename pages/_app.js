@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import "bootstrap/dist/css/bootstrap.css";
 
+import '../styles/global.css';
 import '../styles/reset.css';
 import '../styles/main.css';
 import '../styles/detailedPage.css'

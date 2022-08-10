@@ -3,6 +3,7 @@ import Axios from "axios";
 import { CircularProgress } from '@material-ui/core';
 import { baseUrlThinkly } from '../api/api'
 import { withRouter, useRouter } from 'next/router'
+import { fetchUserAccessToken, fetchUserInfo } from '../../utils/fetchUserDetail';
 // import AuthenticateIsUser from './authenticateIsUser';
 // import ParaByNameFromUrl from '../../components/common/paraByNameFromUrl';
 
@@ -10,18 +11,24 @@ import { withRouter, useRouter } from 'next/router'
 const UserAuth = (props) => {
     const router = useRouter();
     const BASE_URL_THINKLY = useContext(baseUrlThinkly);
-    const [propsDataFromSignUp, setpropsDataFromSignUp] = useState(props.router.query)
+    // const [propsDataFromSignUp, setpropsDataFromSignUp] = useState(props.router.query)
+    const [User, setUser] = useState({})
 
     useEffect(() => {
-        console.log("inside user auth@@@", props.router.query);
-        if (propsDataFromSignUp !== undefined && propsDataFromSignUp.providerId === "google.com") {
-            console.log("propsDataFromSignUp@@@ ", propsDataFromSignUp);
-            checkEmail(propsDataFromSignUp.email, "Success")
-        } else {
-            console.log("inside");
-            // fetchData()
-        }
+        const accessToken = fetchUserAccessToken();
+        if (!accessToken) return router.push("/login")
 
+        const userInfo = fetchUserInfo()
+
+// start working from here next day
+
+        // if (propsDataFromSignUp !== undefined && propsDataFromSignUp.providerId === "google.com") {
+        //     console.log("propsDataFromSignUp@@@ ", propsDataFromSignUp);
+        //     checkEmail(propsDataFromSignUp.email, "Success")
+        // } else {
+        //     console.log("inside");
+        //     fetchData()
+        // }
         // async function fetchData() {
         //     var email = ParaByNameFromUrl('email', router.asPath);
         //     console.log("filtered email from url -> calling authenticate isUser now", email);
@@ -61,5 +68,5 @@ const UserAuth = (props) => {
     </div>)
 }
 
-export default withRouter(UserAuth)
+export default UserAuth
 
