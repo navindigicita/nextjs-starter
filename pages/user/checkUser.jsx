@@ -3,21 +3,18 @@ import { CircularProgress } from "@material-ui/core";
 import { useRouter, withRouter } from 'next/router';
 // import MultiAccount from './multiAccount';
 
-const UserCheck = (props) => {
+const UserCheck = () => {
     const router = useRouter();
-    const userData = props.router.query.data //JSON.parse(props.router.query.data);
-    const loginStatus = props.router.query.status;
-    const GplusData = props.router.query.state //JSON.parse(props.router.query.state);
     const [userType, setUserType] = useState()
 
     useEffect(() => {
-        if (userData !== undefined && loginStatus !== undefined && GplusData !== undefined) {
-            console.log("checkUser data passed from userAuth##########", GplusData);
-            checkEmail()
+        console.log("check user", router.query.response, router.query.userData);
+        if (router.query.response !== undefined && router.query.userData !== undefined) {
+            checkEmail(router.query.response, router.query.userData)
         }
     }, [])
 
-    function checkEmail() {
+    function checkEmail(userData, googleData) {
         const data = JSON.parse(userData)
         console.log("inside check email", data);
         const userResponse = JSON.parse(data.responseData)
@@ -25,17 +22,14 @@ const UserCheck = (props) => {
         if (data.responseCode === '00') {  //user exist with 1 account type
             console.log("single user data########", userResponse);
             const author_id = userResponse.UserDetails[0].UserID
-            // user exist but registered with email only then checkF penName availability and act accordingly
+            // user exist but registered with email only then check penName availability and act accordingly
             if (userResponse.UserDetails[0].PenName !== "" && userResponse.UserDetails[0].PenName.length > 0) {
                 localStorage.setItem('UserID', author_id);
-                router.push({
-                    pathname: '/',
-                    query: { userID: author_id, userStatus: loginStatus }
-                })
+                router.push('/') //check in main index.js for userID from local storage and then show dashboard
             } else {
                 router.push({
                     pathname: '/complete-your-profile',
-                    query: { googleData: GplusData, updateCall: author_id }
+                    query: { googleData: googleData, updateCall: author_id }
                 })
             }
         } else if (data.responseCode === '01') { //user exist with multiple account type
@@ -45,7 +39,7 @@ const UserCheck = (props) => {
             console.log("inside no user found by this mail, 02");
             router.push({
                 pathname: '/complete-your-profile',
-                query: GplusData
+                query: { googleData: googleData }
             })
         }
     }

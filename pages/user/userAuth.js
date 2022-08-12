@@ -11,24 +11,15 @@ import { fetchUserAccessToken, fetchUserInfo } from '../../utils/fetchUserDetail
 const UserAuth = (props) => {
     const router = useRouter();
     const BASE_URL_THINKLY = useContext(baseUrlThinkly);
-    // const [propsDataFromSignUp, setpropsDataFromSignUp] = useState(props.router.query)
-    const [User, setUser] = useState({})
 
     useEffect(() => {
         const accessToken = fetchUserAccessToken();
         if (!accessToken) return router.push("/login")
 
         const userInfo = fetchUserInfo()
-
-// start working from here next day
-
-        // if (propsDataFromSignUp !== undefined && propsDataFromSignUp.providerId === "google.com") {
-        //     console.log("propsDataFromSignUp@@@ ", propsDataFromSignUp);
-        //     checkEmail(propsDataFromSignUp.email, "Success")
-        // } else {
-        //     console.log("inside");
-        //     fetchData()
-        // }
+        if (userInfo !== undefined && userInfo !== null && userInfo !== '') {
+            checkEmail(userInfo)
+        }
         // async function fetchData() {
         //     var email = ParaByNameFromUrl('email', router.asPath);
         //     console.log("filtered email from url -> calling authenticate isUser now", email);
@@ -44,18 +35,24 @@ const UserAuth = (props) => {
         // }
     }, []);
 
-    function checkEmail(email_id, signIn_status) {
-        console.log("inside checkEmail api email_id and signIn_status", email_id, signIn_status);
+    function checkEmail(userInfo) {
+        console.log("inside checkEmail api email_id and signIn_status", userInfo.email);
         var config = {
             method: 'POST',
-            data: { EmailID: email_id, MobileNo: "" }
+            data: {
+                EmailID: userInfo.email,
+                MobileNo: ""
+            }
         }
         Axios(`${BASE_URL_THINKLY}User/CheckUser`, config)
             .then((res) => {
                 console.log("CheckUser response", res.data);
                 router.push({
                     pathname: '/user/checkUser',
-                    query: { data: JSON.stringify(res.data), status: signIn_status, state: JSON.stringify(propsDataFromSignUp) }
+                    query: {
+                        response: JSON.stringify(res.data),
+                        userData: JSON.stringify(userInfo)
+                    }
                 })
             })
             .catch((err) => {

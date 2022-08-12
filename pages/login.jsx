@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { isMobile } from 'react-device-detect'
 import Image from 'next/image';
 import Header from '../components/common/header'
+// import { signIn } from 'next-auth/react'
 
 const SignUp = (props) => {
     const router = useRouter()

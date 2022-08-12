@@ -14,10 +14,9 @@ import DashboardPage from '../components/dashboard/deshaboardPage';
 const HomePage = (props) => {
   const router = useRouter()
   const BASE_URL = useContext(baseUrl);
-  const userIDQuery = props.router.query.userID;
-  const userStatusQuery = props.router.query.userStatus;
-  const [user_ID, setuser_ID] = useState()
-  const [user_status, setuser_status] = useState()
+  // const userIDQuery = props.router.query.userID;
+  // const userStatusQuery = props.router.query.userStatus;
+  const [AuthorID, setAuthorID] = useState()
   const [thinklyConfigData, setthinklyConfigData] = useState()
   const [value, setValue] = useState(null);
   const [getIsValue, setIsvalue] = useState(false);
@@ -27,19 +26,20 @@ const HomePage = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      // console.log("inside fetchData@@@@@@@");
-      // const remoteConfigData = await RemoteConfiguration()
-      // console.log("remote Config Json", remoteConfigData);
-      // const remoteConfigJson = JSON.parse(remoteConfigData)
-      // setthinklyConfigData(remoteConfigJson)
-      if (props.userID !== undefined && props.userStatus !== undefined) {  //from multi account
-        console.log("inside props data condition", props.userID, props.userStatus);
-        setuser_ID(props.userID)
-        setuser_status(props.userStatus)
-      } else if (userIDQuery !== undefined && userStatusQuery !== undefined) {  //from single account
-        console.log("inside history data props", userIDQuery, userStatusQuery);
-        setuser_ID(userIDQuery)
-        setuser_status(userStatusQuery)
+      const data = await RemoteConfiguration()
+      const remoteConfigJson = JSON.parse(data)
+      console.log("remote Config Json", remoteConfigJson);
+      setthinklyConfigData(remoteConfigJson)  //state
+      if (props.userID !== undefined && props.userStatus !== undefined) {  //from multi account(pending)
+        // console.log("inside props data condition", props.userID, props.userStatus);
+        // setuser_ID(props.userID)
+        // setuser_status(props.userStatus)
+      } else if (localStorage.getItem('UserID') !== undefined && localStorage.getItem('UserID') !== null) {  //from single account
+        const data = localStorage.getItem('UserID')
+        console.log("inside single account@@@@@", data);
+        setAuthorID(data) //state
+        fetchUserProfileData(data)   //function
+        fetchSupporterData(data) //function
       } else {
         router.push('/login')
       }
@@ -47,16 +47,10 @@ const HomePage = (props) => {
     fetchData()
   }, []);
 
-  useEffect(() => {
-    if (user_ID !== undefined) {
-      fetchUserProfileData(user_ID)
-      fetchSupporterData(user_ID)
-    }
-  }, [user_ID])
-
+  // stooped here
 
   function fetchUserProfileData(authorID) {
-    console.log("inside fetch user profile data@@@@@@", authorID, BASE_URL);
+    console.log("inside fetch user profile data@@@@@@", authorID);
     var config = {
       headers: {
         "Content-Type": "application/json",
@@ -66,14 +60,11 @@ const HomePage = (props) => {
     };
     Axios.get(`${BASE_URL}User/GetUserProfileByID/${authorID}`, config)
       .then((res) => {
-        console.log("inside api function", res);
+        console.log("inside fetchUserProfileData function", res);
         if (res.data.responseCode === '00') {
-          // setHeadervisible(true)
           console.log("GetUserProfileByID response in Index@@@@", res.data.responseData);
-          window.sessionStorage.setItem("PublicationCount", res.data.responseData.otherDetails.totalPublicationsCount)
+          localStorage.setItem("PublicationCount", res.data.responseData.otherDetails.totalPublicationsCount)
           setProfileData(res.data.responseData);
-        } else if (res.data.responseCode === "02") {
-          console.log("GetUserProfileByID response@@@@", res);
         } else if (res.data.responseCode === "03") {
           console.log("GetUserProfileByID response@@@@", res);
           setProfileData(res.data.responseData)
@@ -87,7 +78,6 @@ const HomePage = (props) => {
   }
 
   function fetchSupporterData(authorID) {
-    console.log("inside fetch support data@@@@@", authorID, BASE_URL);
     var config = {
       headers: {
         "DeviceID": "123456",
@@ -108,7 +98,8 @@ const HomePage = (props) => {
   }
 
   return (<>
-    {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
+    <p>hello</p>
+    {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
         authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} />
       <div className='row' style={{ marginTop: '5rem' }}>
@@ -129,8 +120,20 @@ const HomePage = (props) => {
       </div>
     </div> : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
       <CircularProgress aria-label="Loading..." />
-    </div>}
+    </div>} */}
   </>)
 }
 
 export default withRouter(HomePage)
+
+
+// export async function getServerSideProps(context) {
+//   if (localStorage.getItem('UserID') !== undefined) {
+//     const data = await RemoteConfiguration()
+//     const remoteConfigJson = JSON.parse(data)
+//     console.log("remote Config Json", remoteConfigJson);
+//   }
+//   return {
+//     props: { remoteConfigJson }, // will be passed to the page component as props
+//   }
+// }
