@@ -1,3 +1,8 @@
 module.exports = {
-    trailingSlash: true
+    trailingSlash: true,
+    distDir: 'out',
+    reactStrictMode: true,
+    eslint: {
+      ignoreDuringBuilds: true,
+    },
 };
