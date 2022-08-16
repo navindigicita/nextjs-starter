@@ -2,12 +2,12 @@ import React  from 'react'
 import { isMobile } from 'react-device-detect'
 import Header from '../components/common/header'
 import Image from 'next/image';
-import HandleGplusSignIn from './user/gPlusSignIn';
+// import HandleGplusSignIn from './user/gPlusSignIn';
 
 const SignUp = (props) => {
 
     const handleGmailSignIn = () => {
-        HandleGplusSignIn()
+        // HandleGplusSignIn()
     }
 
     return (<>
