@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST={"..\\components\\posts\\newThinkly.jsx -> react-quill":{id:1167,files:["static/chunks/framework-4d78cf2ac5283a04.js","static/chunks/eabe11fc.67207876ae302098.js","static/chunks/127.ae17677a81761080.js"]}};
