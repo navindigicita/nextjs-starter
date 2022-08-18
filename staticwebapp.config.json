@@ -1,33 +1,42 @@
 {
-    "navigationFallback": {
-      "rewrite": "index.html",
-      "exclude": ["*.{png,jpg,gif,svg}", "*.css"]
-    },
+  "navigationFallback": {
+    "rewrite": "index.html",
+    "exclude": ["*.{png,jpg,gif,svg}", "*.css"]
+  },
 
-    "routes": [
-      {
-        "route": "/pages/*",
-       "headers": {
-        "content-type": "application/javascript"
+  "routes": [
+    {
+      "route": "/pages/*",
+     "headers": {
+      "content-type": "application/javascript"
+     }
+    },
+    {
+    "route": "/login",
+     "headers": {
+      "content-type": "application/javascript"
+     }
+    },
+    {
+      "route": "/chunks/",
+     "headers": {
+      "content-type": "application/javascript"
+     }
+    },
+    {
+      "route": "/css/",
+      "headers": {
+        "content-type": "text/css"
        }
-      },
-      {
-        "route": "/chunks/",
-       "headers": {
-        "content-type": "application/javascript"
-       }
-      },
-      {
-        "route": "/css/",
-        "headers": {
-          "content-type": "text/css"
-         }
-      }
-    ],
-    "mimeTypes": {
-      ".json": "text/json",
-      ".css":"text/css",
-      ".js": "application/javascript"
     }
+  ],
+  "mimeTypes": {
+    ".json": "text/json",
+    ".css":"text/css",
+    ".js": "application/javascript"
+  },
+  "globalHeaders": {
+    "content-type":"application/json"
+  }
 
 }

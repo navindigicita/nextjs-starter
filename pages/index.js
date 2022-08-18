@@ -122,6 +122,7 @@ const HomePage = (props) => {
     */}
       </Head>
     <p>hello</p>
+    <p>index page.</p>
     {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
         authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} />
