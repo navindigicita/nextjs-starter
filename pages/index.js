@@ -103,14 +103,9 @@ const HomePage = (props) => {
   }
 
   return (<>
-    <Script type='text/javascript' id="stripe-js" src="https://js.stripe.com/v3/"
-      onLoad={() => {
-        setStripe({ stripe: window.Stripe('pk_test_12345') })
-      }}
-    />
-    {/* <Head>
+    <Head>
       <script type="text/javascript" src="/static/hello.js"></script>
-    </Head> */}
+    </Head>
     <p>hello</p>
     {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
@@ -138,7 +133,6 @@ const HomePage = (props) => {
 }
 
 export default withRouter(HomePage)
-
 
 // export async function getServerSideProps(context) {
 //   if (localStorage.getItem('UserID') !== undefined) {

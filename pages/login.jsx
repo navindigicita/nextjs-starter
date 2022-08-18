@@ -26,8 +26,7 @@ const SignUp = (props) => {
     return (<>
         <Header />
         <Head>
-            {/* <meta og:title='' /> */}
-            {/* <script type="text/javascript" src="/static/hello.js"></script> */}
+            <script type="text/javascript" src="/static/hello.js"></script>
         </Head>
         <div className='container' style={{ marginTop: '8rem' }}>
             <div className='text-center' style={isMobile ? { marginTop: '100px', marginBottom: '135px' } : {}}>
