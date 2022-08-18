@@ -106,6 +106,11 @@ const HomePage = (props) => {
       <script type="text/javascript" src="/static/hello.js"></script>
     </Head>
     <p>hello</p>
+    <div>
+    <head>
+      <script type="text/javascript" src="/components/common/header.jsx"></script>
+    </head>
+      </div>
     {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
         authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} />
