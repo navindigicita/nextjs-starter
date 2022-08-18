@@ -2,5 +2,21 @@
     "navigationFallback": {
       "rewrite": "index.html",
       "exclude": ["*.{png,jpg,gif,svg}", "*.css"]
-    }
+    },
+
+    "routes": [
+      {
+        "route": "/pages",
+       "headers": {
+        "content-type": "application/json"
+       }
+      },
+      {
+        "route": "/styles",
+        "headers": {
+          "content-type": "text/css"
+         }
+      }
+    ]
+
 }
