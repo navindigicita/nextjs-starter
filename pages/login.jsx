@@ -29,7 +29,7 @@ const SignUp = (props) => {
             <script type="text/javascript" src="static/libs/jquery.min.js"></script>
             <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/malihu-custom-scrollbar-plugin@3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
             <script type="text/javascript" src="static/libs/bootstrap.min.js"></script>
-            <script type="text/javascript" src="static/libs/owl.carousel.min.js"></script>
+            {/* <script type="text/javascript" src="static/libs/owl.carousel.min.js"></script> */}
             <script type="text/javascript" src="static/scripts/chatHead.js"></script>
             <script type="text/javascript" src="static/libs/jquery.magnific-popup.js"></script>
 
