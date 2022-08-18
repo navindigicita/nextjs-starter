@@ -1,7 +1,7 @@
 {
     "navigationFallback": {
       "rewrite": "index.html",
-      "exclude": ["*.{png,jpg,gif,svg}", "*.css","*.js","*.jsx"]
+      "exclude": ["*.{png,jpg,gif,svg}", "*.css"]
     },
 
     "routes": [
@@ -23,6 +23,11 @@
           "content-type": "text/css"
          }
       }
-    ]
+    ],
+    "mimeTypes": {
+      ".json": "text/json",
+      ".css":"text/css",
+      ".js": "text/javascript"
+    }
 
 }
