@@ -1,3 +1,4 @@
+import head from 'next/head';
 import React, { useContext, useState, useEffect } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
@@ -10,6 +11,8 @@ import SideBar from '../components/dashboard/sidebar';
 import Thinklies from '../components/posts/thinklies';
 import Publication from '../components/publication/publications';
 import DashboardPage from '../components/dashboard/deshaboardPage';
+
+
 
 const HomePage = (props) => {
   const router = useRouter()
@@ -36,7 +39,7 @@ const HomePage = (props) => {
         // setuser_status(props.userStatus)
       } else if (localStorage.getItem('UserID') !== undefined && localStorage.getItem('UserID') !== null) {  //from single account
         const data = localStorage.getItem('UserID')
-        console.log("inside single account@@@@@", data);
+        //console.log("inside single account@@@@@", data);
         setAuthorID(data) //state
         fetchUserProfileData(data)   //function
         fetchSupporterData(data) //function
