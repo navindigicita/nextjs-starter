@@ -33,3 +33,15 @@ export default function MyApp({ Component, pageProps }) {
     </div>
   );
 }
+
+export async function getServerSideProps({ req, res }) {
+  debugger;
+  if (req.headers.accept === "application/json") {
+    res.setHeader('Content-Type', 'application/json')
+    res.write(JSON.stringify({ "dummy": "data" }))
+    res.end()
+  }
+  return {
+    props: {}, // will be passed to the page component as props
+  }
+}
