@@ -43,13 +43,13 @@ const SignUp = (props) => {
 
 export default SignUp;
 
-export async function getServerSideProps({ req, res }) {
-    if (req.headers.accept === "application/json") {
-        res.setHeader('Content-Type', 'application/json')
-        res.write(JSON.stringify({ "dummy": "data" }))
-        res.end()
-    }
-    return {
-        props: {}, // will be passed to the page component as props
-    }
-}
+// export async function getServerSideProps({ req, res }) {
+//     if (req.headers.accept === "application/json") {
+//         res.setHeader('Content-Type', 'application/json')
+//         res.write(JSON.stringify({ "dummy": "data" }))
+//         res.end()
+//     }
+//     return {
+//         props: {}, // will be passed to the page component as props
+//     }
+// }
