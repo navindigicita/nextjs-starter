@@ -6,7 +6,7 @@
 
     "routes": [
       {
-        "route": "/pages/",
+        "route": "/pages/*",
        "headers": {
         "content-type": "application/javascript"
        }
