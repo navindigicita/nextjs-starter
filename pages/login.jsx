@@ -26,7 +26,7 @@ const SignUp = (props) => {
     return (<>
         <Header />
         <Head>
-          
+        <script type="text/javascript" src="/components/common/header.jsx"></script>
 
         </Head>
         <div className='container' style={{ marginTop: '8rem' }}>
