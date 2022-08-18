@@ -12,7 +12,7 @@ import Thinklies from '../components/posts/thinklies';
 import Publication from '../components/publication/publications';
 import DashboardPage from '../components/dashboard/deshaboardPage';
 import Head from 'next/head';
-
+import Script from 'next/script'
 
 
 const HomePage = (props) => {
@@ -27,6 +27,7 @@ const HomePage = (props) => {
   const [profileData, setProfileData] = useState();
   // const [Headervisible, setHeadervisible] = useState(false)
   const [supporterData, setsupporterData] = useState()
+  const [stripe, setStripe] = useState(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -102,9 +103,14 @@ const HomePage = (props) => {
   }
 
   return (<>
-    <Head>
+    <Script id="stripe-js" src="https://js.stripe.com/v3/"
+      onLoad={() => {
+        setStripe({ stripe: window.Stripe('pk_test_12345') })
+      }}
+    />
+    {/* <Head>
       <script type="text/javascript" src="/static/hello.js"></script>
-    </Head>
+    </Head> */}
     <p>hello</p>
     {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
