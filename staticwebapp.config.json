@@ -1,18 +1,24 @@
 {
     "navigationFallback": {
       "rewrite": "index.html",
-      "exclude": ["*.{png,jpg,gif,svg}", "*.css"]
+      "exclude": ["*.{png,jpg,gif,svg}", "*.css","*.js","*.jsx"]
     },
 
     "routes": [
       {
-        "route": "/pages",
+        "route": "/pages/",
        "headers": {
-        "content-type": "application/json"
+        "content-type": "application/javascript"
        }
       },
       {
-        "route": "/styles",
+        "route": "/chunks/",
+       "headers": {
+        "content-type": "application/javascript"
+       }
+      },
+      {
+        "route": "/css/",
         "headers": {
           "content-type": "text/css"
          }
