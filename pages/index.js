@@ -11,6 +11,7 @@ import SideBar from '../components/dashboard/sidebar';
 import Thinklies from '../components/posts/thinklies';
 import Publication from '../components/publication/publications';
 import DashboardPage from '../components/dashboard/deshaboardPage';
+import Head from 'next/head';
 
 
 
@@ -101,6 +102,9 @@ const HomePage = (props) => {
   }
 
   return (<>
+    <Head>
+      <script type="text/javascript" src="/static/hello.js"></script>
+    </Head>
     <p>hello</p>
     {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
