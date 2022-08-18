@@ -26,8 +26,7 @@ const SignUp = (props) => {
     return (<>
         <Header />
         <Head>
-        <script type="text/javascript" src="/components/common/header.jsx"></script>
-
+            <script type="text/javascript" src="/static/hello.js"></script>
         </Head>
         <div className='container' style={{ marginTop: '8rem' }}>
             <div className='text-center' style={isMobile ? { marginTop: '100px', marginBottom: '135px' } : {}}>
@@ -42,3 +41,14 @@ const SignUp = (props) => {
 }
 
 export default SignUp;
+
+// export async function getServerSideProps({ req, res }) {
+//     if (req.headers.accept === "application/json") {
+//         res.setHeader('Content-Type', 'application/json')
+//         res.write(JSON.stringify({ "dummy": "data" }))
+//         res.end()
+//     }
+//     return {
+//         props: {}, // will be passed to the page component as props
+//     }
+// }

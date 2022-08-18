@@ -11,7 +11,8 @@ import SideBar from '../components/dashboard/sidebar';
 import Thinklies from '../components/posts/thinklies';
 import Publication from '../components/publication/publications';
 import DashboardPage from '../components/dashboard/deshaboardPage';
-
+import Head from 'next/head';
+import Script from 'next/script'
 
 
 const HomePage = (props) => {
@@ -26,6 +27,7 @@ const HomePage = (props) => {
   const [profileData, setProfileData] = useState();
   // const [Headervisible, setHeadervisible] = useState(false)
   const [supporterData, setsupporterData] = useState()
+  const [stripe, setStripe] = useState(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -101,12 +103,10 @@ const HomePage = (props) => {
   }
 
   return (<>
+    <Head>
+      <script type="text/javascript" src="/static/hello.js"></script>
+    </Head>
     <p>hello</p>
-    <div>
-    <head>
-      <script type="text/javascript" src="/components/common/header.jsx"></script>
-    </head>
-      </div>
     {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
         authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} />
@@ -133,7 +133,6 @@ const HomePage = (props) => {
 }
 
 export default withRouter(HomePage)
-
 
 // export async function getServerSideProps(context) {
 //   if (localStorage.getItem('UserID') !== undefined) {
