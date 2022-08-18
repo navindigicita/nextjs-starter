@@ -103,7 +103,7 @@ const HomePage = (props) => {
   }
 
   return (<>
-    <Script id="stripe-js" src="https://js.stripe.com/v3/"
+    <Script type='text/javascript' id="stripe-js" src="https://js.stripe.com/v3/"
       onLoad={() => {
         setStripe({ stripe: window.Stripe('pk_test_12345') })
       }}
