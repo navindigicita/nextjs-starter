@@ -7,9 +7,9 @@ module.exports = {
       ignoreDuringBuilds: true,
       
     },
-    publicPath: "/_next/*",
-    basePath:"/next",
-    assetPrefix: '/next/'
+    //publicPath: "/_next/*",
+    //basePath:"/next",
+    //assetPrefix: '/next/'
     
 };
 
