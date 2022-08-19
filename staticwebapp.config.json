@@ -3,26 +3,27 @@
     "rewrite": "index.html",
     "exclude": [
       "*.{png,jpg,gif,svg}",
-      "*.css","*.ico"
+      "*.css",
+      "*.ico"
     ]
   },
   "routes": [
     {
       "route": "/pages/*",
       "headers": {
-        "content-type": "application/javascript"
+        "content-type": "text/javascript"
       }
     },
     {
       "route": "/login",
       "headers": {
-        "content-type": "application/javascript"
+        "content-type": "text/javascript"
       }
     },
     {
       "route": "/chunks/",
       "headers": {
-        "content-type": "application/javascript"
+        "content-type": "text/javascript"
       }
     },
     {
@@ -35,9 +36,9 @@
   "mimeTypes": {
     ".json": "text/json",
     ".css": "text/css",
-    ".js": "application/javascript"
+    ".js": "text/javascript"
   },
   "globalHeaders": {
-    "content-type": "application/json"
+    "content-type": "text/json"
   }
 }
