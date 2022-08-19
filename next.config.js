@@ -6,5 +6,18 @@ module.exports = {
       ignoreDuringBuilds: true,
       
     },
-    publicPath: "/public/"
+    publicPath: "/public/",
+    async headers() {
+      return [
+        {
+          source: '/login',
+          headers: [
+            {
+              key: 'content-type',
+              value: 'application/javascript',
+            }
+          ]
+          }
+        ]
+      }
 };
