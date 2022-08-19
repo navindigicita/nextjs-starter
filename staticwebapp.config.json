@@ -32,11 +32,7 @@
       }
     }
   ],
-  "mimeTypes": {
-    ".json": "text/json",
-    ".css": "text/css",
-    ".js": "application/javascript"
-  },
+  
   "globalHeaders": {
     "content-type": "application/json"
   }
