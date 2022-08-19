@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "env-cmd -f .env.dev next build && next export",
+    "build": "env-cmd -f .env.dev next build",
     "dev": "env-cmd -f .env.local next dev",
     "fix": "next lint --fix",
     "lint": "next lint",
