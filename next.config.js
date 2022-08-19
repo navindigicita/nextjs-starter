@@ -8,7 +8,7 @@ module.exports = {
       
     },
     publicPath: "/public/",
-    basePath:"nextjs-starter",
+    basePath:"/nextjs-starter",
     assetPrefix: '/nextjs-starter/',
     async headers() {
       return [
