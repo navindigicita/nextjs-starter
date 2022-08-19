@@ -104,7 +104,7 @@ const HomePage = (props) => {
 
   return (<>
     <Head>
-      <script type="text/javascript" src="/static/hello.js"></script>
+      {/* <script type="text/javascript" src="/static/hello.js"></script> */}
       <script type="text/javascript" defer="" nomodule="" src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script>
       <script type="text/javascript" src="/_next/static/chunks/webpack-6df21c39820c95f2.js" defer=""></script>
       <script type="text/javascript" src="/_next/static/chunks/framework-4d78cf2ac5283a04.js" defer=""></script>

@@ -1,4 +1,5 @@
 module.exports = {
+
     trailingSlash: true,
     // distDir: 'out',
     // reactStrictMode: false,
@@ -7,6 +8,8 @@ module.exports = {
       
     },
     publicPath: "/public/",
+    basePath:"nextjs-starter",
+    assetPrefix: '/nextjs-starter/',
     async headers() {
       return [
         {
@@ -21,3 +24,6 @@ module.exports = {
         ]
       }
 };
+
+  
+
