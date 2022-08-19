@@ -1,6 +1,4 @@
-const withCSS = require('@zeit/next-css')
-
-module.exports = withCSS({
+module.exports = {
   trailingSlash: true,
   // distDir: 'out',
   // reactStrictMode: false,
@@ -9,4 +7,4 @@ module.exports = withCSS({
 
   },
   publicPath: "/public/"
-});
+}
