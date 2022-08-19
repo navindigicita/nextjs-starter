@@ -7,22 +7,10 @@ module.exports = {
       ignoreDuringBuilds: true,
       
     },
-    publicPath: "/public/",
-    basePath:"/nextjs-starter",
-    assetPrefix: '/nextjs-starter/',
-    async headers() {
-      return [
-        {
-          source: '/login',
-          headers: [
-            {
-              key: 'content-type',
-              value: 'application/javascript',
-            }
-          ]
-          }
-        ]
-      }
+    publicPath: "/_next/*",
+    basePath:"/next",
+    assetPrefix: '/next/'
+    
 };
 
   
