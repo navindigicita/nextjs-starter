@@ -3,7 +3,7 @@
     "rewrite": "index.html",
     "exclude": [
       "*.{png,jpg,gif,svg}",
-      "*.css",
+      "/css/*",
       "*.ico"
     ]
   },
@@ -39,6 +39,6 @@
     ".js": "text/javascript"
   },
   "globalHeaders": {
-    "content-type": "text/json"
+    "content-type": "text/javascript"
   }
 }
