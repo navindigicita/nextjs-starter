@@ -121,6 +121,7 @@ const HomePage = (props) => {
       <script type="text/javascript" src="/_next/static/HeBHKw6USCaNMTHLjnoqM/_ssgManifest.js" defer=""></script> */}
     </Head>
     <p>hello</p>
+    <p>index page.</p>
     {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
         authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} />
