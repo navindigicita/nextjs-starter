@@ -23,11 +23,5 @@
           "content-type": "text/css"
          }
       }
-    ],
-    "mimeTypes": {
-      ".json": "text/json",
-      ".css":"text/css",
-      ".js": "application/javascript"
-    }
-
+    ]
 }
