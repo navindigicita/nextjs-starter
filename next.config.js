@@ -6,5 +6,5 @@ module.exports = {
       ignoreDuringBuilds: true,
       
     },
-    publicPath: "/static/"
+    publicPath: "/public/"
 };
