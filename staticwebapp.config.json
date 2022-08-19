@@ -3,7 +3,7 @@
     "rewrite": "index.html",
     "exclude": [
       "*.{png,jpg,gif,svg}",
-      "*.css","hello.js"
+      "*.css","*.ico"
     ]
   },
   "routes": [
