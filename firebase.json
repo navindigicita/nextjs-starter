@@ -3,8 +3,7 @@
     "rules": "database.rules.json"
   },
   "hosting": {
-    "firebase" : "thinklywebapp.web.app",
-    "public": "./out/static",
+    "public": "pages",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -12,10 +11,10 @@
     ],
     "rewrites": [
       {
-        "source": "/",
+        "source": "!/@(js|css)/**",
         "destination": "/index.html"
       }
-    ]
+    ],
+    "cleanUrls": true
   }
-  
 }
