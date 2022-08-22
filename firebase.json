@@ -4,7 +4,7 @@
   },
   "hosting": {
     "firebase" : "thinklywebapp.web.app",
-    "public": "out",
+    "public": "./out/static",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -12,7 +12,7 @@
     ],
     "rewrites": [
       {
-        "source": "**",
+        "source": "/",
         "destination": "/index.html"
       }
     ]
