@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "build": "env-cmd -f .env.dev next build",
-    "next-export" : "next export",
+    ////"next-export" : "next export",
     "dev": "env-cmd -f .env.local next dev",
     "fix": "next lint --fix",
     "lint": "next lint",
-    "post-build": "npm run build",
-    "start": "next start"
+    ////"post-build": "npm run build",
+   
+    "start": "next start",
+    "post-build": "npm run build && next export"
   },
   "dependencies": {
     "@firebase/remote-config": "^0.3.4",
