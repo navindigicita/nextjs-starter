@@ -1,10 +1,17 @@
 module.exports = {
-  trailingSlash: true,
-  distDir: '.next',
-  // reactStrictMode: false,
-  eslint: {
-    ignoreDuringBuilds: true,
 
-  },
-  publicPath: "/public/"
-}
+    trailingSlash: true,
+    // distDir: 'out',
+    // reactStrictMode: false,
+    eslint: {
+      ignoreDuringBuilds: true,
+      
+    },
+    //publicPath: "/_next/*",
+    //basePath:"/next",
+    //assetPrefix: '/next/'
+    
+};
+
+  
+
