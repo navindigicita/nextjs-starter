@@ -12,18 +12,9 @@
     "rewrites": [
       {
         "source": "**",
-        "function": "nextServer"
+        "destination": "index.html"
       }
     ]
-  },
-  "functions": {
-    "source": ".",
-    "runtime": "nodejs14",
-    "ignore": [
-      ".firebase/**",
-      ".firebaserc",
-      "firebase.json",
-      "**/node_modules/**"
-    ]
   }
+  
 }
