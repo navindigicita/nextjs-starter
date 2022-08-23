@@ -105,7 +105,7 @@ const HomePage = (props) => {
   return (<>
     <Head>
       {/* <script type="text/javascript" src="/static/hello.js"></script> */}
-      <script type="text/javascript" defer="" nomodule="" src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script>
+      {/* <script type="text/javascript" defer="" nomodule="" src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script>
       <script type="text/javascript" src="/_next/static/chunks/webpack-6df21c39820c95f2.js" defer=""></script>
       <script type="text/javascript" src="/_next/static/chunks/framework-4d78cf2ac5283a04.js" defer=""></script>
       <script type="text/javascript" src="/_next/static/chunks/main-e1474655dc9df174.js" defer=""></script>
@@ -118,10 +118,9 @@ const HomePage = (props) => {
       <script type="text/javascript" src="/_next/static/chunks/410-f9782eb379fe5ec9.js" defer=""></script>
       <script type="text/javascript" src="/_next/static/chunks/pages/index-89072a427292e377.js" defer=""></script>
       <script type="text/javascript" src="/_next/static/HeBHKw6USCaNMTHLjnoqM/_buildManifest.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/HeBHKw6USCaNMTHLjnoqM/_ssgManifest.js" defer=""></script>
+      <script type="text/javascript" src="/_next/static/HeBHKw6USCaNMTHLjnoqM/_ssgManifest.js" defer=""></script> */}
     </Head>
-    <p>hello</p>
-    <p>index page.</p>
+    {props.isSSR ? <p>hello</p> : <p>index page.</p>}
     {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
         authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} />
@@ -149,13 +148,6 @@ const HomePage = (props) => {
 
 export default withRouter(HomePage)
 
-// export async function getServerSideProps(context) {
-//   if (localStorage.getItem('UserID') !== undefined) {
-//     const data = await RemoteConfiguration()
-//     const remoteConfigJson = JSON.parse(data)
-//     console.log("remote Config Json", remoteConfigJson);
-//   }
-//   return {
-//     props: { remoteConfigJson }, // will be passed to the page component as props
-//   }
-// }
+export async function getServerSideProps() {
+  return { props: { isSSR: true } }
+}

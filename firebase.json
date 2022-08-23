@@ -3,17 +3,21 @@
     "rules": "database.rules.json"
   },
   "hosting": {
-    "public": "publilc",
+    "public": "public2",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
+    ]
+  },
+  "functions": {
+    "source": ".",
+    "runtime": "nodejs14",
+    "ignore": [
+      ".firebase/**",
+      ".firebaserc",
+      "firebase.json",
+      "**/node_modules/**"
     ]
   }
 }
