@@ -19,5 +19,23 @@
       "firebase.json",
       "**/node_modules/**"
     ]
-  }
+  },
+  "rewrites": [
+    {
+      "source": "!/@(js|css)/**",
+      "destination": "/index.html"
+    }
+  ],
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "**/*.@(eot|otf|ttf|ttc|woff|font.css)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ]
 }
