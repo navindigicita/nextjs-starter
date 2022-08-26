@@ -1,17 +1,14 @@
 module.exports = {
-
-    trailingSlash: true,
-    distDir: 'out',
-    // reactStrictMode: false,
-    eslint: {
-      ignoreDuringBuilds: true,
-      
-    },
-    //publicPath: "/_next/*",
-    //basePath:"/next",
-    //assetPrefix: '/next/'
-    
+  experimental: {
+    images: {
+      unoptimized: true,
+      domains: ["thinklymedia.blob.core.windows.net"]
+    }
+  },
+  trailingSlash: true,
+  // distDir: 'out',
+  // reactStrictMode: false,
+  eslint: {
+    ignoreDuringBuilds: true
+  }
 };
-
-  
-

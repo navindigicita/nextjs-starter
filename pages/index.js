@@ -13,6 +13,7 @@ import Publication from '../components/publication/publications';
 import DashboardPage from '../components/dashboard/deshaboardPage';
 import Head from 'next/head';
 import Script from 'next/script'
+import { fetchUserAccessToken } from '../utils/fetchUserDetail';
 
 
 const HomePage = (props) => {
@@ -30,13 +31,14 @@ const HomePage = (props) => {
   const [stripe, setStripe] = useState(null)
 
   useEffect(() => {
+    console.log("inside use effect");
     async function fetchData() {
-      const data = await RemoteConfiguration()
-      const remoteConfigJson = JSON.parse(data)
-      console.log("remote Config Json", remoteConfigJson);
-      setthinklyConfigData(remoteConfigJson)  //state
-      if (props.userID !== undefined && props.userStatus !== undefined) {  //from multi account(pending)
-        // console.log("inside props data condition", props.userID, props.userStatus);
+      // const data = await RemoteConfiguration()
+      // const remoteConfigJson = JSON.parse(data)
+      // console.log("remote Config Json", remoteConfigJson);
+      // setthinklyConfigData(remoteConfigJson)  //state
+      if (props.authorized !== undefined) {  //from multi account(pending)
+        console.log("from get ssr", props.authorized);
         // setuser_ID(props.userID)
         // setuser_status(props.userStatus)
       } else if (localStorage.getItem('UserID') !== undefined && localStorage.getItem('UserID') !== null) {  //from single account
@@ -103,27 +105,12 @@ const HomePage = (props) => {
   }
 
   return (<>
-    <Head>
-      {/* <script type="text/javascript" src="/static/hello.js"></script> */}
-      {/* <script type="text/javascript" defer="" nomodule="" src="/_next/static/chunks/polyfills-c67a75d1b6f99dc8.js"></script>
-      <script type="text/javascript" src="/_next/static/chunks/webpack-6df21c39820c95f2.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/framework-4d78cf2ac5283a04.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/main-e1474655dc9df174.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/pages/_app-d219945223898b8e.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/7112840a-9233cf2eb8644501.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/946-40f08817acba64b2.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/632-4b283b51bba168dc.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/426-f214dc14432eda7b.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/728-de8d450c9ae63c9b.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/410-f9782eb379fe5ec9.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/chunks/pages/index-89072a427292e377.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/HeBHKw6USCaNMTHLjnoqM/_buildManifest.js" defer=""></script>
-      <script type="text/javascript" src="/_next/static/HeBHKw6USCaNMTHLjnoqM/_ssgManifest.js" defer=""></script> */}
-    </Head>
-    {props.isSSR ? <p>hello</p> : <p>index page.</p>}
-    {/* {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
-      <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
-        authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} />
+    <Head> </Head>
+    <hey />
+    {/* {props.isSSR ? <p>hello</p> : <p>index page.</p>} */}
+    {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
+      {/* <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
+        authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} /> */}
       <div className='row' style={{ marginTop: '5rem' }}>
         <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>
           {getIsValue ? <>
@@ -136,18 +123,36 @@ const HomePage = (props) => {
         {!isMobile && <>
           <div className='col-1'></div>
           <div className='col-3 card-fixed'>
-            <SideBar profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} userStatus={user_status} supporterData={supporterData} />
+            {/* <SideBar profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} userStatus={user_status} supporterData={supporterData} /> */}
           </div>
         </>}
       </div>
     </div> : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
       <CircularProgress aria-label="Loading..." />
-    </div>} */}
+    </div>}
   </>)
 }
 
 export default withRouter(HomePage)
 
-export async function getServerSideProps() {
-  return { props: { isSSR: true } }
-}
+// export function getServerSideProps() {
+//   const authSession = fetchUserAccessToken();
+//   if (!authSession) {
+//     return {
+//       redirect: {
+//         destination: "/login",
+//         permanent: false,
+//       },
+//     };
+//   }
+
+//   return {
+//     props: {
+//       authorized: true,
+//     },
+//   };
+// }
+
+// export async function getServerSideProps() {
+//   return { props: { isSSR: true } }
+// }

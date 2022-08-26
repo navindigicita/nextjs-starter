@@ -14,11 +14,15 @@ const UserAuth = (props) => {
 
     useEffect(() => {
         const accessToken = fetchUserAccessToken();
-        if (!accessToken) return router.push("/login")
+        if (!accessToken) {
+            return router.push("/login")
+        }
 
         const userInfo = fetchUserInfo()
         if (userInfo !== undefined && userInfo !== null && userInfo !== '') {
             checkEmail(userInfo)
+        } else {
+            router.push('/login')
         }
         // async function fetchData() {
         //     var email = ParaByNameFromUrl('email', router.asPath);
@@ -60,7 +64,7 @@ const UserAuth = (props) => {
             });
     }
 
-    return (<div style={{ padding: '150px 0px', textAlign: 'center' }}>
+    return (<div className="grid place-items-center h-screen">
         <CircularProgress aria-label="Loading..." />
     </div>)
 }

@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* need to specify parent tag as relative if using next/Image */
+.image-position {
+    height: 100%;
+    width: 100%;
+    position: none !important;
+}
