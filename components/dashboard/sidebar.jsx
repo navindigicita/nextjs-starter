@@ -14,11 +14,14 @@ const SideBar = (props) => {
     const [supporterData, setsupporterData] = useState()
 
     useEffect(() => {
-        if (props.profileJson !== undefined && props.userStatus !== undefined && props.supporterData !== undefined) {
+        console.log("props data successed", props.profileJson);
+        if (props.profileJson !== undefined && props.supporterData !== undefined) {
             console.log("props data successed", props.profileJson);
             setProfileData(props.profileJson)
-            setloginStatus(props.userStatus)
             setsupporterData(props.supporterData)
+            // if (localStorage.getItem('accessToken') !== undefined) {
+            //     setloginStatus('success')
+            // }
         }
     }, []);
 
@@ -73,14 +76,14 @@ const SideBar = (props) => {
         var data1 = data.charAt(0) === '@' ? data.substring(1) : data
         var newWindow = window.open(`/${data1}`, '_blank')
         newWindow.penName = data1  //this line is to pass penName to userProfile page
-        newWindow.userStauts = loginStatus
+        // newWindow.userStauts = loginStatus
     }
 
     return (<>
         {profileData !== undefined && profileData !== null ? <>
             <div className='row' onClick={() => handleUserProfile()} style={{ cursor: 'pointer' }}>
                 {profileData.profileDetails.profileImage !== undefined && profileData.profileDetails.profileImage !== null ?
-                    <Image src={profileData.profileDetails.profileImage.charAt(0) === '@' ? profileData.profileDetails.profileImage.substring(1) : profileData.profileDetails.profileImage} alt="user profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                    <Image src={profileData.profileDetails.profileImage.charAt(0) === '@' ? profileData.profileDetails.profileImage.substring(1) : profileData.profileDetails.profileImage} alt="user profile" height={50} width={50} style={{ borderRadius: '50%' }} />
                     : <Avatar style={{ width: '50px', height: '50px' }} src={<AssignmentIndOutlined />} />
                 }
                 <ListItemText style={{ marginTop: '7px', marginLeft: '15px' }} //onClick={() => props.profileDetail('ProfileDetail')}
@@ -92,7 +95,7 @@ const SideBar = (props) => {
             </div>
             <div className='row mt-4'>
                 <div className='col-1 p-0'>
-                    <Image src={'/bio-link.svg'} alt='Bio_link' />
+                    <Image src={'/bio-link.svg'} alt='Bio_link' height={25} width={25} />
                 </div>
                 <div className='col-11' style={{ lineHeight: '0.9' }}>
                     {/* <a style={{ fontSize: '12px', color: '#3c7493', overflowWrap: 'break-word' }} id="userShareUrl">{profileData.profileDetails.profileUrl}</a> <br /> */}
@@ -106,16 +109,16 @@ const SideBar = (props) => {
                         <text>My True-fans</text>
                         <text className='float-right'>{supporterData !== undefined && supporterData.TotalSupporters}</text>
                     </Card>
-                    {!isPartialUser && <>
-                    <Card className="p-2 mt-2" style={{ fontSize: '16px', fontWeight: '500', cursor: 'pointer' }} id="publication" selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 1, 'Publication')}>
-                        <text>My Publications</text>
-                        <text className='float-right'>{profileData.otherDetails.totalPublicationsCount}</text>
-                    </Card>
-                    <Card className="p-2 mt-2" style={{ fontSize: '16px', fontWeight: '500', cursor: 'pointer' }} id="thinkly" selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 2, 'Thinkly')}>
-                        <text>My Posts</text>
-                        <text className='float-right'>{profileData.otherDetails.totalThinkliesCount}</text>
-                    </Card>
-                    </>}
+                    {/* {!isPartialUser && <>
+                        <Card className="p-2 mt-2" style={{ fontSize: '16px', fontWeight: '500', cursor: 'pointer' }} id="publication" selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 1, 'Publication')}>
+                            <text>My Publications</text>
+                            <text className='float-right'>{profileData.otherDetails.totalPublicationsCount}</text>
+                        </Card>
+                        <Card className="p-2 mt-2" style={{ fontSize: '16px', fontWeight: '500', cursor: 'pointer' }} id="thinkly" selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 2, 'Thinkly')}>
+                            <text>My Posts</text>
+                            <text className='float-right'>{profileData.otherDetails.totalThinkliesCount}</text>
+                        </Card>
+                    </>} */}
                 </div>
             </div>
         </> : <CircularProgress aria-label="Loading..." />}

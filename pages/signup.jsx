@@ -1,13 +1,24 @@
-import React  from 'react'
+import React from 'react'
+import { firebaseApp } from '../firebase-config';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { useRouter } from 'next/router'
 import { isMobile } from 'react-device-detect'
-import Header from '../components/common/header'
 import Image from 'next/image';
-// import HandleGplusSignIn from './user/gPlusSignIn';
+import Header from '../components/common/header'
+import Footer from '../components/common/footer';
 
 const SignUp = (props) => {
+    const router = useRouter()
+    const firebaseAuth = getAuth(firebaseApp);
+    const provider = new GoogleAuthProvider();
 
-    const handleGmailSignIn = () => {
-        // HandleGplusSignIn()
+    const handleGmailSignIn = async () => {
+        const { user } = await signInWithPopup(firebaseAuth, provider)
+        const { refreshToken, providerData } = user;
+        const providerUserData = providerData.find(obj => obj.providerId === "google.com")
+        localStorage.setItem('user', JSON.stringify(providerUserData))
+        localStorage.setItem('accessToken', JSON.stringify(refreshToken))
+        router.push('/user/userAuth')
     }
 
     return (<>
@@ -21,6 +32,7 @@ const SignUp = (props) => {
                     <Image src={'/gmail-logo.svg'} alt="google" height={15} width={50} />Continue with Gmail</button>
             </div>
         </div>
+        <Footer />
     </>)
 }
 

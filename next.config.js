@@ -2,7 +2,14 @@ module.exports = {
   experimental: {
     images: {
       unoptimized: true,
-      domains: ["thinklymedia.blob.core.windows.net"]
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'thinklymedia.blob.core.windows.net',
+          port: '',
+          pathname: '/devimages/**',
+        }
+      ]
     }
   },
   trailingSlash: true,

@@ -1,4 +1,7 @@
 /* sign in button */
+.header-gap {
+    margin-top: 5rem;
+}
 .button1 {
     font-weight: bold;
     border-radius: 4px;

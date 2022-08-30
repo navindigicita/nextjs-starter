@@ -25,12 +25,12 @@ const SharePage = (props) => {
                     <button type="button" className="close text-right pr-2" data-dismiss="modal">&times;</button>
                     <div className="modal-body text-center p-4">
                         <h2 style={{ fontSize: '20px', fontWeight: 'bold' }}>Share your page with the world.</h2>
-                        <div className='row d-flex'>
-                            {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
-                                <Image className='my-3 mx-auto' src={userProfileImage} alt='profile' style={{ width: '100px', height: '100px', borderRadius: '50%', objectFit: 'cover' }} />
-                                : <Avatar className='mx-auto' style={{ width: '100px', height: '100px' }} src={<AssignmentIndOutlined />} />}
-                        </div>
-                        <h2 style={{ fontSize: '20px', fontWeight: 'bold' }}>{userPenName !== undefined && userPenName}</h2>
+                        {/* <div className='row d-flex'> */}
+                        {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
+                            <Image className='flex justify-between my-3' src={userProfileImage} alt='profile' height={120} width={120} style={{ borderRadius: '50%', objectFit: 'cover' }} />
+                            : <Avatar className='flex justify-between my-3' style={{ width: '100px', height: '100px' }} src={<AssignmentIndOutlined />} />}
+                        {/* </div> */}
+                        <h2 className='fs-20 fw-bold mt-2'>{userPenName !== undefined && userPenName}</h2>
                         <ShareLink linkUrl={props.penName} image={userProfileImage} />
                     </div>
                 </div>

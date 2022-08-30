@@ -31,19 +31,14 @@ const HomePage = (props) => {
   const [stripe, setStripe] = useState(null)
 
   useEffect(() => {
-    console.log("inside use effect");
     async function fetchData() {
-      // const data = await RemoteConfiguration()
-      // const remoteConfigJson = JSON.parse(data)
-      // console.log("remote Config Json", remoteConfigJson);
-      // setthinklyConfigData(remoteConfigJson)  //state
-      if (props.authorized !== undefined) {  //from multi account(pending)
-        console.log("from get ssr", props.authorized);
-        // setuser_ID(props.userID)
-        // setuser_status(props.userStatus)
-      } else if (localStorage.getItem('UserID') !== undefined && localStorage.getItem('UserID') !== null) {  //from single account
+      const data = await RemoteConfiguration()
+      if (data !== undefined) {
+        const remoteConfigJson = JSON.parse(data)
+        setthinklyConfigData(remoteConfigJson)
+      }
+      if (localStorage.getItem('UserID') !== undefined && localStorage.getItem('UserID') !== null) {  //from single account
         const data = localStorage.getItem('UserID')
-        //console.log("inside single account@@@@@", data);
         setAuthorID(data) //state
         fetchUserProfileData(data)   //function
         fetchSupporterData(data) //function
@@ -105,17 +100,14 @@ const HomePage = (props) => {
   }
 
   return (<>
-    <Head> </Head>
-    <hey />
     {/* {props.isSSR ? <p>hello</p> : <p>index page.</p>} */}
     {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
-      {/* <Header publicationCount={profileData.otherDetails.totalPublicationsCount} user_profile={profileData}
-        authorID={user_ID} userStatus={user_status} thinklyConfigJSON={thinklyConfigData} /> */}
+      <Header user_profile={profileData} thinklyConfigJSON={thinklyConfigData} />
       <div className='row' style={{ marginTop: '5rem' }}>
         <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>
           {getIsValue ? <>
-            {value === 'Publication' ? <Publication authorID={user_ID} profileJson={profileData} />
-              : value === 'Thinkly' ? <Thinklies authorID={user_ID} profileJson={profileData} />
+            {value === 'Publication' ? <Publication authorID={AuthorID} profileJson={profileData} />
+              : value === 'Thinkly' ? <Thinklies authorID={AuthorID} profileJson={profileData} />
                 : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
           </> : <DashboardPage profileJson={profileData} supporterData={supporterData} />}
         </div>
@@ -123,11 +115,11 @@ const HomePage = (props) => {
         {!isMobile && <>
           <div className='col-1'></div>
           <div className='col-3 card-fixed'>
-            {/* <SideBar profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} userStatus={user_status} supporterData={supporterData} /> */}
+            <SideBar profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} supporterData={supporterData} />
           </div>
         </>}
       </div>
-    </div> : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
+    </div> : <div className='grid place-items-center h-screen'>
       <CircularProgress aria-label="Loading..." />
     </div>}
   </>)

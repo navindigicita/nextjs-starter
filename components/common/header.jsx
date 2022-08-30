@@ -11,7 +11,7 @@ import SharePage from './sharePage';
 import NewThinkly from '../posts/newThinkly';
 import NewPublication from '../publication/newPublication';
 
-const Header = (props, { parentCallback }) => {
+const Header = (props) => {
     const router = useRouter();
     const BASE_URL = useContext(baseUrlThinkly);
     const emailValidate = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
@@ -22,7 +22,10 @@ const Header = (props, { parentCallback }) => {
     const [userProfileImage, setuserProfileImage] = useState()  //stored props data of user profile image
     const [userPenName, setuserPenName] = useState()  //stored props data of user penName
     const [user_status, setuser_status] = useState() //stored props data of user loggedIn status
+
+    const [PublicationCount, setPublicationCount] = useState(0)  //stored props data of user publication count
     const [pub_count, setpub_count] = useState(0)  //stored props data of user publication count
+
     const [thinklyRemoteConfigData, setthinklyRemoteConfigData] = useState()  //stored props data of thinkly remote config json
     const [showThinkly, setshowThinkly] = useState(false)  //hide and show modal box of new thinkly
     const [showPublication, setshowPublication] = useState(false)  //hide and show modal box of new publication
@@ -34,20 +37,23 @@ const Header = (props, { parentCallback }) => {
     const [customDashboard, setcustomDashboard] = useState(false)
 
     useEffect(() => { //all props related data fetched and set in state here
-        if (props.userStatus !== undefined && props.publicationCount !== undefined && props.authorID !== undefined) {  //coming from main index.js
-            console.log("userStatus = ", props.userStatus, "&& publicationCount = ", props.publicationCount, "&& authorID = ", props.authorID);
-            setuserID(props.authorID)
-            setuser_status(props.userStatus)
-            setpub_count(props.publicationCount)
-        }
-        if (props.user_profile !== undefined && props.user_profile !== null) { //coming from main index.js(to get user pen name and profile image)
-            console.log("props.user_profile", props.user_profile.profileDetails);
+        if (props.user_profile !== undefined && props.thinklyConfigJSON !== undefined) { //coming from main index.js
+            console.log("props.user_profile from main index.js", props.user_profile);
+            setPublicationCount(props.user_profile.otherDetails.totalPublicationsCount)
             var data = props.user_profile.profileDetails
+            setuserID(data.userID)
+            setisPartialUser(data.isPartialProfile)
             var name = data.penName.charAt(0) === '@' ? data.penName.substring(1) : data.penName
             setuserPenName(name)
-            setuserProfileImage(data.profileImage);
-            setisPartialUser(data.isPartialProfile)
+            var image = data.profileImage.charAt(0) === '@' ? data.profileImage.substring(1) : data.profileImage
+            setuserProfileImage(image);
+            setthinklyRemoteConfigData(props.thinklyConfigJSON)
         }
+        // if (props.thinklyConfigJSON !== undefined && props.thinklyConfigJSON !== null) {
+        //     console.log("remote config props.thinklyConfigJSON@@@@@@@@@", props.thinklyConfigJSON);
+        //     setthinklyRemoteConfigData(props.thinklyConfigJSON)
+        // }
+
         if (props.showContentForUserProfile !== undefined && props.userProfile !== undefined) {
             console.log("show Content For User Profile@@@@", props.showContentForUserProfile, props.userProfile, props.loginStatus);
             var data = props.userProfile.profileDetails
@@ -58,24 +64,16 @@ const Header = (props, { parentCallback }) => {
             setisPartialUser(data.isPartialProfile)
             setshowForUserProfile(props.showContentForUserProfile)
         }
-        if (props.thinklyConfigJSON !== undefined && props.thinklyConfigJSON !== null) {
-            console.log("remote config props.thinklyConfigJSON@@@@@@@@@", props.thinklyConfigJSON);
-            setthinklyRemoteConfigData(props.thinklyConfigJSON)
-        }
-        // else if (thinklyJsonData !== undefined && thinklyJsonData !== null) {
-        //     console.log("header thinklyJsonData hardcoded@@@@@@@@@", thinklyJsonData);
-        //     setthinklyRemoteConfigData(thinklyJsonData)
-        // }
     }, [])
 
     useEffect(() => {  //set path value on base of url handled here
-        if (userPenName !== undefined) {
-            const link = "https://app.thinkly.me/?&apn=com.me.digicita.thinkly.dev&ibi=com.Thinkly.Thinkly&imv=10.0&isi=1329943323&link=https://test.thinkly.me/thinkly/@" + userPenName
-            setopenInAppUrl(link)  //for mobile view open in app dynamic link
-        }
+        // if (userPenName !== undefined) {
+        //     const link = "https://app.thinkly.me/?&apn=com.me.digicita.thinkly.dev&ibi=com.Thinkly.Thinkly&imv=10.0&isi=1329943323&link=https://test.thinkly.me/thinkly/@" + userPenName
+        //     setopenInAppUrl(link)  //for mobile view open in app dynamic link
+        // }
         var path = router.asPath;
         // var path = thePath.substring(thePath.lastIndexOf('/') + 1)
-        if (path === "dashboard") {
+        if (path === "/") {
             setcustomDashboard(true)
         }
         if (path.includes('/signup')) {
@@ -86,12 +84,12 @@ const Header = (props, { parentCallback }) => {
             setPath('complete-your-profile')
         } else if (path.includes('checkUser')) {
             setPath('checkUser')
-        } else if (user_status === 'Success') {
+        } else if (localStorage.getItem('accessToken')) {
             setPath('LoggedIn')
         } else {
             setPath('')
         }
-    }, [user_status, userID, pub_count, thinklyRemoteConfigData, userProfileImage, userPenName, getPath])
+    }, [userID, pub_count, thinklyRemoteConfigData, userProfileImage, userPenName, getPath])
 
     const handleSignUpClick = () => {  //to switch path url and page UI, base of either login or signup
         router.push('/signup')
@@ -164,27 +162,31 @@ const Header = (props, { parentCallback }) => {
                     <div className="row d-flex">
                         <div className="col-md-6">
                             <Image src={'/thinkly-logo-.png'} height={40} width={130} alt="Header Logo" />
-                            {!isMobile && !customDashboard ? <h6 className="mobheader" style={{ marginTop: '-44px', marginLeft: '140px', marginRight: '-110px' }}>
+                            {/* {!isMobile && !customDashboard ? <h6 className="mobheader" style={{ marginTop: '-44px', marginLeft: '140px', marginRight: '-110px' }}>
                                 <span className="sideline" >Where the world comes to think</span>
-                            </h6> : <>
+                            </h6> : */}
+                            {isMobile && <>
                                 {(getPath === 'signup') ? <span className='float-right mt-1'>Existing User?
                                     <span className='fc-link pointer' onClick={() => handleLoginClick()}> Login </span>
                                 </span> : (getPath === 'login') ? <span className='float-right mt-1'>New User?
                                     <span className='fc-link pointer' onClick={() => handleSignUpClick()}> Sign Up </span>
-                                </span> : (getPath === 'LoggedIn') ? <div className='float-right' style={{ marginTop: '0px' }}>
-
-                                    <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}> <ShareRounded /> </Card>
-                                    <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px' }}>
-                                        {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
-                                            <Image src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '22px', height: '22px', borderRadius: '50%' }} />
-                                            : <Avatar style={{ width: '22px', height: '22px' }} src={<AssignmentIndOutlined />} />}
-                                        <ArrowDropDown onClick={() => handleUserProfle()} />
-                                        <div className="dropdown-user" >
-                                            <a onClick={() => handleViewProfile()}>View My Page</a>
-                                            <a onClick={() => handleLogout()}>Sign out</a>
-                                        </div>
-                                    </Card>
-                                </div> : ''}
+                                </span> :
+                                    (getPath === 'LoggedIn') ? <div className='float-right' style={{ marginTop: '0px' }}>
+                                        <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}> <ShareRounded /> </Card>
+                                        <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px' }}>
+                                            {/* <Image src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '22px', height: '22px', borderRadius: '50%' }} /> */}
+                                            {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
+                                                <Image src={userProfileImage} alt="user profile" height={22} width={22} style={{ borderRadius: '50%' }} />
+                                                : <Avatar style={{ width: '22px', height: '22px' }} src={<AssignmentIndOutlined />} />}
+                                            <ArrowDropDown onClick={() => handleUserProfle()} />
+                                            <div className="dropdown-user" >
+                                                <a onClick={() => handleViewProfile()}>View My Page</a>
+                                                <a onClick={() => handleLogout()}>Sign out</a>
+                                            </div>
+                                        </Card>
+                                    </div> : ''
+                                }
+                                {/* user detail page */}
                                 {showForUserProfile && <div className='float-right' style={{ marginTop: '0px' }}>
                                     {!isPartialUser && <Card className='float-right' style={{ borderRadius: '40px', padding: '4px 1px', marginLeft: '-110px', position: 'absolute', zIndex: '99' }}>
                                         <button className="pointer bg-white border-radius-100 border-none fc-black" data-toggle="modal" data-target="#myModal">Follow</button>
@@ -193,47 +195,50 @@ const Header = (props, { parentCallback }) => {
                                     <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px', height: '34px' }}>
                                         <Avatar style={{ width: '22px', height: '22px', marginTop: '3px' }} src={<AssignmentIndOutlined />} />
                                         <ArrowDropDown onClick={() => handleUserProfle()} style={{ marginTop: '-50px', marginLeft: '20px' }} />
-                                        <div className="dropdown-user" >
-                                            <a onClick={() => handleLogout()}>Sign In</a>
+                                        <div className="dropdown-user">
+                                            {/* if logged in then sign out if not loggod in then call same function to redirect on login page with clear localstorage */}
+                                            {(getPath === 'LoggedIn') ? <a onClick={() => handleLogout()}>Sign out</a> : <a onClick={() => handleLogout()}>Sign In</a>}
                                         </div>
                                     </Card>
                                 </div>}
                             </>}
                         </div>
-                        {/* login and signup href */}
+
+
+                        {/* desktop view part */}
                         {!isMobile && <>
                             {(getPath === 'signup') ? <div className="col-md-6 py-1" style={{ marginLeft: '-10px' }}>
                                 <span className='float-right'>Existing User?
                                     <text className='fc-link pointer' onClick={() => handleLoginClick()}> Login</text>
                                 </span>
-                            </div> : (getPath === 'login') ? <div className="col-md-6 py-1" style={{ marginLeft: '-10px' }}>
+                            </div> : (getPath === 'login') && <div className="col-md-6 py-1" style={{ marginLeft: '-10px' }}>
                                 <span className='float-right'>New User?
                                     <text className='fc-link pointer' onClick={() => handleSignUpClick()}> Sign Up </text>
                                 </span>
-                            </div> : ''}
+                            </div>}
+                            {/* header logo content end && loggedIn user condition starts */}
+                            {getPath === 'LoggedIn' && !showForUserProfile && <>
+                                <div className='col-4'></div>
+                                <div className='col-1' style={{ marginTop: '12px' }}>
+                                    <Card className='float-right p-1 pointer' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
+                                        <ShareRounded height={25} width={25} />
+                                    </Card>
+                                </div>
+                                <div className='col-1' style={{ marginTop: '12px' }}>
+                                    <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingLeft: '12px', paddingTop: '4px' }}>
+                                        <Menu height={25} width={25} style={{ marginTop: '-14px' }} />
+                                        {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
+                                            <Image src={userProfileImage} alt="user profile" height={25} width={25} style={{ borderRadius: '50%' }} />
+                                            : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
+                                        <div className="dropdown-user">
+                                            <a onClick={() => handleViewProfile()}>View My Page</a>
+                                            <a onClick={() => handleLogout()}>Sign out</a>
+                                        </div>
+                                    </Card>
+                                </div>
+                            </>}
                         </>}
-                        {/* header logo content end && loggedIn user condition starts    && !isPartialUser     */}
-                        {!isMobile && getPath === 'LoggedIn' && !showForUserProfile && <>
-                            <div className='col-4'></div>
-                            <div className='col-1' style={{ marginTop: '12px' }}>
-                                <Card className='float-right p-1 pointer' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
-                                    <ShareRounded />
-                                </Card>
-                            </div>
-                            <div className='col-1' style={{ marginTop: '12px' }}>
-                                <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px' }}>
-                                    <Menu />
-                                    {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
-                                        <Image src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '25px', height: '25px', borderRadius: '50%' }} />
-                                        : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
-                                    <div className="dropdown-user">
-                                        <a onClick={() => handleViewProfile()}>View My Page</a>
-                                        <a onClick={() => handleLogout()}>Sign out</a>
-                                    </div>
-                                </Card>
-                            </div>
-                        </>}
-                        {/* for user profile only */}
+                        {/* for user profile only check this one when work on profile detail page */}
                         {!isMobile && showForUserProfile && <>
                             <div className='col-3'></div>
                             <div className='col-2' style={{ marginTop: '12px' }}>
@@ -254,7 +259,7 @@ const Header = (props, { parentCallback }) => {
                                     <Menu />
                                     {user_status === 'Success' ? <>
                                         {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
-                                            <Image src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '25px', height: '25px', borderRadius: '50%' }} />
+                                            <Image src={userProfileImage} alt="user profile" height={25} width={25} style={{ borderRadius: '50%' }} />
                                             : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
                                     </> : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
                                     <div className="dropdown-user">
@@ -287,12 +292,12 @@ const Header = (props, { parentCallback }) => {
                                     <div className="row text-center mb-3">
                                         <div className="col-6 text-right">
                                             <a href={openInAppUrl}>
-                                                <Image src={'/playStore.svg'} style={{ width: '9rem', borderRadius: '10px' }} alt="Download button for Play store" />
+                                                <Image src={'/playStore.svg'} height={40} width={80} style={{ borderRadius: '10px' }} alt="Download button for Play store" />
                                             </a>
                                         </div>
                                         <div className="col-6 text-left">
                                             <a href={openInAppUrl}>
-                                                <Image src={'/appstore.svg'} style={{ width: '8rem' }} alt="Download button for App store" />
+                                                <Image src={'/appstore.svg'} height={40} width={80} alt="Download button for App store" />
                                             </a>
                                         </div>
                                     </div>
