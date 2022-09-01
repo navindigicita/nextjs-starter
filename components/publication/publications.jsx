@@ -41,7 +41,7 @@ const Publication = (props) => {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "DeviceID": "123456",
+                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
                 "UserID": authorID
             },
             data: {

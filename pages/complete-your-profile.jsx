@@ -1,57 +1,57 @@
 import React, { useContext, useState, useEffect } from 'react'
 import Axios from "axios";
 import $ from 'jquery'
+import { useRouter } from 'next/router'
 import { isMobile } from 'react-device-detect'
 import { Card, CircularProgress } from '@material-ui/core'
 import { AddPhotoAlternate } from '@material-ui/icons'
 import { baseUrlThinkly } from './api/api';
-import { useRouter } from 'next/router'
-import Image from 'next/image';
 import Header from '../components/common/header';
 import Footer from '../components/common/footer';
+import Head from 'next/head';
 
 const NewProfile = () => {
   const router = useRouter()
   const BASE_URL_THINKLY = useContext(baseUrlThinkly);
   const [getEmail, setEmail] = useState()
-  const [propsData, setpropsData] = useState(router.query.state)
-  const [apiCallUpdate, setapiCallUpdate] = useState(router.query.updateCall)
+  const [apiCallUpdate, setapiCallUpdate] = useState()
   const [ProfileImage, setProfileImage] = useState('');
   const [imageUploadedMsg, setimageUploadedMsg] = useState(false)
   const [Name, setName] = useState('')
   const [userPenName, setuserPenName] = useState('')
   const [penNameResponse, setpenNameResponse] = useState();
   const [aboutUser, setaboutUser] = useState('')
-  // const [ImageForPreview, setImageForPreview] = useState()
   const [source, setsource] = useState(null)
   const [UID, setUID] = useState(null)
   const [publishLoader, setpublishLoader] = useState(false) //loader hide and show
-  // const [CopyUrl, setCopyUrl] = useState(false)
 
   useEffect(() => {
-    if (propsData !== undefined) {
-      console.log("props data from checkuser to create account@@@ ", propsData);
-      setUID(propsData.uid)
-      setsource(propsData.providerId)
-      setName(propsData.displayName)
+    const googleData = localStorage.getItem('user')
+    if (googleData !== undefined) {
+      const data = JSON.parse(googleData)
+      setUID(data.uid)
+      setsource(data.providerId)
+      setName(data.displayName)
+      setEmail(data.email)
     }
+    // if user enter penName on previous page then sotre in local storage and fetch here
     const localStorageName = window.localStorage.getItem('userName')
     if (localStorageName !== undefined && localStorageName !== null) {
-      const data = window.localStorage.getItem('userName')
-      console.log("userpen name@@@@@", data);
-      // penNameApiCall()
-      setuserPenName(data)
+      setuserPenName(localStorageName)
     }
-    const email = window.localStorage.getItem('emailForSignIn')
-    console.log("email@@@@", email);
-    setEmail(email)
+    // if user id present in local storage then store in state to call update user api
+    const userID = localStorage.getItem('UserID')
+    if (userID !== undefined) {
+      setapiCallUpdate(userID)
+    }
   }, [])
 
-  useEffect(() => {
+  useEffect(() => {  //to check if penName for user have given in previous page then store and fetch from localStorage
     async function checkPenName() {
       if (userPenName !== undefined && userPenName !== null) {
-        console.log("user pen Name before check pen name api call@@@@@", userPenName);
-        await penNameApiCall()
+        if (userPenName.length >= 5 || userPenName.length === 15) {
+          await penNameApiCall()
+        }
       }
     }
     checkPenName()
@@ -79,55 +79,37 @@ const NewProfile = () => {
     setProfileImage(myRenamedFile)
   }
 
-  const fetchPenName = async (event, data) => {
-    if (event === "null") {
-      console.log("inside event null");
-      setuserPenName(userPenName)
-      // await penNameApiCall()
-    } else {
-      console.log("inside penname event", event.target.value);
-      var pen_name = event.target.value
-      setuserPenName(pen_name)
-      // await penNameApiCall()
-    }
-    // await penNameApiCall()
+  const fetchPenName = async (event) => {  //onChange of penName event triggered then go to 2nd useEffect to call penName check api
+    var pen_name = event.target.value
+    setuserPenName(pen_name)
   }
 
-  useEffect(() => {
-    $('#penName').focusout(function () {
-      console.log("out", userPenName);
-    })
-  }, [])
-
-
-  const penNameApiCall = async () => {
-    console.log("inside pen name api call function", userPenName);
-    if (userPenName.length >= 5 || userPenName.length === 15) {
-      console.log("pen name passed  in api", userPenName);
-      var config = {
-        headers: {
-          DeviceID: '123456',
-          UserID: '1234'
-        }
+  const penNameApiCall = async () => { //pen name check api call here
+    var config = {
+      headers: {
+        DeviceID: '123456',
+        UserID: '1234'
       }
-      Axios.get(`${BASE_URL_THINKLY}Publication/IsPennameAvailable/@${userPenName}`, config)
-        .then((res) => {
-          console.log("inside api call", res, userPenName);
-          if (res.data.responseCode === '00') {
-            const response = res.data.responseData.available;
-            setpenNameResponse(response)
-            if (response === false) {
-              document.getElementById('penNameAvailableError').style.display = "block";
-              document.getElementById('penNameAvailableError').style.top = "calc(62% - 10px)";
-              document.getElementById('penNameAvailableError').innerHTML = 'This Pen name is already taken'
-            }
-          }
-        })
-        .catch((err) => {
-          console.log("IsPennameAvailable error in catch", err);
-
-        });
     }
+    Axios.get(`${BASE_URL_THINKLY}Publication/IsPennameAvailable/@${userPenName}`, config)
+      .then((res) => {
+        console.log("inside api call@@@@@@@@@@@@", res, userPenName);
+        if (res.data.responseCode === '00') {
+          const response = res.data.responseData.available;
+          if (response === false) {
+            document.getElementById('penNameAvailableError').style.display = "block";
+            document.getElementById('penNameAvailableError').style.top = "calc(62% - 10px)";
+            document.getElementById('penNameAvailableError').innerHTML = 'This Pen name is already taken'
+          } else {
+            document.getElementById('penNameAvailableError').style.display = "none";
+          }
+          setpenNameResponse(response)
+        }
+      })
+      .catch((err) => {
+        console.log("IsPennameAvailable error in catch", err);
+
+      });
   }
 
   const handleDataValidation = () => {
@@ -147,10 +129,10 @@ const NewProfile = () => {
       document.getElementById('penNameFormatError').style.display = "block";
       document.getElementById('penNameFormatError').innerHTML = 'Please match the requested format(Should include minimum 5 characters, maximum 15 characters, no space, no special characters except _). '
     } else {
-      fetchPenName("null", userPenName)
-      if (penNameResponse === true) {
+      // fetchPenName("null", userPenName)
+      if (penNameResponse === true) {  //if penName response true then only upload image on server
         setpublishLoader(true)
-        var data = new FormData(); // api call for upload Image in azure
+        var data = new FormData(); //api call for upload Image in azure
         data.append("FileName", ProfileImage);
         const config = {
           headers: {
@@ -159,7 +141,6 @@ const NewProfile = () => {
         }
         Axios.post(`${BASE_URL_THINKLY}Image/PostUploadFile/${ProfileImage.name}`, data, config)
           .then((res) => {
-            console.log("PostUploadFile@@@@@@@@", res);
             const user_name = Name.trim().replace(/  +/g, ' ').split(" ");
             const firstName = user_name[0];
             const lastName = user_name.length > 0 ? user_name[1] : ''
@@ -170,7 +151,6 @@ const NewProfile = () => {
             }
           })
           .catch((err) => {
-            console.log("PostUploadFile error in catch", err);
             document.getElementById('pubImageUploadError').innerHTML = 'Oops! Something went wrong. Try again'
           });
       }
@@ -179,9 +159,6 @@ const NewProfile = () => {
   }
 
   const handleCreateProfile = (firstName, lastName) => {
-    // const user_name = Name.trim().replace(/  +/g, ' ').split(" ");
-    // const firstName = user_name[0];
-    // const lastName = user_name.length > 0 ? user_name[1] : '' 
     var data = new FormData();
     data.append("FirstName", firstName);
     data.append("LastName", lastName);
@@ -191,7 +168,7 @@ const NewProfile = () => {
     data.append("GCMID", "");
     data.append("EmailID", getEmail !== undefined ? getEmail : '');
     data.append("AboutMe", aboutUser);
-    data.append("ImageName", "@" + ProfileImage.name);
+    data.append("ImageName", ProfileImage.name);
     data.append("Password", UID !== null ? UID : '');  //if gmail then pass Uid here else empty
     data.append("SelectedCategory", []);
     data.append("UserName", Name);
@@ -205,20 +182,19 @@ const NewProfile = () => {
     };
     Axios.post(`${BASE_URL_THINKLY}User/v2/RegisterUser`, data, config)
       .then((res) => {
-        console.log("RegisterUser response", res.data);
         if (res.data.responseCode === '00') {
           const userID = res.data.responseData.UserID;
           const pen_name = res.data.responseData.PenName.charAt(0) === '@' ? res.data.responseData.PenName.substring(1) : res.data.responseData.PenName
           const ImageName = res.data.responseData.ImageName.charAt(0) === '@' ? res.data.responseData.ImageName.substring(1) : res.data.responseData.ImageName
           setpublishLoader(false)
-          history.push({
-            pathname: '/account/Created',
-            userID: userID,
-            penName: pen_name,
-            profile: ImageName,
+          router.push({
+            pathname: '/user/created',
+            query: {
+              userID: userID,
+              penName: pen_name,
+              profile: ImageName
+            }
           })
-        } else if (res.data.responseCode === '01') {
-          // alert("not registered")
         }
       })
       .catch((err) => {
@@ -227,11 +203,10 @@ const NewProfile = () => {
   }
 
   const handleUpdateProfile = (firstName, lastName) => {
-    console.log(firstName, lastName, aboutUser, ProfileImage.name, userPenName);
     var config = {
       method: 'POST',
       headers: {
-        "DeviceID": process.env.REACT_APP_DEVICE_ID,
+        "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
         "UserID": apiCallUpdate
       },
       data: {
@@ -250,14 +225,14 @@ const NewProfile = () => {
           const pen_name = res.data.responseData.PenName.charAt(0) === '@' ? res.data.responseData.PenName.substring(1) : res.data.responseData.PenName
           const ImageName = res.data.responseData.ProfileImage.charAt(0) === '@' ? res.data.responseData.ProfileImage.substring(1) : res.data.responseData.ProfileImage
           setpublishLoader(false)
-          history.push({
-            pathname: '/account/Created',
-            userID: res.data.responseData.UserID,
-            penName: pen_name,
-            profile: ImageName,
+          router.push({
+            pathname: '/user/created',
+            query: {
+              userID: res.data.responseData.UserID,
+              penName: pen_name,
+              profile: ImageName
+            }
           })
-        } else if (res.data.responseCode === '01') {
-          // alert("not registered")
         }
       })
       .catch((err) => {
@@ -266,16 +241,11 @@ const NewProfile = () => {
   }
 
   return (<>
+  <Head>
+    <title>Welcome! Let's create an account for you</title>
+  </Head>
     <Header />
     <div className='container header-gap'>
-      {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <div className='fs-30 fw-bold mb-4 '>Complete My Page</div>
-            <div className='text-center'>
-                <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-
-                </div>
-            </div>
-        </div> */}
       <div className='text-center' style={isMobile ? { marginTop: '30px', marginBottom: '70px' } : {}}>
         <div className='fs-30 fw-bold mb-4 '>Complete My Page</div>
         <Card id="img-preview" style={{ height: 'auto', width: '200px', border: 'none', display: 'inline-flex', objectFit: 'cover', objectPosition: 'center' }}> </Card>
@@ -303,8 +273,8 @@ const NewProfile = () => {
               <label className='float-left fs-15'>My web page link</label>
               <span className='fs-18' style={{ position: 'absolute', color: '#717171', top: 'calc(75% - 10px)', left: '30px' }}>uat.thinkly.me/</span>
               <input type="text" name='penName' id='penName' minLength='5' maxLength='15' className='input-field fs-18 fc-black' style={{ paddingLeft: '124px', marginTop: '3px' }}
-                placeholder='mypagename' value={userPenName} onChange={(e) => fetchPenName(e, "null")} required />
-              {penNameResponse !== undefined && penNameResponse === false && <div id="penNameAvailableError" className='float-left error-msg' style={{ display: 'none' }}></div>}
+                placeholder='mypagename' value={userPenName} onChange={(e) => fetchPenName(e)} required />
+              {<div id="penNameAvailableError" className='float-left error-msg' style={{ display: 'none' }}></div>}
               {userPenName !== null && userPenName.length < 5 && <div id="penNameFormatError" className='float-left error-msg' style={{ display: 'none' }}></div>}
               {userPenName === null || userPenName === '' && <label id='penNameError' className='float-left error-msg' style={{ display: 'none' }}></label>}
             </div>

@@ -49,14 +49,11 @@ const HomePage = (props) => {
     fetchData()
   }, []);
 
-  // stooped here
-
   function fetchUserProfileData(authorID) {
-    console.log("inside fetch user profile data@@@@@@", authorID);
     var config = {
       headers: {
         "Content-Type": "application/json",
-        "DeviceID": "123456",
+        "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
         "UserID": authorID
       },
     };
@@ -64,14 +61,11 @@ const HomePage = (props) => {
       .then((res) => {
         console.log("inside fetchUserProfileData function", res);
         if (res.data.responseCode === '00') {
-          console.log("GetUserProfileByID response in Index@@@@", res.data.responseData);
           localStorage.setItem("PublicationCount", res.data.responseData.otherDetails.totalPublicationsCount)
           setProfileData(res.data.responseData);
         } else if (res.data.responseCode === "03") {
-          console.log("GetUserProfileByID response@@@@", res);
-          setProfileData(res.data.responseData)
-        } else {
-          console.log("GetUserProfileByID else part", res);
+          localStorage.clear()
+          router.push('/login')
         }
       })
       .catch((err) => {
@@ -82,7 +76,7 @@ const HomePage = (props) => {
   function fetchSupporterData(authorID) {
     var config = {
       headers: {
-        "DeviceID": "123456",
+        "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
         "UserID": authorID
       },
     };
@@ -95,13 +89,12 @@ const HomePage = (props) => {
 
   const profileDetail = (value) => {
     setIsvalue(true);
-    console.log("index", value);
     setValue(value);
   }
 
   return (<>
     {/* {props.isSSR ? <p>hello</p> : <p>index page.</p>} */}
-    {profileData !== undefined && profileData !== null ? <div className={isMobile ? 'container' : 'container pr-5'}>
+    {profileData !== undefined ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header user_profile={profileData} thinklyConfigJSON={thinklyConfigData} />
       <div className='row' style={{ marginTop: '5rem' }}>
         <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>

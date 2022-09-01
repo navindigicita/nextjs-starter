@@ -28,10 +28,10 @@ const MultiAccount = () => {
 
     return (
         <div className='container' style={{ paddingTop: '300px' }}>
-            <div id="user_account_type" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content modal-background">
-                        <div class="modal-body p-2" style={{ height: "80vh" }}>
+            <div id="user_account_type" className="modal fade in" tabindex="-1" role="dialog" data-backdrop="static">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content modal-background">
+                        <div className="modal-body p-2" style={{ height: "80vh" }}>
                             <div className="row">
                                 <div className='text-center p-4'>
                                     {accountList !== undefined && accountList.length > 0 && <>
