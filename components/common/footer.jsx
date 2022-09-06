@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PlayStore from "../../public/playStore.svg";
 import AppStore from "../../public/appstore.svg";
 import { isMobile } from 'react-device-detect';
+import Image from 'next/image';
 
 const Footer = () => {
     const [getPath, setPath] = useState();
@@ -45,12 +46,12 @@ const Footer = () => {
                         <div className="row text-center mt-5" style={{ position: 'relative', zIndex: '1' }}>
                             <div className="col-6 text-right">
                                 <a href="https://play.google.com/store/apps/details?id=com.me.digicita.thinkly">
-                                    <img src={PlayStore} className="downloadImgSize" alt="Download button for Play store" />
+                                    <Image src={PlayStore} height={50} width={60} className="downloadImgSize" alt="Download button for Play store" />
                                 </a>
                             </div>
                             <div className="col-6 text-left">
                                 <a href="https://apps.apple.com/in/app/thinkly/id1329943323">
-                                    <img src={AppStore} className="downloadImgSize" alt="Download button for App store" />
+                                    <Image src={AppStore} height={50} width={60} className="downloadImgSize" alt="Download button for App store" />
                                 </a>
                             </div>
                         </div>

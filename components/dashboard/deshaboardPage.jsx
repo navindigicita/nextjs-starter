@@ -120,12 +120,12 @@ const DashboardPage = (props) => {
                                     <div className="row text-center mb-3">
                                         <div className="col-6 text-right">
                                             <a href={openInAppUrl}>
-                                                <Image src={'playStore.svg'} style={{ width: '9rem', borderRadius: '10px' }} alt="Download button for Play store" />
+                                                <Image src={'playStore.svg'} height={50} width={100} style={{ borderRadius: '10px' }} alt="Download button for Play store" />
                                             </a>
                                         </div>
                                         <div className="col-6 text-left">
                                             <a href={openInAppUrl}>
-                                                <Image src={'appstore.svg'} style={{ width: '8rem' }} alt="Download button for App store" />
+                                                <Image src={'appstore.svg'} height={50} width={100} alt="Download button for App store" />
                                             </a>
                                         </div>
                                     </div>

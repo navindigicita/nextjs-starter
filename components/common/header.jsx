@@ -34,7 +34,7 @@ const Header = (props) => {
     const [showForUserProfile, setshowForUserProfile] = useState(false)
     const [isPartialUser, setisPartialUser] = useState(false)  //if user not registered in app then don't show create button
     const [openInAppUrl, setopenInAppUrl] = useState(null)  //dynamic link for mob
-    const [customDashboard, setcustomDashboard] = useState(false)
+    // const [customDashboard, setcustomDashboard] = useState(false)  //to show text beside logo (where the world comes to think), set true if path (/) inside 2nd useEffect
 
     useEffect(() => { //all props related data fetched and set in state here
         if (props.user_profile !== undefined && props.thinklyConfigJSON !== undefined) { //coming from main index.js
@@ -49,33 +49,23 @@ const Header = (props) => {
             setuserProfileImage(image);
             setthinklyRemoteConfigData(props.thinklyConfigJSON)
         }
-        // if (props.thinklyConfigJSON !== undefined && props.thinklyConfigJSON !== null) {
-        //     console.log("remote config props.thinklyConfigJSON@@@@@@@@@", props.thinklyConfigJSON);
-        //     setthinklyRemoteConfigData(props.thinklyConfigJSON)
-        // }
-
-        if (props.showContentForUserProfile !== undefined && props.userProfile !== undefined) {
-            console.log("show Content For User Profile@@@@", props.showContentForUserProfile, props.userProfile, props.loginStatus);
+        // from user profile detail page
+        if (props.userProfile !== undefined && props.showContentForUserProfile !== undefined) {
+            console.log("show Content For User Profile@@@@", props.showContentForUserProfile, props.userProfile);
+            setshowForUserProfile(props.showContentForUserProfile)
             var data = props.userProfile.profileDetails
+            setuserID(data.userID)
+            setisPartialUser(data.isPartialProfile)
             var name = data.penName.charAt(0) === '@' ? data.penName.substring(1) : data.penName
             setuserPenName(name)
-            setuser_status(props.loginStatus)
-            setuserProfileImage(data.profileImage);
+            var image = data.profileImage.charAt(0) === '@' ? data.profileImage.substring(1) : data.profileImage
+            setuserProfileImage(image)
             setisPartialUser(data.isPartialProfile)
-            setshowForUserProfile(props.showContentForUserProfile)
         }
     }, [])
 
     useEffect(() => {  //set path value on base of url handled here
-        // if (userPenName !== undefined) {
-        //     const link = "https://app.thinkly.me/?&apn=com.me.digicita.thinkly.dev&ibi=com.Thinkly.Thinkly&imv=10.0&isi=1329943323&link=https://test.thinkly.me/thinkly/@" + userPenName
-        //     setopenInAppUrl(link)  //for mobile view open in app dynamic link
-        // }
         var path = router.asPath;
-        // var path = thePath.substring(thePath.lastIndexOf('/') + 1)
-        if (path === "/") {
-            setcustomDashboard(true)
-        }
         if (path.includes('/signup')) {
             setPath('signup')
         } else if (path.includes('/login')) {
@@ -84,12 +74,15 @@ const Header = (props) => {
             setPath('complete-your-profile')
         } else if (path.includes('checkUser')) {
             setPath('checkUser')
-        } else if (localStorage.getItem('accessToken')) {
+        } else if (localStorage.getItem('accessToken') !== undefined && localStorage.getItem('accessToken') !== null &&
+            localStorage.getItem('UserID') !== undefined && localStorage.getItem('UserID') !== null &&
+            localStorage.getItem('PublicationCount') !== undefined && localStorage.getItem('PublicationCount') !== null) {
+            console.log("inside logged in", localStorage.getItem('accessToken'));
             setPath('LoggedIn')
         } else {
             setPath('')
         }
-    }, [userID, pub_count, thinklyRemoteConfigData, userProfileImage, userPenName, getPath])
+    }, [])
 
     const handleSignUpClick = () => {  //to switch path url and page UI, base of either login or signup
         router.push('/signup')
@@ -105,7 +98,6 @@ const Header = (props) => {
     }
 
     const sendSignUpEmail = () => {  //send email to user for app link
-        console.log("inside sign up email function", EmailInput);
         var config = {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
@@ -120,10 +112,7 @@ const Header = (props) => {
             Axios(`${BASE_URL}Notification/SendEmailNotification`, config)
                 .then((res) => {
                     if (res.data.responseCode === '00') {
-                        console.log("success Send Email Notification");
                         setEmail(true)
-                    } else {
-                        console.log("inside .then other than 00 responseCode", res.data);
                     }
                 })
                 .catch((err) => {
@@ -152,7 +141,7 @@ const Header = (props) => {
         console.log(userPenName);
         var newWindow = window.open(`${userPenName}`, '_blank')
         newWindow.penName = userPenName
-        newWindow.userStauts = user_status
+        // newWindow.userStauts = user_status
     }
 
     return (<>
@@ -174,11 +163,10 @@ const Header = (props) => {
                                     (getPath === 'LoggedIn') ? <div className='float-right' style={{ marginTop: '0px' }}>
                                         <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}> <ShareRounded /> </Card>
                                         <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px' }}>
-                                            {/* <Image src={userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage} alt="user profile" style={{ width: '22px', height: '22px', borderRadius: '50%' }} /> */}
                                             {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
                                                 <Image src={userProfileImage} alt="user profile" height={22} width={22} style={{ borderRadius: '50%' }} />
                                                 : <Avatar style={{ width: '22px', height: '22px' }} src={<AssignmentIndOutlined />} />}
-                                            <ArrowDropDown onClick={() => handleUserProfle()} />
+                                            <ArrowDropDown onClick={() => handleUserProfle()} style={{ marginTop: '-10px' }} />
                                             <div className="dropdown-user" >
                                                 <a onClick={() => handleViewProfile()}>View My Page</a>
                                                 <a onClick={() => handleLogout()}>Sign out</a>
@@ -189,11 +177,14 @@ const Header = (props) => {
                                 {/* user detail page */}
                                 {showForUserProfile && <div className='float-right' style={{ marginTop: '0px' }}>
                                     {!isPartialUser && <Card className='float-right' style={{ borderRadius: '40px', padding: '4px 1px', marginLeft: '-110px', position: 'absolute', zIndex: '99' }}>
-                                        <button className="pointer bg-white border-radius-100 border-none fc-black" data-toggle="modal" data-target="#myModal">Follow</button>
+                                        <button className="pointer bg-white border-radius-100 border-none fc-black mx-2" data-toggle="modal" data-target="#myModal">Follow</button>
                                     </Card>}
-                                    <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}> <ShareRounded /> </Card>
+                                    <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
+                                        <ShareRounded />
+                                    </Card>
                                     <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px', height: '34px' }}>
-                                        <Avatar style={{ width: '22px', height: '22px', marginTop: '3px' }} src={<AssignmentIndOutlined />} />
+                                        {getPath === 'LoggedIn' ? <Image src={userProfileImage} alt="user profile" height={22} width={22} style={{ borderRadius: '50%' }} />
+                                            : <Avatar style={{ height: '22px', width: '22px' }} src={<AssignmentIndOutlined />} />}
                                         <ArrowDropDown onClick={() => handleUserProfle()} style={{ marginTop: '-50px', marginLeft: '20px' }} />
                                         <div className="dropdown-user">
                                             {/* if logged in then sign out if not loggod in then call same function to redirect on login page with clear localstorage */}
@@ -249,22 +240,14 @@ const Header = (props) => {
                                     <button className="pointer bg-white border-radius-100 border-none" data-toggle="modal" data-target="#myModal">Follow</button>
                                 </Card>}
                             </div>
-                            {/* <div className='col-1' style={{ marginTop: '12px' }}>
-                                <Card className='float-right p-1 pointer' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
-                                    <ShareRounded />
-                                </Card>
-                            </div> */}
                             <div className='col-1' style={{ marginTop: '12px' }}>
-                                <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px' }}>
-                                    <Menu />
-                                    {user_status === 'Success' ? <>
-                                        {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
-                                            <Image src={userProfileImage} alt="user profile" height={25} width={25} style={{ borderRadius: '50%' }} />
-                                            : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
-                                    </> : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
+                                <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingLeft: '12px', paddingTop: '4px', paddingBottom: getPath === 'LoggedIn' ? '0px' : '4px' }}>
+                                    <Menu height={25} width={25} style={{ marginTop: getPath === 'LoggedIn' ? '-14px' : '0px' }} />
+                                    {getPath === 'LoggedIn' ?
+                                        <Image src={userProfileImage} alt="user profile" height={25} width={25} style={{ borderRadius: '50%' }} />
+                                        : <Avatar style={{ height: '25px', width: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
                                     <div className="dropdown-user">
-                                        {/* <a onClick={() => handleViewProfile()}>View My Page</a> */}
-                                        {user_status === 'Success' ? <a onClick={() => handleLogout()}>Sign Out</a> : <a onClick={() => handleLogout()}>Sign In</a>}
+                                        {getPath === 'LoggedIn' ? <a onClick={() => handleLogout()}>Sign out</a> : <a onClick={() => handleLogout()}>Sign In</a>}
                                     </div>
                                 </Card>
                             </div>

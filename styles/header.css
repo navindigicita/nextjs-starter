@@ -1,7 +1,16 @@
 /* sign in button */
-.header-gap {
-    margin-top: 5rem;
+@media only screen and (max-width: 600px) {
+    .header-gap {
+        margin-top: 5rem;
+    }
 }
+
+@media only screen and (min-width: 601px) {
+    .header-gap {
+        margin-top: 5rem;
+    }
+}
+
 .button1 {
     font-weight: bold;
     border-radius: 4px;

@@ -11,6 +11,10 @@
     background: #ffffff;
 }
 
+.bg-gray {
+    background: lightgray;
+}
+
 /* border */
 .border-none {
     border: none;
