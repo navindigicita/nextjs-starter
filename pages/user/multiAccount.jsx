@@ -39,14 +39,13 @@ const MultiAccount = () => {
                                         <p>Hey, we found multiple Thinkly accounts for your email <b>{accountList[0].EmailID}</b>. Choose any one to sign in. </p>
                                         <Card style={{ height: '55vh', overflow: 'auto', boxShadow: 'none', paddingTop: '10px' }} >
                                             {accountList.map((obj, index) => {
+                                                console.log(obj)
                                                 return (<div className='row d-flex mb-3'>
                                                     <div className='col-8 mx-auto'>
                                                         <Card className="row d-flex py-1 account-list-card" onClick={() => handleAccount(index)}>
                                                             <div className='col-1 mx-auto my-auto'>
-                                                                {obj.UserImage !== undefined ?
-                                                                    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-                                                                        <Image src={obj.UserImage.charAt(0) === '@' ? obj.UserImage.substring(1) : obj.UserImage} alt="profile" height={100} width={50} />
-                                                                    </div> : <Avatar style={{ width: '44px', height: '44px' }} src={<AssignmentIndOutlined />} />}
+                                                                {(obj.UserImage !== undefined && obj.UserImage !== "") ? <Image src={obj.UserImage.charAt(0) === '@' ? obj.UserImage.substring(1) : obj.UserImage} alt="profile" height={100} width={50} style={{ borderRadius: '50%' }} />
+                                                                    : <Avatar style={{ width: '44px', height: '44px' }} src={<AssignmentIndOutlined />} />}
                                                             </div>
                                                             <div className='col-10 text-left mx-auto pl-4'>
                                                                 <ListItemText

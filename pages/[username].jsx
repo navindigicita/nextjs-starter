@@ -308,6 +308,9 @@ const UserProfile = (props) => {
             <Header userProfile={getProfileDetail} showContentForUserProfile={showDataOnHeader} />
             <Head>
                 <title>{getpenName}</title>
+                <meta name="description" content={aboutUser} />
+                <meta property="og:url" content={`https://nextjs-starter-thinkly-five.vercel.app/${getpenName}/`} />
+                <meta property="og:type" content="website" />
                 <meta property="og:title" content={getpenName} key="og-title" />
                 <meta property="og:description" content={aboutUser} key="og-desc" />
                 <meta property="og:image" content={getProfileImage} key="og-image" />

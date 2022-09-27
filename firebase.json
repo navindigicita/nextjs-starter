@@ -5,6 +5,16 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrite": [
+      {
+        "destination": "/fruit/[name]/index.html",
+        "regex": "^/fruit/([^/]+?)(?:/)?$"
+      },
+      {
+        "destination": "/[username]/index.html",
+        "regex": "^/([^/]+?)(?:/)?$"
+      }
     ]
   }
 }
