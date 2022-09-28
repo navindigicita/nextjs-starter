@@ -238,7 +238,7 @@ const NewThinkly = (props) => {
     }
 
     useEffect(() => { //interest api called here
-        fetch(process.env.REACT_APP_INTEREST_JSON)
+        fetch(process.env.NEXT_PUBLIC_INTEREST_JSON)
             .then(response => response.json())
             .then((data) => {
                 console.log('interest list from api call', data)

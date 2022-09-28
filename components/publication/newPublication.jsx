@@ -220,7 +220,7 @@ const NewPublication = (props) => {
 
     // json called for all interest list
     useEffect(() => {
-        fetch(process.env.REACT_APP_INTEREST_JSON)
+        fetch(process.env.NEXT_PUBLIC_INTEREST_JSON)
             .then(response => response.json())
             .then((data) => {
                 console.log('interest list', data)

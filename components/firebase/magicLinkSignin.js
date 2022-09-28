@@ -3,9 +3,9 @@
 // const Register = async ({ email }) => {
 //     console.log("inside firebase magic link function", email, firebase);
 //     const actionCodeSettings = {
-//         url: process.env.REACT_APP_ACTIONCODE_URL + email,
+//         url: process.env.NEXT_PUBLIC_ACTIONCODE_URL + email,
 //         handleCodeInApp: true,
-//         // dynamicLinkDomain: process.env.REACT_APP_DYNAMIC_LINK_DOMAIN
+//         // dynamicLinkDomain: process.env.NEXT_PUBLIC_DYNAMIC_LINK_DOMAIN
 //     };
 //     await firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
 //         .then(() => {

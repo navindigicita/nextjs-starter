@@ -158,7 +158,7 @@ const UserProfileMob = (props) => {
                     return new Promise(resolve => {
                         const form = document.createElement('form');
                         form.method = 'post'
-                        form.action = process.env.REACT_APP_PAYMENT_GATEWAY
+                        form.action = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY
                         const data = [
                             { name: 'qty', value: starCount },
                             { name: 'receiver', value: getpenName },
