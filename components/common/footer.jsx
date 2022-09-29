@@ -8,11 +8,13 @@ const Footer = () => {
     const [getPath, setPath] = useState();
 
     useEffect(() => {
-        var windowURL = window.location.href
-        if (windowURL.indexOf('uat.stars.thinkly.me') > 0) {
-            setPath('stars')
-        } else if (windowURL.indexOf('uat.create.thinkly.me') > 0) {
-            setPath('create')
+        if (typeof window !== "undefined") {
+            var windowURL = window.location.href
+            if (windowURL.indexOf('uat.stars.thinkly.me') > 0) {
+                setPath('stars')
+            } else if (windowURL.indexOf('uat.create.thinkly.me') > 0) {
+                setPath('create')
+            }
         }
     }, [])
 

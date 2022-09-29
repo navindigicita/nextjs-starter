@@ -21,9 +21,8 @@ import Footer from '../components/common/footer';
 import Faq from '../components/common/faq';
 import UserProfileMob from '../components/userProfileMob';
 import { UserProfileEvent, UserSupportStarEvent } from '../config/facebookPixelEvent';
-import { getAnalytics, logEvent } from "firebase/analytics";
+// import { getAnalytics, logEvent } from "firebase/analytics";
 import PublicationProfile from '../components/publication/pubDetailPage';
-// publication 
 
 
 const responsive = {
@@ -78,7 +77,7 @@ const StyledTab = withStyles((theme) => ({
 
 const UserProfile = (props) => {
     const emailValidate = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-    const analytics = getAnalytics();
+    // const analytics = getAnalytics();
     const router = useRouter()
     const BASE_URL = useContext(baseUrl);
     const BASE_URL_THINKLY = useContext(baseUrlThinkly);
@@ -109,18 +108,19 @@ const UserProfile = (props) => {
 
     useEffect(() => {
         if (window.penName !== undefined) {
-            logEvent(analytics, 'USER_DETAIL_PAGE', { penname: window.penName })  //google analytic log
+            // logEvent(analytics, 'USER_DETAIL_PAGE', { penname: window.penName })  //google analytic log
             getUserProfileDateils(window.penName)
         } else {
-            var thePath = window.location.href;
+            var thePath = window.location.href
             var path = thePath.match(/([^\/]*)\/*$/)[1]
             console.log("user name", path);
-            logEvent(analytics, 'USER_DETAIL_PAGE', { penname: path })  //google analytic log
+            // logEvent(analytics, 'USER_DETAIL_PAGE', { penname: path })  //google analytic log
             getUserProfileDateils(path)
         }
     }, [])
 
     function getUserProfileDateils(data) {
+        console.log(data);
         var config = {
             headers: {
                 "Content-Type": "application/json",
@@ -130,14 +130,15 @@ const UserProfile = (props) => {
         };
         Axios.get(`${BASE_URL}User/GetDetailsByPenName/${data}`, config)
             .then((res) => {
+                console.log(res);
                 if (res.data.responseCode === '00') {
+                    setprofileDetail(res.data.responseData.Details)
                     if (res.data.responseData.Type === 'Publication') {
                         setshowPublication(true)
                     } else { //for user
                         if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
                             UserProfileEvent()
                         }
-                        setprofileDetail(res.data.responseData.Details)
                         const response = res.data.responseData.Details.profileDetails
                         const storedUserID = localStorage.getItem('UserID')
                         if (parseInt(storedUserID) === response.userID) {
@@ -155,7 +156,7 @@ const UserProfile = (props) => {
                         // getPublicationByAuthor(response.userID)  //api call params passed
                     }
                 } else if (res.data.responseCode === '03') {
-                    router.push('/signIn')
+                    router.push('/login')
                 }
             })
             .catch((err) => {
@@ -319,8 +320,8 @@ const UserProfile = (props) => {
     }
 
     return (<>
-        {showPublication ? <PublicationProfile publicationDetail={getProfileDetail} /> : <>
-            {getProfileDetail !== undefined ? <>
+        {getProfileDetail !== undefined ? <>
+            {showPublication ? <PublicationProfile publicationDetail={getProfileDetail} /> : <>
                 {showDataOnHeader ? <Header userProfile={getProfileDetail} showContentForUserProfile={showDataOnHeader} /> : <Header showContentForUserProfile={showDataOnHeader} />}
                 <Head>
                     <title>{getpenName}</title>
@@ -506,11 +507,11 @@ const UserProfile = (props) => {
                     </div>
                 }
                 <Footer />
-            </> : <div className='grid place-items-center h-screen'>
-                <CircularProgress aria-label="Loading..." />
-            </div>
-            }
-        </>}
+            </>}
+        </> : <div className='grid place-items-center h-screen'>
+            <CircularProgress aria-label="Loading..." />
+        </div>
+        }
     </>)
 }
 

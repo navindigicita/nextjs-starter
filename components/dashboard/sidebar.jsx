@@ -74,9 +74,11 @@ const SideBar = (props) => {
     const handleUserProfile = () => {
         var data = profileData.profileDetails.penName
         var data1 = data.charAt(0) === '@' ? data.substring(1) : data
-        var newWindow = window.open(`/${data1}`, '_blank')
-        newWindow.penName = data1  //this line is to pass penName to userProfile page
-        // newWindow.userStauts = loginStatus
+        if (typeof window !== "undefined") {
+            var newWindow = window.open(`/${data1}`, '_blank')
+            newWindow.penName = data1  //this line is to pass penName to userProfile page
+            // newWindow.userStauts = loginStatus
+        }
     }
 
     return (<>

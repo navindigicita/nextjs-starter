@@ -1,6 +1,11 @@
-import { getApp, getApps, initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
+import "firebase/compat/auth";
+import firebase from 'firebase/compat/app'
+// import { getAnalytics } from "firebase/analytics"
+
+// import { getApp, getApps, initializeApp } from "firebase/app";
+// import { getFirestore } from 'firebase/firestore'
+// import { getStorage } from 'firebase/storage'
+require('firebase/auth')
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -11,12 +16,16 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_APP_ID,
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
 
-const app = getApps.length > 0 ? getApp() : initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.auth();
+export default firebaseApp
+// const analytics = getAnalytics(app)
 
-const db = getFirestore(app)
+// const app = getApps.length > 0 ? getApp() : firebaseApp
 
-const storage = getStorage(app)
+// const db = getFirestore(app)
 
-export { firebaseApp, app, db, storage }
+// const storage = getStorage(app)
+
+// export { firebaseApp, app, db, storage }

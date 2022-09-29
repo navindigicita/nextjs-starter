@@ -99,9 +99,9 @@ const HomePage = (props) => {
       <div className='row' style={{ marginTop: '5rem' }}>
         <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>
           {getIsValue ? <>
-            {value === 'Publication' ? <Publication authorID={AuthorID} profileJson={profileData} />
+            {/* {value === 'Publication' ? <Publication authorID={AuthorID} profileJson={profileData} />
               : value === 'Thinkly' ? <Thinklies authorID={AuthorID} profileJson={profileData} />
-                : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
+                : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''} */}
           </> : <DashboardPage profileJson={profileData} supporterData={supporterData} />}
         </div>
         <div style={{ background: 'lightgray', height: 'auto', width: '1px', marginRight: '-40px', marginLeft: '38px' }}></div>

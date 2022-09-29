@@ -136,9 +136,11 @@ const Header = (props) => {
     }
 
     const handleViewProfile = () => {  //onClick of view profile take to new tab for profile detail page
-        var newWindow = window.open(`${userPenName}`, '_blank')
-        newWindow.penName = userPenName
-        // newWindow.userStauts = user_status
+        if (typeof window !== "undefined") {
+            var newWindow = window.open(`${userPenName}`, '_blank')
+            newWindow.penName = userPenName
+            // newWindow.userStauts = user_status
+        }
     }
 
     return (<>
@@ -330,18 +332,3 @@ const Header = (props) => {
 }
 
 export default Header;
-
-//const downloadApp = () => {   //app store link for andriod and IOS
-//     var userAgent = navigator.userAgent || navigator.vendor;
-//     if (/android/i.test(userAgent)) {
-//         return (
-//             window.location = "https://play.google.com/store/apps/details?id=com.me.digicita.thinkly"
-//         )
-//     }
-//     // /iPad|iPhone|iPod/.test(userAgent)
-//     if (/iPhone/i.test(userAgent)) {
-//         return (
-//             window.location = "https://apps.apple.com/in/app/thinkly/id1329943323"
-//         )
-//     }
-// }
