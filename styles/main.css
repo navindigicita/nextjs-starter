@@ -8,11 +8,11 @@ body {
   /* font-family: 'PT Sans', sans-serif; */
 }
 
-/* h1 {
-  font-size: 36px;
-  margin-bottom: 45px;
-  margin-top: 100px;
-} */
+img.pubProfile {
+  position: relative !important;
+  width: 60% !important;
+  height: 25rem !important;
+}
 
 .home {
   display: flex;
@@ -59,7 +59,7 @@ body {
   display: flex;
 }
 
-.project > aside {
+.project>aside {
   background-color: #ffffff;
   height: 100vh;
   flex-basis: 400px;
@@ -67,7 +67,7 @@ body {
   border-right: 1px solid #e1e1e1;
 }
 
-.project > main {
+.project>main {
   display: flex;
   justify-content: center;
   width: 100%;
@@ -86,11 +86,11 @@ body {
   margin-top: 30px;
 }
 
-.project ul > li {
+.project ul>li {
   border-bottom: 1px solid #cdebff;
 }
 
-.project ul > li > a {
+.project ul>li>a {
   transition: ease-in-out background-color 0.15s;
   text-decoration: none;
   color: #393939;
@@ -99,7 +99,7 @@ body {
   text-transform: capitalize;
 }
 
-.project ul > li > a:hover {
+.project ul>li>a:hover {
   background-color: #f1f9ff;
   cursor: pointer;
 }
@@ -123,23 +123,23 @@ body {
   justify-content: space-between;
 }
 
-.stats > div {
+.stats>div {
   text-align: right;
   width: 70px;
 }
 
-.stats-details > div {
+.stats-details>div {
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
 
-.stats-details > div > p {
+.stats-details>div>p {
   color: #393939;
   margin-left: 4px;
 }
 
-.stats-details > p {
+.stats-details>p {
   color: #858585;
 }
 
