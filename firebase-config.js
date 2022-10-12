@@ -1,10 +1,5 @@
 import "firebase/compat/auth";
 import firebase from 'firebase/compat/app'
-// import { getAnalytics } from "firebase/analytics"
-
-// import { getApp, getApps, initializeApp } from "firebase/app";
-// import { getFirestore } from 'firebase/firestore'
-// import { getStorage } from 'firebase/storage'
 require('firebase/auth')
 
 const firebaseConfig = {
@@ -20,12 +15,3 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const firebaseApp = firebase.auth();
 export default firebaseApp
-// const analytics = getAnalytics(app)
-
-// const app = getApps.length > 0 ? getApp() : firebaseApp
-
-// const db = getFirestore(app)
-
-// const storage = getStorage(app)
-
-// export { firebaseApp, app, db, storage }
