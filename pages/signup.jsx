@@ -1,11 +1,11 @@
 import React from 'react'
-import { firebaseApp } from '../firebase-config';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { useRouter } from 'next/router'
 import { isMobile } from 'react-device-detect'
 import Image from 'next/image';
 import Header from '../components/common/header'
 import Footer from '../components/common/footer';
+import {firebaseApp} from '../firebase-config';
 
 const SignUp = (props) => {
     const router = useRouter()

@@ -9,10 +9,6 @@ const UserCheck = () => {
         console.log("check user", router.query.response, router.query.userData);
         if (router.query.response !== undefined && router.query.userData !== undefined) {
             checkEmail(router.query.response, router.query.userData)
-        } else {
-            setTimeout(() => {
-                router.push('/login')
-            }, 10000);
         }
     }, [])
 

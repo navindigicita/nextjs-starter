@@ -1,6 +1,5 @@
-import "firebase/compat/auth";
-import firebase from 'firebase/compat/app'
-require('firebase/auth')
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -11,7 +10,6 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_APP_ID,
 };
 
-
-const app = firebase.initializeApp(firebaseConfig);
-const firebaseApp = firebase.auth();
+const app = initializeApp(firebaseConfig);
+const firebaseApp = getAuth(app);
 export default firebaseApp
