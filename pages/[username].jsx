@@ -224,7 +224,7 @@ const UserProfile = (props) => {
             headers: {
                 "Content-Type": "application/json",
                 "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
-                "UserID": "3223"
+                "UserID": localStorage.getItem('UserID')
             },
         };
         Axios.get(`${BASE_URL_THINKLY}Star/GetStarPriceDetails`, config)
@@ -321,188 +321,190 @@ const UserProfile = (props) => {
 
     return (<>
         {getProfileDetail !== undefined ? <>
-            <Header userProfile={getProfileDetail} showContentForUserProfile={showDataOnHeader} />
-            <Head>
-                <title>{getpenName}</title>
-                <meta property="og:title" content={getpenName} key="og-title" />
-                <meta property="og:description" content={aboutUser} key="og-desc" />
-                <meta property="og:image" content={getProfileImage} key="og-image" />
-            </Head>
-            {isMobile ? <UserProfileMob userProfileJson={getProfileDetail} />
-                : <div className='container' style={{ marginTop: '5rem' }}>
-                    <div className='row mb-5'>
-                        <div className='col-4 right-content'>
-                            {getProfileImage !== undefined ? <Image src={getProfileImage} alt="profile image" layout='fill' /> : <Avatar src={<AssignmentIndOutlinedIcon />} />}
-                        </div>
-                        <div className='col-8 mt-2'>
-                            <div className="card left-content" style={{ height: '500px' }}>
-                                <div className='mb-1 fs-30 fw-bold'> {getpenName} </div>
-                                <div className='fs-20 fw-mid mb-3'>{getProfileDetail.profileDetails.firstName} {getProfileDetail.profileDetails.lastName !== undefined && getProfileDetail.profileDetails.lastName}</div>
-                                <p className='fs-18'>{aboutUser}</p>
-                                <h6 className='fs-15 fc-link fw-mid pointer' data-toggle="modal" data-target="#myModal">View Full Profile</h6>
+            {showPublication ? <PublicationProfile publicationDetail={getProfileDetail} /> : <>
+                <Header userProfile={getProfileDetail} showContentForUserProfile={showDataOnHeader} />
+                <Head>
+                    <title>{getpenName}</title>
+                    <meta property="og:title" content={getpenName} key="og-title" />
+                    <meta property="og:description" content={aboutUser} key="og-desc" />
+                    <meta property="og:image" content={getProfileImage} key="og-image" />
+                </Head>
+                {isMobile ? <UserProfileMob userProfileJson={getProfileDetail} />
+                    : <div className='container' style={{ marginTop: '5rem' }}>
+                        <div className='row mb-5'>
+                            <div className='col-4 right-content'>
+                                {getProfileImage !== undefined ? <Image src={getProfileImage} alt="profile image" layout='fill' /> : <Avatar src={<AssignmentIndOutlinedIcon />} />}
+                            </div>
+                            <div className='col-8 mt-2'>
+                                <div className="card left-content" style={{ height: '500px' }}>
+                                    <div className='mb-1 fs-30 fw-bold'> {getpenName} </div>
+                                    <div className='fs-20 fw-mid mb-3'>{getProfileDetail.profileDetails.firstName} {getProfileDetail.profileDetails.lastName !== undefined && getProfileDetail.profileDetails.lastName}</div>
+                                    <p className='fs-18'>{aboutUser}</p>
+                                    <h6 className='fs-15 fc-link fw-mid pointer' data-toggle="modal" data-target="#myModal">View Full Profile</h6>
 
-                                {getpenName === 'Durgajasraj' && <Image src={Durgajasraj} alt="durgajasraj" className='mb-4' width={100} height={50} style={{ objectFit: 'cover', objectPosition: 'center' }} />}
+                                    {getpenName === 'Durgajasraj' && <Image src={Durgajasraj} alt="durgajasraj" className='mb-4' width={100} height={50} style={{ objectFit: 'cover', objectPosition: 'center' }} />}
 
-                                {getProfileDetail.profileDetails.isSupportEnabled === true && <Card className='mt-4' style={{ padding: '10px 20px 20px 20px', background: '#fff', width: '50%', height: 'auto', overflow: 'initial' }}>
-                                    <form name="paymentGateway" onSubmit={handleSubmit(onSubmit)}>
-                                        <div className='text-center'>
-                                            <p className='fw-mid mb-3'>Support <Star className='star-color' /> to {getpenName}</p>
-                                            <div className='row ml-1'>
-                                                <div className='col-1' style={{ marginLeft: '10px', marginRight: '10px' }}>
-                                                    <Image src={'/star.svg'} alt="icon" height={60} width={60} />
+                                    {getProfileDetail.profileDetails.isSupportEnabled === true && <Card className='mt-4' style={{ padding: '10px 20px 20px 20px', background: '#fff', width: '50%', height: 'auto', overflow: 'initial' }}>
+                                        <form name="paymentGateway" onSubmit={handleSubmit(onSubmit)}>
+                                            <div className='text-center'>
+                                                <p className='fw-mid mb-3'>Support <Star className='star-color' /> to {getpenName}</p>
+                                                <div className='row ml-1'>
+                                                    <div className='col-1' style={{ marginLeft: '10px', marginRight: '10px' }}>
+                                                        <Image src={'/star.svg'} alt="icon" height={60} width={60} />
+                                                    </div>
+                                                    <div className='col-1' style={{ fontSize: '22px' }}> x </div>
+                                                    <div className='col-2 mt-1'>
+                                                        <span className="numberCircle pointer" name="starCount" id="oneStar" onClick={() => handleStar(1)}> 1 </span>
+                                                    </div>
+                                                    <div className='col-2 mt-1'>
+                                                        <span className="numberCircle pointer" name="starCount" id="threeStar" onClick={() => handleStar(3)}> 3 </span>
+                                                    </div>
+                                                    <div className='col-2 mt-1'>
+                                                        <span className="numberCircle pointer" name="starCount" id="fiveStar" onClick={() => handleStar(5)}> 5 </span>
+                                                    </div>
+                                                    <div className='col-3 mt-1'>
+                                                        <span className="numberCircle pointer" name="starCount" id="Stars" style={{ padding: '10px 10px' }} onClick={() => handleStar(10)}> 10 </span>
+                                                    </div>
                                                 </div>
-                                                <div className='col-1' style={{ fontSize: '22px' }}> x </div>
-                                                <div className='col-2 mt-1'>
-                                                    <span className="numberCircle pointer" name="starCount" id="oneStar" onClick={() => handleStar(1)}> 1 </span>
-                                                </div>
-                                                <div className='col-2 mt-1'>
-                                                    <span className="numberCircle pointer" name="starCount" id="threeStar" onClick={() => handleStar(3)}> 3 </span>
-                                                </div>
-                                                <div className='col-2 mt-1'>
-                                                    <span className="numberCircle pointer" name="starCount" id="fiveStar" onClick={() => handleStar(5)}> 5 </span>
-                                                </div>
-                                                <div className='col-3 mt-1'>
-                                                    <span className="numberCircle pointer" name="starCount" id="Stars" style={{ padding: '10px 10px' }} onClick={() => handleStar(10)}> 10 </span>
-                                                </div>
+                                                <input type='text' name='qty' id='qty' value={starCount} style={{ display: 'none' }} />
+                                                <textarea className='mt-3 w-96' name='remarks' id='remarks' rows={3} cols={40} type="text" maxLength={1000} value={Remarks} onChange={(e) => setRemarks(e.target.value)} style={{ outline: 'none', border: '1px solid lightgray' }} placeholder="Say something nice... (Optional)"></textarea>
+                                                {starCount > 0 ? '' : <div id="starCountError" className='error-msg'></div>}
+                                                <button onClick={() => setUserDetail('star')} className={`mt-3 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 w-96 ${SupportButton ? 'bg-gray' : 'primary-bg-color'}`} id='getStarValue' disabled={SupportButton}>
+                                                    Support {!SupportButton && starCount}<Star style={{ color: 'antiquewhite', marginTop: '-3px' }} /> to {getpenName} {currency}{finalAmount}
+                                                </button>
                                             </div>
-                                            <input type='text' name='qty' id='qty' value={starCount} style={{ display: 'none' }} />
-                                            <textarea className='mt-3 w-96' name='remarks' id='remarks' rows={3} cols={40} type="text" maxLength={1000} value={Remarks} onChange={(e) => setRemarks(e.target.value)} style={{ outline: 'none', border: '1px solid lightgray' }} placeholder="Say something nice... (Optional)"></textarea>
-                                            {starCount > 0 ? '' : <div id="starCountError" className='error-msg'></div>}
-                                            <button onClick={() => setUserDetail('star')} className={`mt-3 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 w-96 ${SupportButton ? 'bg-gray' : 'primary-bg-color'}`} id='getStarValue' disabled={SupportButton}>
-                                                Support {!SupportButton && starCount}<Star style={{ color: 'antiquewhite', marginTop: '-3px' }} /> to {getpenName} {currency}{finalAmount}
-                                            </button>
-                                        </div>
-                                        {/* modalpopup for user info */}
-                                        <div id="userContactInfo" className="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-                                            <div className="modal-dialog modal-dialog-centered">
-                                                <div className="modal-content">
-                                                    <button type="button" className="close text-right pr-2" data-dismiss="modal" >&times;</button>
-                                                    <div className="modal-body px-5 pb-4 pt-1">
-                                                        <h5 className='text-center mb-4'>We need some details to send you a receipt</h5>
-                                                        <input type='text' placeholder='Your email ID' value={emailID} onChange={(e) => setemailID(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
-                                                        <br /><br />
-                                                        <input type='text' placeholder='Your mobile number' value={numberInfo} onChange={(e) => setnumberInfo(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
-                                                        <br /><br />
-                                                        {<div id="infoPlease" className='error-msg'></div>}
-                                                        <div className='text-center'>
-                                                            <button type='submit' className='mt-3 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 w-50 primary-bg-color' onClick={() => setUserDetail('userInfo')} >Continue</button>
+                                            {/* modalpopup for user info */}
+                                            <div id="userContactInfo" className="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+                                                <div className="modal-dialog modal-dialog-centered">
+                                                    <div className="modal-content">
+                                                        <button type="button" className="close text-right pr-2" data-dismiss="modal" >&times;</button>
+                                                        <div className="modal-body px-5 pb-4 pt-1">
+                                                            <h5 className='text-center mb-4'>We need some details to send you a receipt</h5>
+                                                            <input type='text' placeholder='Your email ID' value={emailID} onChange={(e) => setemailID(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
+                                                            <br /><br />
+                                                            <input type='text' placeholder='Your mobile number' value={numberInfo} onChange={(e) => setnumberInfo(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
+                                                            <br /><br />
+                                                            {<div id="infoPlease" className='error-msg'></div>}
+                                                            <div className='text-center'>
+                                                                <button type='submit' className='mt-3 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 w-50 primary-bg-color' onClick={() => setUserDetail('userInfo')} >Continue</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </form>
+                                    </Card>}
+
+
+                                    {/* if viewFullProfile is true then show thinkly and publication list below for now not in use */}
+                                    {/* {viewFullProfile && <> <div className='mt-5'>
+                                        <p className='font-weight-bold' style={{ fontSize: '18px' }}>Publications by this Author</p>
+                                        infinite={true} autoPlay={truse} autoPlaySpeed={2000} arrows={false}  //comment this
+                                        <Carousel responsive={responsive}>
+                                            {getPublicationByAuthorData !== null && getPublicationByAuthorData.length > 0 ? getPublicationByAuthorData.map((obj) => {
+                                                var img_extension = '.' + (obj.publicationImage.split(/[#?]/)[0].split('.').pop())
+                                                return (<Card className="mb-4" style={{ width: '140px', boxShadow: 'none', background: 'rgba(247, 247, 247, 0.49)' }}>
+                                                    {(/.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(img_extension) ?
+                                                        <CardMedia component="img" height="160" image={obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage} style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }} alt="publication profile" />
+                                                        : <div style={{ background: '#ea7f00', height: '160px' }}></div>
+                                                    }
+                                                    <div className='px-2'>
+                                                        <text style={{ fontSize: '14px', fontWeight: 'bold' }}>{obj.publicationName}</text> <br />
+                                                        <a href='#morepublication' data-toggle="modal" data-target="#myModal" onClick={() => setShowModal(true)} style={{ color: '#2baadf', fontSize: '12px', fontFamily: 'sans-serif' }}>View the Publication</a>
+                                                    </div>
+                                                </Card>)
+                                            }) : <div className='text-center'> No Data Available </div>}
+                                        </Carousel>
+                                    </div>
+                                        <div className='mt-5'>
+                                            <p className='font-weight-bold' style={{ fontSize: '18px' }}>Thinklies by this Author</p>
+                                            <StyledTabs value={value} onchange={handleChangeTabs} aria-label="styled tabs" >
+                                                <StyledTab label="All" />
+                                                <StyledTab label="Audio" />
+                                                <StyledTab label="Video" />
+                                            </StyledTabs>
                                         </div>
-                                    </form>
-                                </Card>}
-
-
-                                {/* if viewFullProfile is true then show thinkly and publication list below for now not in use */}
-                                {/* {viewFullProfile && <> <div className='mt-5'>
-                                    <p className='font-weight-bold' style={{ fontSize: '18px' }}>Publications by this Author</p>
-                                    infinite={true} autoPlay={truse} autoPlaySpeed={2000} arrows={false}  //comment this
-                                    <Carousel responsive={responsive}>
-                                        {getPublicationByAuthorData !== null && getPublicationByAuthorData.length > 0 ? getPublicationByAuthorData.map((obj) => {
-                                            var img_extension = '.' + (obj.publicationImage.split(/[#?]/)[0].split('.').pop())
-                                            return (<Card className="mb-4" style={{ width: '140px', boxShadow: 'none', background: 'rgba(247, 247, 247, 0.49)' }}>
-                                                {(/.(gif|jpe?g|tiff?|png|webp|bmp)$/i).test(img_extension) ?
-                                                    <CardMedia component="img" height="160" image={obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage} style={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }} alt="publication profile" />
-                                                    : <div style={{ background: '#ea7f00', height: '160px' }}></div>
-                                                }
-                                                <div className='px-2'>
-                                                    <text style={{ fontSize: '14px', fontWeight: 'bold' }}>{obj.publicationName}</text> <br />
-                                                    <a href='#morepublication' data-toggle="modal" data-target="#myModal" onClick={() => setShowModal(true)} style={{ color: '#2baadf', fontSize: '12px', fontFamily: 'sans-serif' }}>View the Publication</a>
-                                                </div>
-                                            </Card>)
-                                        }) : <div className='text-center'> No Data Available </div>}
-                                    </Carousel>
+                                        <div className='mt-4'>
+                                            {getThinkliesByAuthorData !== null && getThinkliesByAuthorData.length > 0 ? <>
+                                                {(value === 0 ? <div className='row'>
+                                                    {getThinkliesByAuthorData.map((obj) => {
+                                                        var image1 = obj.postData.postImages[0];
+                                                        var isAudio = obj.postData.audioURL;
+                                                        var isVideo = obj.postData.videoURL;
+                                                        return (<div className='col-4 mb-4'>
+                                                            <Card className="card-view-publication">
+                                                                <div className='row d-flex' style={{ padding: '5px 5px 5px 20px' }}>
+                                                                    {image1 !== undefined ? <div className='col-4' style={isAudio !== "" || isVideo !== "" ? { marginBottom: '-24px' } : {}}>
+                                                                        <img className='img-fluid Upublilcation-image' src={image1.charAt(0) === '@' ? image1.substring(1) : image1} alt="" />
+                                                                        {isAudio !== undefined && isAudio !== "" ? <img src={Audio_Icon} className='thinkly-type-icon1' /> :
+                                                                            isVideo !== undefined && isVideo !== "" ? <img src={Video_Icon} className='thinkly-type-icon1' /> : ''}
+                                                                    </div> : <div className='col-4 Upublilcation-no-image'>
+                                                                        {isAudio !== undefined && isAudio !== "" ? <img src={Audio_Icon} className='thinkly-type-icon2' /> :
+                                                                            isVideo !== undefined && isVideo !== "" ? <img src={Video_Icon} className='thinkly-type-icon2' /> : ''}
+                                                                    </div>}
+                                                                    <div className='col-8 my-auto'>
+                                                                        <p className='' style={{ fontSize: '14px', lineHeight: '1', marginBottom: '0px' }}> {obj.postData.postTitle} </p>
+                                                                    </div>
+                                                                </div>
+                                                            </Card>
+                                                        </div>)
+                                                    })}
+                                                </div> : value === 1 ? <div className='row'>
+                                                    {getThinkliesByAuthorData.map((obj) => {
+                                                        var image1 = obj.postData.postImages[0];
+                                                        var isAudio = obj.postData.audioURL;
+                                                        return (<>
+                                                            {isAudio !== undefined && isAudio !== "" && <div className='col-4 mb-4' >
+                                                                <Card className="card-view-publication">
+                                                                    <div className='row d-flex' style={{ padding: '5px 5px 5px 20px' }}>
+                                                                        {image1 !== undefined ? <div className='col-4' style={{ marginBottom: '-24px' }}>
+                                                                            <img className='img-fluid Upublilcation-image' src={image1.charAt(0) === '@' ? image1.substring(1) : image1} alt="" />
+                                                                            <img src={Audio_Icon} className='thinkly-type-icon1' />
+                                                                        </div> : <div className='col-4 Upublilcation-no-image'>
+                                                                            <img src={Audio_Icon} className='thinkly-type-icon2' />
+                                                                        </div>}
+                                                                        <div className='col-8 my-auto'>
+                                                                            <p className='' style={{ fontSize: '14px', lineHeight: '1', marginBottom: '0px' }}> {obj.postData.postTitle} </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </Card>
+                                                            </div>}
+                                                        </>)
+                                                    })}
+                                                </div> : <div className='row'>
+                                                    {getThinkliesByAuthorData.map((obj) => {
+                                                        var image1 = obj.postData.postImages[0];
+                                                        var isVideo = obj.postData.videoURL;
+                                                        return (<>
+                                                            {isVideo !== undefined && isVideo !== "" && <div className='col-4 mb-4' >
+                                                                <Card className="card-view-publication">
+                                                                    <div className='row d-flex' style={{ padding: '5px 5px 5px 20px' }}>
+                                                                        {image1 !== undefined ? <div className='col-4' style={{ marginBottom: '-24px' }}>
+                                                                            <img className='img-fluid Upublilcation-image' src={image1.charAt(0) === '@' ? image1.substring(1) : image1} alt="" />
+                                                                            <img src={Video_Icon} style={{ marginTop: '-90px', marginLeft: '6px' }} />
+                                                                        </div> : <div className='col-4 Upublilcation-no-image'>
+                                                                            <img src={Video_Icon} style={{ marginTop: '15px', marginLeft: '6px' }} />
+                                                                        </div>}
+                                                                        <div className='col-8 my-auto'>
+                                                                            <p className='' style={{ fontSize: '14px', lineHeight: '1', marginBottom: '0px' }}> {obj.postData.postTitle} </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </Card>
+                                                            </div>}
+                                                        </>)
+                                                    })}
+                                                </div>)}
+                                            </> : <div className='text-center'> No Data Available </div>}
+                                        </div>
+                                    </>} */}
                                 </div>
-                                    <div className='mt-5'>
-                                        <p className='font-weight-bold' style={{ fontSize: '18px' }}>Thinklies by this Author</p>
-                                        <StyledTabs value={value} onchange={handleChangeTabs} aria-label="styled tabs" >
-                                            <StyledTab label="All" />
-                                            <StyledTab label="Audio" />
-                                            <StyledTab label="Video" />
-                                        </StyledTabs>
-                                    </div>
-                                    <div className='mt-4'>
-                                        {getThinkliesByAuthorData !== null && getThinkliesByAuthorData.length > 0 ? <>
-                                            {(value === 0 ? <div className='row'>
-                                                {getThinkliesByAuthorData.map((obj) => {
-                                                    var image1 = obj.postData.postImages[0];
-                                                    var isAudio = obj.postData.audioURL;
-                                                    var isVideo = obj.postData.videoURL;
-                                                    return (<div className='col-4 mb-4'>
-                                                        <Card className="card-view-publication">
-                                                            <div className='row d-flex' style={{ padding: '5px 5px 5px 20px' }}>
-                                                                {image1 !== undefined ? <div className='col-4' style={isAudio !== "" || isVideo !== "" ? { marginBottom: '-24px' } : {}}>
-                                                                    <img className='img-fluid Upublilcation-image' src={image1.charAt(0) === '@' ? image1.substring(1) : image1} alt="" />
-                                                                    {isAudio !== undefined && isAudio !== "" ? <img src={Audio_Icon} className='thinkly-type-icon1' /> :
-                                                                        isVideo !== undefined && isVideo !== "" ? <img src={Video_Icon} className='thinkly-type-icon1' /> : ''}
-                                                                </div> : <div className='col-4 Upublilcation-no-image'>
-                                                                    {isAudio !== undefined && isAudio !== "" ? <img src={Audio_Icon} className='thinkly-type-icon2' /> :
-                                                                        isVideo !== undefined && isVideo !== "" ? <img src={Video_Icon} className='thinkly-type-icon2' /> : ''}
-                                                                </div>}
-                                                                <div className='col-8 my-auto'>
-                                                                    <p className='' style={{ fontSize: '14px', lineHeight: '1', marginBottom: '0px' }}> {obj.postData.postTitle} </p>
-                                                                </div>
-                                                            </div>
-                                                        </Card>
-                                                    </div>)
-                                                })}
-                                            </div> : value === 1 ? <div className='row'>
-                                                {getThinkliesByAuthorData.map((obj) => {
-                                                    var image1 = obj.postData.postImages[0];
-                                                    var isAudio = obj.postData.audioURL;
-                                                    return (<>
-                                                        {isAudio !== undefined && isAudio !== "" && <div className='col-4 mb-4' >
-                                                            <Card className="card-view-publication">
-                                                                <div className='row d-flex' style={{ padding: '5px 5px 5px 20px' }}>
-                                                                    {image1 !== undefined ? <div className='col-4' style={{ marginBottom: '-24px' }}>
-                                                                        <img className='img-fluid Upublilcation-image' src={image1.charAt(0) === '@' ? image1.substring(1) : image1} alt="" />
-                                                                        <img src={Audio_Icon} className='thinkly-type-icon1' />
-                                                                    </div> : <div className='col-4 Upublilcation-no-image'>
-                                                                        <img src={Audio_Icon} className='thinkly-type-icon2' />
-                                                                    </div>}
-                                                                    <div className='col-8 my-auto'>
-                                                                        <p className='' style={{ fontSize: '14px', lineHeight: '1', marginBottom: '0px' }}> {obj.postData.postTitle} </p>
-                                                                    </div>
-                                                                </div>
-                                                            </Card>
-                                                        </div>}
-                                                    </>)
-                                                })}
-                                            </div> : <div className='row'>
-                                                {getThinkliesByAuthorData.map((obj) => {
-                                                    var image1 = obj.postData.postImages[0];
-                                                    var isVideo = obj.postData.videoURL;
-                                                    return (<>
-                                                        {isVideo !== undefined && isVideo !== "" && <div className='col-4 mb-4' >
-                                                            <Card className="card-view-publication">
-                                                                <div className='row d-flex' style={{ padding: '5px 5px 5px 20px' }}>
-                                                                    {image1 !== undefined ? <div className='col-4' style={{ marginBottom: '-24px' }}>
-                                                                        <img className='img-fluid Upublilcation-image' src={image1.charAt(0) === '@' ? image1.substring(1) : image1} alt="" />
-                                                                        <img src={Video_Icon} style={{ marginTop: '-90px', marginLeft: '6px' }} />
-                                                                    </div> : <div className='col-4 Upublilcation-no-image'>
-                                                                        <img src={Video_Icon} style={{ marginTop: '15px', marginLeft: '6px' }} />
-                                                                    </div>}
-                                                                    <div className='col-8 my-auto'>
-                                                                        <p className='' style={{ fontSize: '14px', lineHeight: '1', marginBottom: '0px' }}> {obj.postData.postTitle} </p>
-                                                                    </div>
-                                                                </div>
-                                                            </Card>
-                                                        </div>}
-                                                    </>)
-                                                })}
-                                            </div>)}
-                                        </> : <div className='text-center'> No Data Available </div>}
-                                    </div>
-                                </>} */}
                             </div>
                         </div>
+                        <Faq />
                     </div>
-                    <Faq />
-                </div>
-            }
-            <Footer />
+                }
+                <Footer />
+            </>} {/* closing of publication detail page condition */}
         </> : <div className='grid place-items-center h-screen'>
             <CircularProgress aria-label="Loading..." />
         </div>
