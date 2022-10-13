@@ -507,8 +507,7 @@ const UserProfile = (props) => {
             </>} {/* closing of publication detail page condition */}
         </> : <div className='grid place-items-center h-screen'>
             <CircularProgress aria-label="Loading..." />
-        </div>
-        }
+        </div>}
     </>)
 }
 

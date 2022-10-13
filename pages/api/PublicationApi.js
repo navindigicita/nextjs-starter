@@ -2,7 +2,6 @@ import { baseUrl } from "./api";
 import Axios from 'axios';
 
 export const FetchUserDetailByPenname = (penName) => {
-    console.log("inside api from api, baseUrl, and penname", baseUrl, penName);
     var config = {
         headers: {
             "Content-Type": "application/json",
