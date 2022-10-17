@@ -5,12 +5,21 @@ import Axios from "axios";
 import { useRouter } from 'next/router'
 import Image from 'next/image';
 import Head from 'next/head';
-import { Avatar, Card, CardMedia, CircularProgress } from '@material-ui/core'
+import Carousel from "react-multi-carousel"
+import "react-multi-carousel/lib/styles.css"
+import { Avatar, Card, ListItemText, CircularProgress } from '@material-ui/core'
 import { KeyboardArrowDown } from '@material-ui/icons';
 import ParaByNameFromUrl from '../common/paraByNameFromUrl'
 import { PublicationProfileEvent, PublicationSubscribeEvent } from '../../config/facebookPixelEvent';
 import { baseUrl } from '../../pages/api/api';
 import { isMobile } from 'react-device-detect';
+
+const meetAuthorResponsive = {
+    mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 1,
+    },
+};
 
 const PublicationDetailMob = (props) => {
     const BASE_URL = useContext(baseUrl);
@@ -22,12 +31,13 @@ const PublicationDetailMob = (props) => {
     const [PublicationPenName, setPublicationPenName] = useState()
     const [AuthorList, setAuthorList] = useState()
     const [PubSection, setPubSection] = useState()
-    const [getPublicationThinkly, setPublicationThinkly] = useState()  //thinklies list in this publication
+    const [PublicationThinklies, setPublicationThinklies] = useState()  //thinklies list in this publication
     const [startIndexValue, setstartIndexValue] = useState(0)  //star index of load ore thinkies in this publication
     const [endIndexValue, setendIndexValue] = useState(9)  //end index of load ore thinkies in this publication
     const [NoMoreData, setNoMoreData] = useState(false)  //if no more thinklies then hide MORE link 
-    const [getUserPublication, setUserPublication] = useState() // more publication by the author who has written this publilcation
-    const [getMorePubByInterest, setMorePubByInterest] = useState()  //more publication list by this publication's interest
+    const [UserPublication, setUserPublication] = useState() // more publication by the author who has written this publilcation
+    const [NoMorePubByAuthor, setNoMorePubByAuthor] = useState(false)  //no data of publilcation by author
+    const [MorePubByInterest, setMorePubByInterest] = useState()  //more publication list by this publication's interest
     const [publicationPrice, setPublicationPrice] = useState() // store publication price
     const [submitLoader, setSubmitLoader] = useState(false) //loader hide and show on payment btn
     const [emailID, setemailID] = useState()  //for modal box(free subscription)
@@ -48,14 +58,14 @@ const PublicationDetailMob = (props) => {
             const element = arr.splice(indexMain, 1)[0]
             arr.splice(0, 0, element);
             setAuthorList(arr)  //main author index switch last to start end here
-            // fetchSectionDetail(data.publicationID, data.createdBy) //function call
-            // fetchPublicationThinklies(data.publicationID, data.createdBy)  //function call
-            // fetchMorePubByAuthor(data.publicationID, data.createdBy)   //function call
-            // const interestArray = [];
-            // data.interestData.filter((obj) => {
-            //     interestArray.push(obj.interestID)
-            // })
-            // fetchYouMayLikePubs(data.createdBy, interestArray)  //function call
+            fetchSectionDetail(data.publicationID, data.createdBy) //function call
+            fetchPublicationThinklies(data.publicationID, data.createdBy)  //function call
+            fetchMorePubByAuthor(data.publicationID, data.createdBy)   //function call
+            const interestArray = [];
+            data.interestData.filter((obj) => {
+                interestArray.push(obj.interestID)
+            })
+            fetchYouMayLikePubs(data.createdBy, interestArray)  //function call
         }
     }, [])
 
@@ -111,10 +121,10 @@ const PublicationDetailMob = (props) => {
             .then((res) => {
                 if (res.data.responseCode === '00') {
                     const newData = res.data.responseData;
-                    if (getPublicationThinkly !== undefined) {
-                        setPublicationThinkly(getPublicationThinkly => [...getPublicationThinkly, ...newData])
+                    if (PublicationThinklies !== undefined) {
+                        setPublicationThinklies(getPublicationThinkly => [...getPublicationThinkly, ...newData])
                     } else {
-                        setPublicationThinkly(newData)
+                        setPublicationThinklies(newData)
                     }
                     if (newData.length < 9) {
                         setNoMoreData(true)
@@ -145,7 +155,17 @@ const PublicationDetailMob = (props) => {
         Axios(`${BASE_URL}User/GetUserPublications`, config)
             .then((res) => {
                 if (res.data.responseCode === '00') {
-                    setUserPublication(res.data.responseData)
+                    const newData = res.data.responseData
+                    if (UserPublication !== undefined) {
+                        setUserPublication(setUserPublication => [...setUserPublication, ...newData])
+                    } else {
+                        setUserPublication(newData)
+                    }
+                    if (newData.length < 9) {
+                        setNoMorePubByAuthor(true)
+                    }
+                } else if (res.data.responseCode === '03') {
+                    setNoMorePubByAuthor(true)
                 }
             })
             .catch((err) => {
@@ -268,7 +288,7 @@ const PublicationDetailMob = (props) => {
         }
     }
 
-    const viewpub = (penName) => {
+    const handlePubView = (penName) => {
         const name = penName.charAt(0) === '@' ? penName.substring(1) : penName;
         // logEvent(analytics, 'PUB_AUTHOR_PUBLICATION_CLICK', { pubPenName: penName })  //google analytic log
         var newWindow = window.open(`${name}`, '_blank')
@@ -295,15 +315,168 @@ const PublicationDetailMob = (props) => {
                 <div className='d-flex justify-content-center'>
                     <Image src={PublicationImage} alt="PublicationImage" className='pubProfile' width='100%' height='20rem' style={{ objectFit: 'contain', objectPosition: 'center' }} />
                 </div>
-                <div className='row text-center'>
+                <div className='row mt-4 text-center'>
                     <div className='col-12'>
-                        <h1 className='ff-lora fs-56 fw-bold'>{PublicationDetails.publicationName}</h1>
-                        {AuthorList !== undefined && AuthorList.length > 2 ? <p className='fs-28'> Authored by <b>{AuthorList[0].authorName}</b> and {AuthorList.length - 1} others</p>
-                            : AuthorList.length === 2 ? <p className='fs-28'> Authored by <b>{AuthorList[0].authorName}</b> and <b>{AuthorList[1].authorName}</b> </p>
-                                : <p className='fs-28'> Authored by <b>{AuthorList[0].authorName}</b> </p>}
+                        <h1 className='ff-lora fs-36 fw-bold'>{PublicationDetails.publicationName}</h1>
+                        {AuthorList !== undefined && AuthorList.length > 2 ? <p className='fs-26'> Authored by <b>{AuthorList[0].authorName}</b> and {AuthorList.length - 1} others</p>
+                            : AuthorList.length === 2 ? <p className='fs-26'> Authored by <b>{AuthorList[0].authorName}</b> and <b>{AuthorList[1].authorName}</b> </p>
+                                : <p className='fs-26'> Authored by <b>{AuthorList[0].authorName}</b> </p>}
                     </div>
                 </div>
                 <div className='vertical-line my-4'></div>
+                {/* description */}
+                {PublicationDetails.description !== undefined && <>
+                    <div className='row d-flex story-content'>
+                        <div className='col-12 mb-3 fs-28 fw-bold'>{PublicationDetails.about}</div>
+                        <div className='col-12 text-left mb-3'>{PublicationDetails.description}</div>
+                        <button className='mx-auto subscribe px-4' onClick={() => subscribeHandle(PublicationDetails.publicationPayType)}>
+                            {PublicationDetails.publicationPayType === 'Paid' ? <>Subscribe Now </> : <>Subscribe for free</>}
+                        </button>
+                    </div>
+                    <div className='vertical-line mt-4 mb-3'></div>
+                </>}
+                {/* for free publication get user mail ID MODAL */}
+                <div id="userContactInfo" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <button type="button" class="close text-right pr-2" data-dismiss="modal" >&times;</button>
+                            <div class="modal-body px-5 pb-4 pt-1">
+                                <h5 className='text-center mb-4'>We need your emailID to send you a voucher code</h5>
+                                <input type='text' placeholder='Your email ID' value={emailID} onChange={(e) => setemailID(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
+                                {<div id="infoPlease" className='error-msg'></div>}
+                                <div className='text-center'>
+                                    <button type='submit' className='mt-3 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 w-50 primary-bg-color' onClick={() => onSubmit('Free')} >Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/* sections */}
+                {PubSection !== undefined && PubSection.length > 0 && <>
+                    {PubSection.map((obj, index) => {
+                        return (obj.sectionTitle !== '' && obj.sectionDescription !== '' && <>
+                            <div className='row d-flex' key={index}>
+                                <div className='col-12'>
+                                    <p className='text-center fs-28 fw-bold mb-4'>{obj.sectionTitle}</p>
+                                    {obj.sectionContents !== undefined && obj.sectionContents.length > 0 && obj.sectionContents.map((data) => {
+                                        return (<div className='row'>
+                                            <div className='col-12'>
+                                                {data.sectionImage !== null && data.sectionImage !== undefined && data.sectionImage !== ''
+                                                    && <Image src={data.sectionImage} alt='sectionImage' height={100} width={100} className='section-image-center' />}
+                                                {data.sectionDescription !== undefined && data.sectionDescription !== null && data.sectionDescription !== ''
+                                                    && <div className='' dangerouslySetInnerHTML={{ __html: data.sectionDescription }} />}
+                                            </div>
+                                        </div>)
+                                    })}
+                                </div>
+                                <button className='mx-auto subscribe px-4 mt-4' onClick={() => subscribeHandle(PublicationDetails.publicationPayType)}>
+                                    {PublicationDetails.publicationPayType === 'Paid' ? <>Subscribe Now</> : <>Subscribe for free</>}
+                                </button>
+                            </div>
+                            <div className='vertical-line mt-4 mb-3'></div>
+                        </>)
+                    })}
+                </>}
+                {/* thinklies in this publication */}
+                {PublicationThinklies !== undefined && PublicationThinklies.length > 0 && <>
+                    <p className='p-heading mb-4'>Posts in this Publication</p>
+                    {PublicationThinklies.map((obj, index) => {
+                        const image_url = obj.postData.postImages.length > 0 && obj.postData.postImages[0].charAt(0) === '@' ? obj.postData.postImages[0].substring(1) : obj.postData.postImages[0]
+                        return (<Card className='t-in-p' key={index} onClick={() => handlePostView(obj.postData.postURL, obj.postData.postID)}>
+                            <div className='row d-flex'>
+                                <div className='col-3'>
+                                    {obj.postData.postImages.length > 0 ? <Image src={image_url} height={100} width={100} className='publilcation-image' />
+                                        : <Card className='publilcation-image' style={{ background: '#faa422' }}></Card>}
+                                </div>
+                                <div className='col-8 my-auto'>
+                                    <h4 className='fs-22'> {obj.postData.postTitle.slice(0, 45) + (obj.postData.postTitle.length > 45 ? "..." : "")} </h4>
+                                </div>
+                            </div>
+                        </Card>)
+                    })}
+                    {!NoMoreData && <p className='col-12 fs-22 fw-mid' onClick={() => fetchMoreThinklyByPublication()}> <KeyboardArrowDown /> show more</p>}
+                    <div className='vertical-line mt-4 mb-3'></div>
+                </>}
+                {/* meet the authors */}
+                {PublicationDetails.publicationAuthor !== undefined && PublicationDetails.publicationAuthor.length > 0 && <div>
+                    <p className='text-center fs-26 fw-bold mb-2'>Authored by</p>
+                    <Carousel responsive={meetAuthorResponsive}>
+                        {PublicationDetails.publicationAuthor.map((obj, index) => { //onClick={() => handleUserProfile(obj.authorID)}
+                            const imageUrl = obj.authorProfileImage.charAt(0) === '@' ? obj.authorProfileImage.substring(1) : obj.authorProfileImage
+                            return (<Card className="card-body" key={index}>
+                                <div className='row mt-2'>
+                                    <Avatar className='mx-auto ma-profile' src={imageUrl} alt="author profile" />
+                                </div>
+                                <div className='text-center fs-30 fw-bold'>{obj.authorName.slice(0, 16) + (obj.authorName.length > 16 ? "..." : "")}</div>
+                                <p className='fs-18 text-center mb-4'>
+                                    {obj.authorProfileText !== '' && (obj.authorProfileText.slice(0, 200) + (obj.authorProfileText.length > 200 ? "..." : ""))}
+                                </p>
+                            </Card>)
+                        })}
+                    </Carousel>
+                </div>}
+                {/* more publication from abc */}
+                {UserPublication !== undefined && UserPublication.length > 0 && <>
+                    <div className='vertical-line mt-3 mb-4'></div>
+                    <p className='p-heading mb-4'>More Publications By {AuthorList[0].authorName}</p>
+                    {UserPublication.map((obj, index) => {
+                        const imageUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
+                        return (<div className='row mb-3 ml-1' key={index} onClick={() => handlePubView(obj.penName)}>
+                            <div className='col-3'>
+                                <Image src={imageUrl} alt="Image" height={100} width={100} className="publilcation-image" />
+                            </div>
+                            <div className='col-9'>
+                                <ListItemText primary={<h5 className='fs-22 fw-bold'>{obj.publicationName.slice(0, 18) + (obj.publicationName.length > 18 ? "..." : "")}</h5>}
+                                    secondary={<p className='fs-14'>{obj.description.slice(0, 70) + (obj.description.length > 70 ? "..." : "")}</p>} />
+                            </div>
+                        </div>)
+                    })}
+                    {!NoMorePubByAuthor && <p className='col-12 text-center fs-18 fw-bold fc-primary' onClick={() => fetchMorePubByAuthor()}>+MORE</p>}
+                </>}
+                {/* publication profile  */}
+                {PublicationDetails.publicationPayType === 'Paid' && <>
+                    <div className='vertical-line my-4'></div>
+                    {PublicationDetails !== undefined && PublicationDetails.publicationImage !== undefined && <div id='paidpublicationdiv'>
+                        <form name="paymentGatewayrazorpay" onSubmit={handleSubmit(onSubmit)}>
+                            <div className='col-12 mx-auto' >
+                                <Card className="t-in-p">
+                                    <div className='row mb-3'>
+                                        <img className='mx-auto pay-pub-profile' src={PublicationDetails.publicationImage.charAt(0) === '@' ? PublicationDetails.publicationImage.substring(1) : PublicationDetails.publicationImage} alt="author profile" />
+                                    </div>
+                                    <div className='text-center mb-2'>
+                                        <span className='ff-lora fs-30 fw-bold'>{PublicationDetails.publicationName}</span>
+                                        <p className='fs-20 fw-mid'>{PublicationDetails.about}</p>
+                                        <p className='fs-32 fw-bold'>{PublicationDetails.publicationPlan[0].planName}</p>
+                                        <p className='fs-28 fw-bold mx-auto'>&#x20b9; {PublicationDetails.publicationPrice}</p>
+                                    </div>
+                                    <p className='text-center fs-18 fw-normal mb-2'> {PublicationDetails.publicationPlan[0].description} </p>
+                                    <button type='submit' className='subscribe mx-auto px-4 d-flex' style={{ paddingTop: '0.4rem' }}>
+                                        {submitLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#fff' }} /> : <>Subscribe @ &#x20b9;{PublicationDetails.publicationPrice} {PublicationDetails.publicationPlan[0].planName}</>}
+                                    </button>
+                                </Card>
+                            </div>
+                        </form>
+                    </div>}
+                </>}
+                {/* you may also like */}
+                {MorePubByInterest !== undefined && MorePubByInterest.length > 0 && <>
+                    <div className='vertical-line my-3'></div>
+                    <p className='p-heading mb-4'>Other Publilcations you may like</p>
+                    {MorePubByInterest.map((obj, index) => {
+                        const imageUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
+                        return (<div className='row mb-3 ml-1' key={index}>
+                            <div className='col-3'>
+                                <Image src={imageUrl} alt="Image" height={100} width={100} className="publilcation-image" />
+                            </div>
+                            <div className='col-9'>
+                                <ListItemText primary={<h5 className='fs-22 fw-bold'>{obj.publicationName.slice(0, 15) + (obj.publicationName.length > 15 ? "..." : "")}</h5>}
+                                    secondary={<p className='fs-14'>{obj.description.slice(0, 60) + (obj.description.length > 60 ? "..." : "")}</p>} />
+                                {/* <h4 className='fs-14 fc-link' onClick={() => handlePubView(obj.penName)}>View the Publication</h4> */}
+                            </div>
+                        </div>)
+                    })}
+                    {/* {!NoMorePubByInterest && <p className='col-12 text-center fs-22 fw-bold fc-primary' onClick={() => fetchMorePubByInterest()}>+MORE</p>} */}
+                </>}
             </div> : <div className='grid place-items-center h-screen'>
                 <CircularProgress aria-label="Loading..." />
             </div>}
