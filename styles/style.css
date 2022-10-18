@@ -15,6 +15,10 @@
     background: lightgray;
 }
 
+.bg-profile-tab {
+    background: #ffe7cc;
+}
+
 /* border */
 .border-none {
     border: none;

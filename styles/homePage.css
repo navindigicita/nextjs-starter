@@ -23,20 +23,33 @@
     padding: 5px 20px;
 }
 
-.active div{
-    background-color: #e98c37!important;
-  } 
+.active div {
+    background-color: #e98c37 !important;
+}
 
-  .interest-card-bg{
-    background-color: #e98c37!important;
-  } 
+/* for active tab in libraries use */
+div.tab button.active {
+    font-weight: 700;
+    color: black;
+    font-size: 18px;
+    height: 40px;
+    border-bottom: 3px solid #e98c37 !important;
+    /* background: #ffe7cc !important; */
+}
+/* end */
+.interest-card-bg {
+    background-color: #e98c37 !important;
+}
+
 /* thinkly setting card text line height modified in build-in class */
 .line-height-align .MuiTypography-body1 {
     line-height: 1 !important;
 }
+
 .line-height-align .MuiTypography-body2 {
     line-height: 1 !important;
 }
+
 /* end thinkly setting line height */
 
 .interest-textbox {
@@ -47,6 +60,7 @@
     outline: 0;
     padding: 2px 8px 2px;
 }
+
 .bottomline-textbox {
     border-top: none;
     border-left: none;
@@ -57,6 +71,7 @@
     outline: 0;
     padding: 2px 8px 2px;
 }
+
 .card-interest {
     margin-top: 10px;
     margin-left: 10px;
@@ -87,7 +102,7 @@
 }
 
 
-.type-file-hide > input {
+.type-file-hide>input {
     display: none;
 }
 
@@ -111,48 +126,50 @@
 }
 
 /* modal popup scrollable */
-.modal-dialog{
+.modal-dialog {
     overflow-y: initial !important
 }
-.modal-dialog .scroll{
+
+.modal-dialog .scroll {
     height: 90vh;
     overflow-y: auto;
 }
 
 /* react quill editor */
 
-.ql-editor{
+.ql-editor {
     height: 160px !important;
     /* resize: vertical; */
     overflow: auto;
 }
 
 /* default selected background color */
-.MuiListItem-root.Mui-selected, .MuiListItem-root.Mui-selected:hover {
+.MuiListItem-root.Mui-selected,
+.MuiListItem-root.Mui-selected:hover {
     background-color: #ffe7cc !important;
 }
 
 .addReadMore.showlesscontent .SecSec,
-    .addReadMore.showlesscontent .readLess {
-        display: none;
-    }
+.addReadMore.showlesscontent .readLess {
+    display: none;
+}
 
-    .addReadMore.showmorecontent .readMore {
-        display: none;
-    }
+.addReadMore.showmorecontent .readMore {
+    display: none;
+}
 
-    .addReadMore .readMore,
-    .addReadMore .readLess {
-        font-weight: bold;
-        margin-left: 2px;
-        color: black;
-        cursor: pointer;
-    }
+.addReadMore .readMore,
+.addReadMore .readLess {
+    font-weight: bold;
+    margin-left: 2px;
+    color: black;
+    cursor: pointer;
+}
 
-    .addReadMoreWrapTxt.showmorecontent .SecSec,
-    .addReadMoreWrapTxt.showmorecontent .readLess {
-        display: block;
-    }
+.addReadMoreWrapTxt.showmorecontent .SecSec,
+.addReadMoreWrapTxt.showmorecontent .readLess {
+    display: block;
+}
 
 /* .content {
     height:100px;

@@ -5,23 +5,16 @@ import Image from 'next/image';
 
 const SideBar = (props) => {
     const [profileData, setProfileData] = useState();
-    const [loginStatus, setloginStatus] = useState()
     const [aboutMe, setaboutMe] = useState();
-    const [selectedIndex, setSelectedIndex] = useState(0) //set index of thinkly type
     const [CopyUrl, setCopyUrl] = useState(false)
     const [isPartialUser, setisPartialUser] = useState(false)
     const [UserUrl, setUserUrl] = useState()
     const [supporterData, setsupporterData] = useState()
 
     useEffect(() => {
-        console.log("props data successed", props.profileJson);
         if (props.profileJson !== undefined && props.supporterData !== undefined) {
-            console.log("props data successed", props.profileJson);
             setProfileData(props.profileJson)
             setsupporterData(props.supporterData)
-            // if (localStorage.getItem('accessToken') !== undefined) {
-            //     setloginStatus('success')
-            // }
         }
     }, []);
 
@@ -40,20 +33,26 @@ const SideBar = (props) => {
     }, [profileData]);
 
     const handleListItemClick = (event, index, page) => {
-        console.log("thinkly type item index", index);
-        setSelectedIndex(index);
         props.profileDetail(page)
         if (index === 0) {
-            document.getElementById('publication').style.background = '#fff'
-            document.getElementById('thinkly').style.background = '#fff'
             document.getElementById('dashboard').style.background = '#ffe7cc'
+            document.getElementById('Publication').style.background = '#fff'
+            document.getElementById('Libraries').style.background = '#fff'
+            document.getElementById('thinkly').style.background = '#fff'
         } else if (index === 1) {
             document.getElementById('dashboard').style.background = '#fff'
+            document.getElementById('Publication').style.background = '#ffe7cc'
+            document.getElementById('Libraries').style.background = '#fff'
             document.getElementById('thinkly').style.background = '#fff'
-            document.getElementById('publication').style.background = '#ffe7cc'
         } else if (index === 2) {
             document.getElementById('dashboard').style.background = '#fff'
-            document.getElementById('publication').style.background = '#fff'
+            document.getElementById('Publication').style.background = '#fff'
+            document.getElementById('Libraries').style.background = '#ffe7cc'
+            document.getElementById('thinkly').style.background = '#fff'
+        } else if (index === 3) {
+            document.getElementById('dashboard').style.background = '#fff'
+            document.getElementById('Publication').style.background = '#fff'
+            document.getElementById('Libraries').style.background = '#fff'
             document.getElementById('thinkly').style.background = '#ffe7cc'
         }
     }
@@ -61,7 +60,6 @@ const SideBar = (props) => {
     const copyLink = () => {
         // var url = document.getElementById("userShareUrl").innerHTML;
         navigator.clipboard.writeText(UserUrl).then(function () {
-            console.log('Copied!', UserUrl);
             setCopyUrl(true)
             setTimeout(() => {
                 setCopyUrl(false)
@@ -83,44 +81,49 @@ const SideBar = (props) => {
 
     return (<>
         {profileData !== undefined && profileData !== null ? <>
-            <div className='row' onClick={() => handleUserProfile()} style={{ cursor: 'pointer' }}>
+            {/* profile Image and user name show and onclick of it will take user to new tab with user profile url */}
+            <div className='row cursor-pointer' onClick={() => handleUserProfile()}>
                 {profileData.profileDetails.profileImage !== undefined && profileData.profileDetails.profileImage !== null ?
                     <Image src={profileData.profileDetails.profileImage.charAt(0) === '@' ? profileData.profileDetails.profileImage.substring(1) : profileData.profileDetails.profileImage} alt="user profile" height={50} width={50} style={{ borderRadius: '50%' }} />
                     : <Avatar style={{ width: '50px', height: '50px' }} src={<AssignmentIndOutlined />} />
                 }
                 <ListItemText style={{ marginTop: '7px', marginLeft: '15px' }} //onClick={() => props.profileDetail('ProfileDetail')}
-                    primary={<div style={{ lineHeight: '1', fontSize: '18px' }}>
-                        <span className="header-font"> <b>{profileData.profileDetails.firstName + " " + profileData.profileDetails.lastName}</b> </span> </div>}
-                    secondary={<span style={{ fontSize: '14px' }}>{aboutMe}</span>}
-                />
+                    primary={<div className='fs-18' style={{ lineHeight: '1' }}>
+                        <span className="header-font">
+                            <b>{profileData.profileDetails.firstName + " " + profileData.profileDetails.lastName}</b>
+                        </span>
+                    </div>}
+                    secondary={<span className='fs-14'>{aboutMe}</span>} />
                 {/* <text className='float-right' style={{ fontSize: '12px', fontWeight: 'bold', color: '#ea7f00', marginTop: '7px' }}>EDIT</text> */}
             </div>
             <div className='row mt-4'>
                 <div className='col-1 p-0'>
                     <Image src={'/bio-link.svg'} alt='Bio_link' height={25} width={25} />
                 </div>
-                <div className='col-11' style={{ lineHeight: '0.9' }}>
-                    {/* <a style={{ fontSize: '12px', color: '#3c7493', overflowWrap: 'break-word' }} id="userShareUrl">{profileData.profileDetails.profileUrl}</a> <br /> */}
-                    <a style={{ fontSize: '12px', color: '#3c7493', overflowWrap: 'break-word' }} id="userShareUrl">{UserUrl}</a> <br />
-                    <a style={{ fontSize: '12px', color: '#e98c37', fontWeight: '500', cursor: 'pointer' }} onClick={() => copyLink()}>{CopyUrl ? 'Copied' : 'Copy Link'}</a>
+                <div className='col-11' style={{ lineHeight: '1' }}>
+                    <h6 className='fs-12 fc-link break-words' id="userShareUrl">{UserUrl}</h6>
+                    <h6 className='fs-12 fc-primary fw-mid cursor-pointer' onClick={() => copyLink()}>{CopyUrl ? 'Copied' : 'Copy Link'}</h6>
                 </div>
             </div>
             <div className='row mt-4'>
                 <div className='col-12' style={{ width: 'auto', paddingLeft: '0px', paddingRight: '0px' }}>
-                    <Card className="p-2 mt-2" style={{ fontSize: '16px', fontWeight: '500', cursor: 'pointer', background: '#ffe7cc' }} id="dashboard" selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 0, 'Dashboard')}>
-                        <text>My True-fans</text>
-                        <text className='float-right'>{supporterData !== undefined && supporterData.TotalSupporters}</text>
+                    <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" style={{ background: '#ffe7cc' }} id="dashboard" onClick={(event) => handleListItemClick(event, 0, 'Dashboard')}>
+                        <span>My True-fans</span>
+                        <span className='float-right'>{supporterData !== undefined && supporterData.TotalSupporters}</span>
                     </Card>
-                    {/* {!isPartialUser && <>
-                        <Card className="p-2 mt-2" style={{ fontSize: '16px', fontWeight: '500', cursor: 'pointer' }} id="publication" selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 1, 'Publication')}>
-                            <text>My Publications</text>
-                            <text className='float-right'>{profileData.otherDetails.totalPublicationsCount}</text>
+                    {!isPartialUser && <>
+                        <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="Publication" onClick={(event) => handleListItemClick(event, 1, 'Publication')}>
+                            <span>My Publication</span>
+                            <span className='float-right'>{profileData.otherDetails.totalPublicationsCount}</span>
                         </Card>
-                        <Card className="p-2 mt-2" style={{ fontSize: '16px', fontWeight: '500', cursor: 'pointer' }} id="thinkly" selected={selectedIndex === 0} onClick={(event) => handleListItemClick(event, 2, 'Thinkly')}>
-                            <text>My Posts</text>
-                            <text className='float-right'>{profileData.otherDetails.totalThinkliesCount}</text>
+                        <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="Libraries" onClick={(event) => handleListItemClick(event, 2, 'Libraries')}>
+                            <span>My Library</span>
                         </Card>
-                    </>} */}
+                        {/* <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="thinkly" onClick={(event) => handleListItemClick(event, 2, 'Thinkly')}>
+                            <span>My Posts</span>
+                            <span className='float-right'>{profileData.otherDetails.totalThinkliesCount}</span>
+                        </Card> */}
+                    </>}
                 </div>
             </div>
         </> : <CircularProgress aria-label="Loading..." />}
