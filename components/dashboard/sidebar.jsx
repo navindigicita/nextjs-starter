@@ -119,10 +119,9 @@ const SideBar = (props) => {
                         <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="Libraries" onClick={(event) => handleListItemClick(event, 2, 'Libraries')}>
                             <span>My Library</span>
                         </Card>
-                        {/* <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="thinkly" onClick={(event) => handleListItemClick(event, 2, 'Thinkly')}>
+                        <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="thinkly" onClick={(event) => handleListItemClick(event, 3, 'Thinkly')}>
                             <span>My Posts</span>
-                            <span className='float-right'>{profileData.otherDetails.totalThinkliesCount}</span>
-                        </Card> */}
+                        </Card>
                     </>}
                 </div>
             </div>

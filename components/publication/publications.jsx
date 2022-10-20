@@ -1,40 +1,27 @@
 import React, { useEffect, useState, useContext } from 'react'
 import Axios from "axios";
 import Image from 'next/image';
-import { Avatar, ListItemText, CircularProgress } from "@material-ui/core"
-import { AssignmentIndOutlined } from "@material-ui/icons"
+import { ListItemText, CircularProgress, Box } from "@material-ui/core"
 import { Card } from 'react-bootstrap'
+import InfiniteScroll from "react-infinite-scroll-component";
 import { baseUrl } from '../../pages/api/api.jsx';
 import NoData from '../common/noData.jsx';
 
 const Publication = (props) => {
     const BASE_URL = useContext(baseUrl);
     const [Author_ID, setAuthor_ID] = useState()
-    const [PublicationByAuthorData, setPublicationByAuthorData] = useState([])
-    const [NoRecord, setNoRecord] = useState(false)
-    const [isFetching, setIsFetching] = useState(false) // scroll more publication
+    const [PublicationByAuthorData, setPublicationByAuthorData] = useState([])  //store publication list inside array
+    const [NoRecord, setNoRecord] = useState(false)  //if no record found then show create publication pannel
+    const [isFetching, setIsFetching] = useState(false) // scroll more publication show loader
     const [startIndexValue, setstartIndexValue] = useState(0)
     const [endIndexValue, setendIndexValue] = useState(10)
 
     useEffect(() => {
         if (props.authorID !== undefined && props.authorID !== null) {
-            console.log("inside publication page props data of author ID@@@", props.authorID);
             setAuthor_ID(props.authorID)
             getPublicationByAuthor(props.authorID)
         }
     }, [])
-
-    function scrollpublications() {
-        setstartIndexValue(endIndexValue)
-        setendIndexValue(endIndexValue + 10)
-    }
-
-    useEffect(() => {
-        console.log("startIndexValue", startIndexValue, "endIndexValue", endIndexValue);
-        if (Author_ID !== undefined) {
-            getPublicationByAuthor(Author_ID)
-        }
-    }, [startIndexValue, endIndexValue])
 
     function getPublicationByAuthor(authorID) {
         var config = {
@@ -45,67 +32,65 @@ const Publication = (props) => {
                 "UserID": authorID
             },
             data: {
-                "UserID": authorID,
-                "StartIndex": startIndexValue,
-                "EndIndex": endIndexValue
+                FilterType: "AUTHOR",
+                StartIndex: startIndexValue,
+                EndIndex: endIndexValue
             }
         };
-        Axios(`${BASE_URL}User/GetUserPublications/`, config)
+        Axios(`${BASE_URL}User/V2/GetMyPublications`, config)
             .then((res) => {
-                console.log("setPublicationByAuthorData @@@@@@@@", res);
                 if (res.data.responseCode === '00') {
-                    fetchAppendedData(res.data.responseData)
-                    setIsFetching(false)
+                    const newData = res.data.responseData.publications
+                    setPublicationByAuthorData(publicationData => [...publicationData, ...newData])
+                    setstartIndexValue(endIndexValue)
+                    setendIndexValue(endIndexValue + 10)
+                    setIsFetching(true)
+
                 } else if (res.data.responseCode === '03') {
-                    console.log("inside no record");
                     setNoRecord(true)
                     setIsFetching(false)
                 }
             })
-            .catch((err) => {
-                console.log("setPublicationByAuthorData error in catch", err);
-            });
+            .catch((err) => { console.log(err); });
     }
-
-    const fetchAppendedData = (newData) => {
-        setPublicationByAuthorData(publicationData => [...publicationData, ...newData])
-        if (newData !== null) {
-            setIsFetching(true)
-            scrollpublications()
-        }
-    }
-
-    useEffect(() => {
-        console.log(PublicationByAuthorData);
-    }, [PublicationByAuthorData])
 
     const handlePubicationClick = (pen_name) => {
-        console.log(pen_name);
-        window.open(`/publication/${pen_name}`, '_blank')
+        window.open(`/${pen_name}`, '_blank')
     }
 
     return (<>
         <div className='container'>
             <p className='fs-28 fw-mid'>My Publications</p> <hr />
-            {PublicationByAuthorData !== undefined && PublicationByAuthorData.length > 0 ? <>
-                {PublicationByAuthorData.map((obj, index) => {
-                    const name = obj.penName.charAt(0) === '@' ? obj.penName.substring(1) : obj.penName
-                    return (<Card className='mt-4' key={index}>
-                        <div className='row cursor' onClick={() => handlePubicationClick(name)}>
-                            <div className='col-2'>
-                                {obj.publicationImage !== undefined && <Image src={obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage} alt="publication Image" height={50} width={50} style={{ objectFit: 'cover' }} />}
+            {PublicationByAuthorData !== undefined && PublicationByAuthorData.length > 0 ?
+                <InfiniteScroll dataLength={PublicationByAuthorData.length}
+                    next={getPublicationByAuthor(Author_ID)}
+                    hasMore={isFetching}
+                    loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
+                    endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}
+                >
+                    {PublicationByAuthorData.map((obj, index) => {
+                        const name = obj.penName.charAt(0) === '@' ? obj.penName.substring(1) : obj.penName
+                        const imageUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
+                        const authorData = obj.publicationAuthor.find(({ authorID }) => authorID == Author_ID)
+                        console.log(obj)
+                        return (<Card className='mt-4' key={index}>
+                            <div className='row cursor' onClick={() => handlePubicationClick(name)}>
+                                <div className='col-2'>
+                                    {obj.publicationImage !== undefined && <Image src={imageUrl} alt="publication Image" height={50} width={50} style={{ objectFit: 'cover' }} />}
+                                </div>
+                                <div className='col-8'>
+                                    <ListItemText className='my-auto' primary={<div>
+                                        <span className='ff-lora fs-18 mr-2'>{obj.publicationName}</span>
+                                        <Box component="span" className='py-1 fc-primary border-radius-4 fw-mid-bold fs-10 px-2 bg-lightgray'>{authorData !== undefined && authorData.authorType}</Box>
+                                    </div>}
+                                        secondary={<text className='fs-15'>{obj.about}</text>} />
+                                </div>
                             </div>
-                            <div className='col-8'>
-                                <ListItemText className='my-auto' primary={<span className='ff-lora fs-18'>{obj.publicationName}</span>}
-                                    secondary={<text className='fs-15'>{obj.about}</text>} />
-                            </div>
-                        </div>
-                    </Card>)
-                })}
-            </> : NoRecord === true ? <NoData authorID={Author_ID} /> : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
-                <CircularProgress aria-label="Loading..." />
-            </div>}
-            {isFetching && <div style={{ padding: '10px 0px', textAlign: 'center' }}> <CircularProgress aria-label="Loading..." /> </div>}
+                        </Card>)
+                    })}
+                </InfiniteScroll> : NoRecord === true ? <NoData authorID={Author_ID} /> : <div className='grid place-items-center h-screen'>
+                    <CircularProgress aria-label="Loading..." />
+                </div>}
         </div>
     </>)
 }

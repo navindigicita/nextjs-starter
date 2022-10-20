@@ -1,4 +1,3 @@
-import head from 'next/head';
 import React, { useContext, useState, useEffect } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
@@ -8,28 +7,21 @@ import { baseUrl } from './api/api'
 import { RemoteConfiguration } from '../config/individualThinkly';
 import Header from '../components/common/header';
 import SideBar from '../components/dashboard/sidebar';
-import Thinklies from '../components/posts/thinklies';
 import Publication from '../components/publication/publications';
 import DashboardPage from '../components/dashboard/deshaboardPage';
-import Head from 'next/head';
-import Script from 'next/script'
-import { fetchUserAccessToken } from '../utils/fetchUserDetail';
 import Libraries from '../components/publication/libraries';
+import PostCollection from '../components/posts/postCollection';
 
 
 const HomePage = (props) => {
   const router = useRouter()
   const BASE_URL = useContext(baseUrl);
-  // const userIDQuery = props.router.query.userID;
-  // const userStatusQuery = props.router.query.userStatus;
   const [AuthorID, setAuthorID] = useState()
   const [thinklyConfigData, setthinklyConfigData] = useState()
   const [value, setValue] = useState(null);
   const [getIsValue, setIsvalue] = useState(false);
   const [profileData, setProfileData] = useState();
-  // const [Headervisible, setHeadervisible] = useState(false)
   const [supporterData, setsupporterData] = useState()
-  const [stripe, setStripe] = useState(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -63,7 +55,6 @@ const HomePage = (props) => {
         if (res.data.responseCode === '00') {
           localStorage.setItem("PublicationCount", res.data.responseData.otherDetails.totalPublicationsCount)
           setProfileData(res.data.responseData);
-          console.log("inside fetchUserProfileData function", res.data.responseData);
         } else if (res.data.responseCode === "03") {
           localStorage.clear()
           router.push('/login')
@@ -100,8 +91,8 @@ const HomePage = (props) => {
         <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>
           {getIsValue ? <>
             {value === 'Libraries' ? <Libraries authorID={AuthorID} />
-              : value === 'Publication' ? <Publication authorID={AuthorID} profileJson={profileData} />
-                : value === 'Thinkly' ? <Thinklies authorID={AuthorID} profileJson={profileData} />
+              : value === 'Publication' ? <Publication authorID={AuthorID} />
+                : value === 'Thinkly' ? <PostCollection authorID={AuthorID} profileJson={profileData} />
                   : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
           </> : <DashboardPage profileJson={profileData} supporterData={supporterData} />}
         </div>
