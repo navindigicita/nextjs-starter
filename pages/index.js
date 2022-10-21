@@ -6,6 +6,7 @@ import { withRouter, useRouter } from 'next/router';
 import { baseUrl } from './api/api'
 import { RemoteConfiguration } from '../config/individualThinkly';
 import Header from '../components/common/header';
+import Footer from '../components/common/footer';
 import SideBar from '../components/dashboard/sidebar';
 import Publication from '../components/publication/publications';
 import DashboardPage from '../components/dashboard/deshaboardPage';
@@ -92,7 +93,7 @@ const HomePage = (props) => {
           {getIsValue ? <>
             {value === 'Libraries' ? <Libraries authorID={AuthorID} />
               : value === 'Publication' ? <Publication authorID={AuthorID} />
-                : value === 'Thinkly' ? <PostCollection authorID={AuthorID} profileJson={profileData} />
+                : value === 'Thinkly' ? <PostCollection authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
                   : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
           </> : <DashboardPage profileJson={profileData} supporterData={supporterData} />}
         </div>
@@ -107,6 +108,7 @@ const HomePage = (props) => {
     </div> : <div className='grid place-items-center h-screen'>
       <CircularProgress aria-label="Loading..." />
     </div>}
+    <Footer />
   </>)
 }
 

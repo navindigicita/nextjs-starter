@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Thinklies from '../posts/thinklies'
+import Draft from "./drafts";
+import ScheduledPost from "./scheduledPost";
 
 const PostCollection = (props) => {
     const [Author_ID, setAuthor_ID] = useState()
@@ -7,11 +9,10 @@ const PostCollection = (props) => {
 
     useEffect(() => {
         document.getElementById("defaultOpen").click();
-        if (props.authorID !== undefined) {
+        if (props.authorID !== undefined && props.thinklyConfigJSON !== undefined) {
             setAuthor_ID(props.authorID)
             setconfigJson(props.thinklyConfigJSON)
         }
-
     }, []);
 
     const openTab = (event, tabName) => {
@@ -31,20 +32,20 @@ const PostCollection = (props) => {
     return (<div className='row'>
         <div className='col-12'>
             <p className='fs-28 fw-mid'>My Post Collection</p> <hr />
-            <div className="tab mt-1 " >
+            <div className="tab mt-4">
                 <button className='col-4 tablinks fc-gray active' onClick={(event) => openTab(event, 'Posts')} id="defaultOpen" ><b>Published</b></button>
-                {/* <button className='col-4 tablinks fc-gray' onClick={(event) => openTab(event, 'Drafts')} ><b>Drafts</b></button>
-                <button className='col-4 tablinks fc-gray' onClick={(event) => openTab(event, 'ScheduledPosts')} ><b>Scheduled</b></button> */}
+                <button className='col-4 tablinks fc-gray' onClick={(event) => openTab(event, 'Drafts')} ><b>Drafts</b></button>
+                <button className='col-4 tablinks fc-gray' onClick={(event) => openTab(event, 'ScheduledPosts')} ><b>Scheduled</b></button>
             </div>
             <div id="Posts" className="tabContent">
-                {Author_ID !== undefined && <Thinklies authorID={Author_ID} thinklyConfigJSON={configJson} />}
+                {Author_ID !== undefined && configJson !== undefined && <Thinklies authorID={Author_ID} thinklyConfigJSON={configJson} />}
             </div>
-            {/* <div id="Drafts" className="tabContent">
-                {Author_ID !== undefined && <MyDraft authorID={Author_ID} thinklyConfigJSON={configJson} />}
+            <div id="Drafts" className="tabContent">
+                {Author_ID !== undefined && configJson !== undefined && <Draft authorID={Author_ID} thinklyConfigJSON={configJson} />}
             </div>
             <div id="ScheduledPosts" className="tabContent">
-                {Author_ID !== undefined && <ScheduledList authorID={Author_ID} thinklyConfigJSON={configJson} />}
-            </div> */}
+                {Author_ID !== undefined && configJson !== undefined && <ScheduledPost authorID={Author_ID} thinklyConfigJSON={configJson} />}
+            </div>
         </div>
     </div>);
 }

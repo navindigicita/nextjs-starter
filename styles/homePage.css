@@ -1,3 +1,23 @@
+.primary-border-button {
+    border-radius: 4px;
+    background-color: #fff;
+    color: #faa422;
+    border: 2px solid #faa422;
+    font-weight: 500;
+    height: 40px;
+    width: 40%;
+}
+
+.primary-bg-button {
+    border-radius: 4px;
+    background-color: #faa422;
+    color: #fff;
+    border: none;
+    font-weight: 500;
+    height: 40px;
+    width: 40%;
+}
+
 .vertical-line {
     border-left: 1px solid lightgray;
     height: auto;
