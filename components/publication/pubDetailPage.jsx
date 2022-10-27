@@ -404,13 +404,13 @@ const PublicationDetailPage = (props) => {
 
     return (<>
         <Header />
-        {PublicationDetail !== undefined ? <>
+        {PublicationDetail !== undefined && PublicationImage !== undefined ? <>
             {isMobile ? <PublicationDetailMob publicationDetail={PublicationDetail} /> :
                 <div className='container' style={{ marginTop: '4rem' }}>
                     <Head>
                         <title>{PublicationDetail.publicationName}</title>
                         <meta name="description" content={PublicationDetail.about} />
-                        <meta property="og:url" content={`https://nextjs-starter-thinkly-five.vercel.app/${PublicationPenName}/`} />
+                        <meta property="og:url" content={`https://nextjs-starter-thinkly-five.vercel.app/${PublicationPenName}`} />
                         <meta property="og:type" content="website" />
                         <meta property="og:title" content={PublicationDetail.publicationName} key="og-title" />
                         <meta property="og:description" content={PublicationDetail.about} key="og-desc" />
