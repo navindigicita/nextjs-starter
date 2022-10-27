@@ -6,8 +6,12 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {/* <link href="https://fonts.googleapis.com/css?family=PT+Sans:300,400,700,800" rel="stylesheet" />
-          <link rel="stylesheet" href="/_next/static/style.css" /> */}
+          <title>Thinkly</title>
+          <meta name="description" content="Platform for thinklers" />
+          <meta property="og:url" content="https://nextjs-starter-thinkly-five.vercel.app" />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content="Thinkly" key="og-title" />
+          <meta property="og:description" content="Platform for thinklers ogTag" key="og-desc" />
         </Head>
         <body>
           <Main />
