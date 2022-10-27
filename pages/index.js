@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { CircularProgress } from '@material-ui/core';
 import { isMobile } from 'react-device-detect';
+import Head from 'next/head';
 import Axios from "axios";
 import { withRouter, useRouter } from 'next/router';
 import { baseUrl } from './api/api'
@@ -86,6 +87,14 @@ const HomePage = (props) => {
 
   return (<>
     {/* {props.isSSR ? <p>hello</p> : <p>index page.</p>} */}
+    <Head>
+      <title>Thinkly Dashboard</title>
+      <meta name="description" content="Platform for thinklers" />
+      <meta property="og:url" content="https://nextjs-starter-thinkly-five.vercel.app" />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="Thinkly" key="og-title" />
+      <meta property="og:description" content="Platform for thinklers og" key="og-desc" />
+    </Head>
     {profileData !== undefined ? <div className={isMobile ? 'container' : 'container pr-5'}>
       <Header user_profile={profileData} thinklyConfigJSON={thinklyConfigData} />
       <div className='row' style={{ marginTop: '5rem' }}>
