@@ -407,7 +407,7 @@ const PublicationDetailPage = (props) => {
         {PublicationDetail !== undefined && PublicationImage !== undefined ? <>
             {isMobile ? <PublicationDetailMob publicationDetail={PublicationDetail} /> :
                 <div className='container' style={{ marginTop: '4rem' }}>
-                    {/* <Head>
+                    <Head>
                         <title>{PublicationDetail.publicationName}</title>
                         <meta name="description" content={PublicationDetail.about} />
                         <meta property="og:url" content={`https://nextjs-starter-thinkly-five.vercel.app/${PublicationPenName}`} />
@@ -415,17 +415,7 @@ const PublicationDetailPage = (props) => {
                         <meta property="og:title" content={PublicationDetail.publicationName} key="og-title" />
                         <meta property="og:description" content={PublicationDetail.about} key="og-desc" />
                         <meta property="og:image" content={PublicationImage} key="og-image" />
-                    </Head> */}
-                    <Head>
-                        <title>kakashi Hatake</title>
-                        <meta name="description" content="avount" />
-                        <meta property="og:url" content="https://nextjs-starter-thinkly-five.vercel.app/kakashi" />
-                        <meta property="og:type" content="website" />
-                        <meta property="og:title" content="kakashi" key="og-title" />
-                        <meta property="og:description" content="about kakashi" key="og-desc" />
-                        <meta property="og:image" content="https://thinklymedia.blob.core.windows.net/devimages/3223_1645515418857.jpeg" key="og-image" />
                     </Head>
-                    
                     <div className='d-flex justify-content-center'>
                         <Image src={PublicationImage} alt="PublicationImage" className='pubProfile' width='60%' height='25rem' style={{ objectFit: 'contain', objectPosition: 'center' }} />
                     </div>
