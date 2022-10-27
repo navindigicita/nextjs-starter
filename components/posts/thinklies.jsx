@@ -21,7 +21,6 @@ const Thinklies = (props) => {
 
     useEffect(() => {
         if (props.authorID !== undefined && props.thinklyConfigJSON !== undefined) {
-            console.log(props.authorID, props.thinklyConfigJSON);
             setAuthorID(props.authorID)
             setRemoteConfigJson(props.thinklyConfigJSON)
             fetchThinklies(props.authorID)
@@ -47,7 +46,6 @@ const Thinklies = (props) => {
             .then((res) => {
                 if (res.data.responseCode === '00') {
                     const newData = res.data.responseData
-                    console.log(newData);
                     setThinklyList(data => [...data, ...newData])
                     setstartIndexValue(endIndexValue)
                     setendIndexValue(endIndexValue + 10)
@@ -78,7 +76,6 @@ const Thinklies = (props) => {
 
     const handlePostAction = (index) => {
         setEditPost(false)
-        console.log("inside post action", index);
         $(`.${index}`).addClass("dropdown-post") //add class to particular index only
         if ($(".dropdown-post").css('display') === 'none') {
             $(".dropdown-post").css('display', 'block');  //edit show
@@ -89,7 +86,7 @@ const Thinklies = (props) => {
         $(`.${index}`).removeClass("dropdown-post")
     }
 
-    return (<div className='row'>
+    return (<>
         {ThinklyList.length > 0 ? <InfiniteScroll dataLength={ThinklyList.length}
             next={fetchThinklies(AuthorID)}
             hasMore={isFetching}
@@ -147,7 +144,7 @@ const Thinklies = (props) => {
         </InfiniteScroll> : NoRecord === true ? <NoData /> : <div className='grid place-items-center h-screen'>
             <CircularProgress aria-label="Loading..." />
         </div>}
-    </div>);
+    </>);
 }
 
 export default Thinklies;

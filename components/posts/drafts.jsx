@@ -29,7 +29,6 @@ const Draft = (props) => {
         };
         Axios.get(`${BASE_URL_THINKLY}Draft/GetDraftsForUser/${authorID}`, config)
             .then((res) => {
-                console.log(res.data);
                 if (res.data.responseCode === '00') {
                     setDraftList(res.data.responseData.Drafts)
                 } else if (res.data.responseCode === '03') {
@@ -60,7 +59,6 @@ const Draft = (props) => {
         };
         Axios(`${BASE_URL_THINKLY}draft/DeleteDraft`, config)
             .then((res) => {
-                console.log(res.data);
                 if (res.data.responseCode === '00') {
                     $('#deleteDraft').modal('hide')
                     setDraftDeleteLoader(false)
@@ -75,7 +73,7 @@ const Draft = (props) => {
         setEditDraft(true)
     }
 
-    return (<div className='row'>
+    return (<>
         {DraftList !== undefined && DraftList !== null && DraftList.length > 0 ? <div className="container py-4">
             {DraftList.map((obj, index) => {
                 let Images = obj.ImageNames !== undefined && (obj.ImageNames).length > 0 && obj.ImageNames[0].charAt(0) === '@' ? obj.ImageNames[0].substring(1) : obj.ImageNames[0]
@@ -116,7 +114,7 @@ const Draft = (props) => {
 
         {/* {EditDraft && <NewThinkly draftID={DraftId} authorID={AuthorID} thinklyConfigJSON={props.thinklyConfigJSON} onChangeCallback={() => setEditDraft(false)} />} */}
 
-    </div>)
+    </>)
 }
 
 export default Draft
