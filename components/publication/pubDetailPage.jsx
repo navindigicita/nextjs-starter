@@ -4,7 +4,7 @@ import $ from 'jquery';
 import Axios from "axios";
 import { useRouter } from 'next/router'
 import Image from 'next/image';
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { Avatar, Card, CardMedia, CircularProgress } from '@material-ui/core'
 import { KeyboardArrowDown } from '@material-ui/icons';
 import Carousel from "react-multi-carousel"
@@ -407,15 +407,23 @@ const PublicationDetailPage = (props) => {
         {PublicationDetail !== undefined && PublicationImage !== undefined ? <>
             {isMobile ? <PublicationDetailMob publicationDetail={PublicationDetail} /> :
                 <div className='container' style={{ marginTop: '4rem' }}>
-                    <Head>
-                        <title>{PublicationDetail.publicationName}</title>
-                        <meta name="description" content={PublicationDetail.about} />
-                        <meta property="og:url" content={`https://nextjs-starter-thinkly-five.vercel.app/${PublicationPenName}`} />
-                        <meta property="og:type" content="website" />
-                        <meta property="og:title" content={PublicationDetail.publicationName} key="og-title" />
-                        <meta property="og:description" content={PublicationDetail.about} key="og-desc" />
-                        <meta property="og:image" content={PublicationImage} key="og-image" />
-                    </Head>
+                    <NextSeo
+                        title={PublicationDetail.publicationName}
+                        description={PublicationDetail.about}
+                        canonical="https://nextjs-starter-thinkly-five.vercel.app/"
+                        openGraph={{
+                            url: `https://nextjs-starter-thinkly-five.vercel.app/${PublicationPenName}`,
+                            title: PublicationDetail.publicationName,
+                            description: PublicationDetail.about,
+                            images: [{
+                                url: PublicationImage,
+                                width: 800,
+                                height: 600
+                            }],
+                            siteName: 'Thinkly WebLite',
+                        }}
+                    />
+
                     <div className='d-flex justify-content-center'>
                         <Image src={PublicationImage} alt="PublicationImage" className='pubProfile' width='60%' height='25rem' style={{ objectFit: 'contain', objectPosition: 'center' }} />
                     </div>
