@@ -5,12 +5,12 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        {/* <Head>
+        <Head>
           <meta property="og:url" content="https://nextjs-starter-thinkly-five.vercel.app" />
           <meta property="og:type" content="website" />
           <meta property="og:title" content="Thinkly document.js" key="og-title" />
           <meta property="og:description" content="Platform for thinklers document.js" key="og-desc" />
-        </Head> */}
+        </Head>
         <body>
           <Main />
           <NextScript />

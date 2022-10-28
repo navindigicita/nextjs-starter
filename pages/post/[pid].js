@@ -25,7 +25,6 @@ export default Post
 
 export async function getServerSideProps(content) {
     const value = content.params.pid
-    console.log(content, content.resolvedUrl)
     const webUrl = content.req.headers.referer
     const resolved = content.resolvedUrl
     return {
