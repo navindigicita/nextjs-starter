@@ -418,7 +418,9 @@ const PublicationDetailPage = (props) => {
                             images: [{
                                 url: PublicationImage,
                                 width: 800,
-                                height: 600
+                                height: 600,
+                                alt: 'Og Image Alt',
+                                type: 'image/jpeg',
                             }],
                             siteName: 'Thinkly WebLite',
                         }}
