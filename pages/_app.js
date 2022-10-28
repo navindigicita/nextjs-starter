@@ -29,14 +29,14 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <div>
-      <Head>
+      {/* <Head>
         <title>Thinkly</title>
         <meta name="description" content="Platform for thinklers" />
         <meta property="og:url" content="https://nextjs-starter-thinkly-five.vercel.app" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Thinkly app.js" key="og-title" />
         <meta property="og:description" content="Platform for thinklers app.js" key="og-desc" />
-      </Head>
+      </Head> */}
       <Component {...pageProps} />
     </div>
   );
