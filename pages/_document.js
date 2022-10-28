@@ -6,12 +6,10 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <title>Thinkly</title>
-          <meta name="description" content="Platform for thinklers" />
           <meta property="og:url" content="https://nextjs-starter-thinkly-five.vercel.app" />
           <meta property="og:type" content="website" />
-          <meta property="og:title" content="Thinkly" key="og-title" />
-          <meta property="og:description" content="Platform for thinklers ogTag" key="og-desc" />
+          <meta property="og:title" content="Thinkly document.js" key="og-title" />
+          <meta property="og:description" content="Platform for thinklers document.js" key="og-desc" />
         </Head>
         <body>
           <Main />
