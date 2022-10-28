@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { useForm } from "react-hook-form";
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import $ from 'jquery';
 import Axios from "axios";
 import { useRouter } from 'next/router'
@@ -321,14 +321,32 @@ const UserProfile = (props) => {
 
     return (<>
         {getProfileDetail !== undefined ? <>
+            <NextSeo
+                title="Using More of Config"
+                description="This example uses more of the available config options."
+                canonical="https://nextjs-starter-thinkly-five.vercel.app/"
+                openGraph={{
+                    url: 'https://nextjs-starter-thinkly-five.vercel.app/post/19967/',
+                    title: 'Open Graph Title',
+                    description: 'Open Graph Description',
+                    images: [{
+                        url: 'https://thinklymedia.blob.core.windows.net/devimages/01_1638797315802_.jpg',
+                        width: 800,
+                        height: 600,
+                        alt: 'Og Image Alt',
+                        type: 'image/jpeg',
+                    }],
+                    siteName: 'SiteName',
+                }}
+            />
             {showPublication ? <PublicationProfile publicationDetail={getProfileDetail} /> : <>
                 <Header userProfile={getProfileDetail} showContentForUserProfile={showDataOnHeader} />
-                <Head>
+                {/* <Head>
                     <title>{getpenName}</title>
                     <meta property="og:title" content={getpenName} key="og-title" />
                     <meta property="og:description" content={aboutUser} key="og-desc" />
                     <meta property="og:image" content={getProfileImage} key="og-image" />
-                </Head>
+                </Head> */}
                 {isMobile ? <UserProfileMob userProfileJson={getProfileDetail} />
                     : <div className='container' style={{ marginTop: '5rem' }}>
                         <div className='row mb-5'>
