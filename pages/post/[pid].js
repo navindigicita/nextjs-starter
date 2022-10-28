@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
+import { NextSeo } from 'next-seo';
 
 const Post = (props) => {
 
@@ -9,14 +10,25 @@ const Post = (props) => {
 
 
     return (<>
-        <Head>
-            <title>{props.data}</title>
-            <meta name="description" content="Post Description" />
-            <meta property="og:url" content={props.url} />
-            <meta property="og:type" content="website" />
-            <meta property="og:title" content={props.data} key="og-title" />
-            <meta property="og:description" content={props.shortUrl} key="og-desc" />
-        </Head>
+        <NextSeo
+            title="Using More of Config"
+            description="This example uses more of the available config options."
+            canonical="https://nextjs-starter-thinkly-five.vercel.app/"
+            openGraph={{
+                url: 'https://nextjs-starter-thinkly-five.vercel.app/post/19967/',
+                title: 'Open Graph Title',
+                description: 'Open Graph Description',
+                images: [{
+                    url: 'https://thinklymedia.blob.core.windows.net/devimages/01_1638797315802_.jpg',
+                    width: 800,
+                    height: 600,
+                    alt: 'Og Image Alt',
+                    type: 'image/jpeg',
+                }],
+                siteName: 'SiteName',
+            }}
+        />
+        
         <p>Post: {props.data}</p>
     </>)
 }

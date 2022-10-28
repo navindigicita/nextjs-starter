@@ -28,6 +28,7 @@
     "moment": "^2.29.1",
     "next": "^12.2.5",
     "next-auth": "^4.10.3",
+    "next-seo": "^5.11.1",
     "quill-paste-smart": "^1.4.10",
     "react": "^18.1.0",
     "react-bootstrap": "^2.1.0",
