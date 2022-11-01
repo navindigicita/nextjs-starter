@@ -23,7 +23,29 @@ import UserProfileMob from '../components/userProfileMob';
 import { UserProfileEvent, UserSupportStarEvent } from '../config/facebookPixelEvent';
 // import { getAnalytics, logEvent } from "firebase/analytics";
 import PublicationProfile from '../components/publication/pubDetailPage';
+import { async } from '@firebase/util';
 
+export async function getServerSideProps(context) {
+    const userName = context.params.username
+    var response;
+    var config = {
+        headers: {
+            "Content-Type": "application/json",
+            "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
+            "UserID": 0 //if fetching detail by then set user id as 0
+        },
+    };
+    await Axios.get(`${baseUrl._currentValue}User/GetDetailsByPenName/${userName}`, config)
+        .then((res) => {
+            response = res.data
+        })
+
+    console.log("data@@@@@", response);
+
+    return {
+        props: { userData: response }, // will be passed to the page component as props
+    }
+}
 
 const responsive = {
     superLargeDesktop: {
@@ -107,16 +129,47 @@ const UserProfile = (props) => {
     };
 
     useEffect(() => {
-        if (window.penName !== undefined) {
-            // logEvent(analytics, 'USER_DETAIL_PAGE', { penname: window.penName })  //google analytic log
-            getUserProfileDateils(window.penName)
-        } else {
-            var thePath = window.location.href
-            var path = thePath.match(/([^\/]*)\/*$/)[1]
-            console.log("user name", path);
-            // logEvent(analytics, 'USER_DETAIL_PAGE', { penname: path })  //google analytic log
-            getUserProfileDateils(path)
+        if (props.userData !== undefined) {
+            const res = props.userData
+            if (res.responseCode === '00') {
+                console.log("response@@@@@@@@@", res.responseData);
+                setprofileDetail(res.responseData.Details)
+                if (res.responseData.Type === 'Publication') {
+                    setshowPublication(true)
+                } else { //for user
+                    if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+                        UserProfileEvent()
+                    }
+                    const response = res.responseData.Details.profileDetails
+                    const storedUserID = localStorage.getItem('UserID')
+                    if (parseInt(storedUserID) === response.userID) {
+                        setshowDataOnHeader(true)  //for content on header for user profile detail page
+                    } else {
+                        setshowDataOnHeader(false)  //don't show content on header for user profile detail page
+                    }
+                    const penNameShorted = response.penName.charAt(0) === '@' ? response.penName.substring(1) : response.penName
+                    setpenName(penNameShorted)
+                    const image = response.profileImage.charAt(0) === '@' ? response.profileImage.substring(1) : response.profileImage
+                    setProfileImage(image)
+                    setaboutUser(response.aboutMe.trim()); //to remove unnessery space used trim
+                    // for now commented(not in use) - don't remove
+                    // getThinkliesByAuthor(response.userID)  //api call params passed
+                    // getPublicationByAuthor(response.userID)  //api call params passed
+                }
+            } else if (res.responseCode === '03') {
+
+            }
         }
+        // if (window.penName !== undefined) {
+        //     // logEvent(analytics, 'USER_DETAIL_PAGE', { penname: window.penName })  //google analytic log
+        //     getUserProfileDateils(window.penName)
+        // } else {
+        //     var thePath = window.location.href
+        //     var path = thePath.match(/([^\/]*)\/*$/)[1]
+        //     console.log("user name", path);
+        //     // logEvent(analytics, 'USER_DETAIL_PAGE', { penname: path })  //google analytic log
+        //     getUserProfileDateils(path)
+        // }
     }, [])
 
     function getUserProfileDateils(data) {
@@ -321,21 +374,21 @@ const UserProfile = (props) => {
 
     return (<>
         <NextSeo
-            title="Using More of Config"
-            description="This example uses more of the available config options."
+            title={props.userData.responseData.Details.profileDetails.firstName + ' ' + props.userData.responseData.Details.profileDetails.lastName}
+            description={aboutUser}
             canonical="https://nextjs-starter-thinkly-five.vercel.app/"
             openGraph={{
-                url: 'https://nextjs-starter-thinkly-five.vercel.app/post/19967/',
-                title: 'Open Graph Title',
-                description: 'Open Graph Description',
+                url: `https://nextjs-starter-thinkly-five.vercel.app/${getpenName}`,
+                title: props.userData.responseData.Details.profileDetails.firstName + ' ' + props.userData.responseData.Details.profileDetails.lastName,
+                description: aboutUser ,
                 images: [{
-                    url: 'https://thinklymedia.blob.core.windows.net/devimages/01_1638797315802_.jpg',
+                    url: getProfileImage,
                     width: 800,
                     height: 600,
-                    alt: 'Og Image Alt',
+                    alt: 'userImage',
                     type: 'image/jpeg',
                 }],
-                siteName: 'SiteName',
+                siteName: 'Thinkly weblite',
             }}
         />
         {getProfileDetail !== undefined ? <>
@@ -531,9 +584,3 @@ const UserProfile = (props) => {
 
 export default UserProfile;
 
-// export async function getServerSideProps(context) {
-//     console.log(context.query);
-//     return {
-//         props: { usernamepara: context.params.username }, // will be passed to the page component as props
-//     }
-// }
