@@ -27,7 +27,7 @@ import { async } from '@firebase/util';
 
 export async function getServerSideProps(context) {
     const userName = context.params.username
-    var response;
+    var response, userFullName, penName, aboutText, imageUrl;
     var config = {
         headers: {
             "Content-Type": "application/json",
@@ -38,12 +38,24 @@ export async function getServerSideProps(context) {
     await Axios.get(`${baseUrl._currentValue}User/GetDetailsByPenName/${userName}`, config)
         .then((res) => {
             response = res.data
+            userFullName = res.data.responseData.Details.profileDetails.firstName + "" + res.data.responseData.Details.profileDetails.lastName
+            aboutText = res.data.responseData.Details.profileDetails.aboutMe
+            const data1 = res.data.responseData.Details.profileDetails.penName
+            penName = data1.charAt(0) === '@' ? data1.substring(1) : data1
+            const data2 = res.data.responseData.Details.profileDetails.profileImage
+            imageUrl = data2.charAt(0) === '@' ? data2.substring(1) : data2
         })
 
     console.log("data@@@@@", response);
 
     return {
-        props: { userData: response }, // will be passed to the page component as props
+        props: {
+            userData: response,
+            userFullName: userFullName,
+            userAboutText: aboutText,
+            userPenName: penName,
+            userProfileImage: imageUrl
+        }, // will be passed to the page component as props
     }
 }
 
@@ -374,15 +386,15 @@ const UserProfile = (props) => {
 
     return (<>
         <NextSeo
-            title={props.userData.responseData.Details.profileDetails.firstName + ' ' + props.userData.responseData.Details.profileDetails.lastName}
-            description={props.userData.responseData.Details.profileDetails.aboutMe.trim()}
+            title={props.userFullName}
+            description={props.userAboutText}
             canonical="https://nextjs-starter-thinkly-five.vercel.app/"
             openGraph={{
-                url: `https://nextjs-starter-thinkly-five.vercel.app/${props.userData.responseData.Details.profileDetails.penName.charAt(0) === '@' ? props.userData.responseData.Details.profileDetails.penName.substring(1) : props.userData.responseData.Details.profileDetails.penName}`,
-                title: props.userData.responseData.Details.profileDetails.firstName + ' ' + props.userData.responseData.Details.profileDetails.lastName,
-                description: props.userData.responseData.Details.profileDetails.aboutMe.trim() ,
+                url: `https://nextjs-starter-thinkly-five.vercel.app/${props.userPenName}`,
+                title: props.userFullName,
+                description: props.userAboutText,
                 images: [{
-                    url: props.userData.responseData.Details.profileDetails.profileImage.charAt(0) === '@' ? props.userData.responseData.Details.profileDetails.profileImage.substring(1) : props.userData.responseData.Details.profileDetails.profileImage,
+                    url: props.userProfileImage,
                     width: 800,
                     height: 600,
                     alt: 'userImage',
