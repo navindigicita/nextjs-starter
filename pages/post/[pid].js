@@ -1,13 +1,6 @@
-import { useEffect, useState } from 'react'
-import Head from 'next/head'
 import { NextSeo } from 'next-seo';
 
 const Post = (props) => {
-
-    useEffect(() => {
-        console.log(props);
-    }, [])
-
 
     return (<>
         <NextSeo
@@ -28,7 +21,7 @@ const Post = (props) => {
                 siteName: 'SiteName',
             }}
         />
-        
+
         <p>Post: {props.data}</p>
     </>)
 }

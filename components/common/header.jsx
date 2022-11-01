@@ -83,11 +83,17 @@ const Header = (props) => {
     }, [])
 
     const handleSignUpClick = () => {  //to switch path url and page UI, base of either login or signup
+        // if (typeof window != undefined) {
+        //     logEvent(analytics, 'SIGN_UP_CLICK');
+        // }
         router.push('/signup')
         setPath('signup')
     }
 
     const handleLoginClick = () => {  //to switch path url and page UI, base of either login or signup
+        // if (typeof window != undefined) {
+        //     logEvent(analytics, 'LOGIN_CLICK');
+        // }
         router.push('/login')
         setPath('login') //when update or replace state then on first click it store update data value in state as a queue data and after 2nd click replace the data that's why used another click event to recall state update
         document.addEventListener('click', function () {
@@ -136,7 +142,7 @@ const Header = (props) => {
     }
 
     const handleViewProfile = () => {  //onClick of view profile take to new tab for profile detail page
-        if (typeof window !== "undefined") {
+        if (typeof window !== undefined) {
             var newWindow = window.open(`${userPenName}`, '_blank')
             newWindow.penName = userPenName
             // newWindow.userStauts = user_status

@@ -320,25 +320,25 @@ const UserProfile = (props) => {
     }
 
     return (<>
+        <NextSeo
+            title="Using More of Config"
+            description="This example uses more of the available config options."
+            canonical="https://nextjs-starter-thinkly-five.vercel.app/"
+            openGraph={{
+                url: 'https://nextjs-starter-thinkly-five.vercel.app/post/19967/',
+                title: 'Open Graph Title',
+                description: 'Open Graph Description',
+                images: [{
+                    url: 'https://thinklymedia.blob.core.windows.net/devimages/01_1638797315802_.jpg',
+                    width: 800,
+                    height: 600,
+                    alt: 'Og Image Alt',
+                    type: 'image/jpeg',
+                }],
+                siteName: 'SiteName',
+            }}
+        />
         {getProfileDetail !== undefined ? <>
-            <NextSeo
-                title="Using More of Config"
-                description="This example uses more of the available config options."
-                canonical="https://nextjs-starter-thinkly-five.vercel.app/"
-                openGraph={{
-                    url: 'https://nextjs-starter-thinkly-five.vercel.app/post/19967/',
-                    title: 'Open Graph Title',
-                    description: 'Open Graph Description',
-                    images: [{
-                        url: 'https://thinklymedia.blob.core.windows.net/devimages/01_1638797315802_.jpg',
-                        width: 800,
-                        height: 600,
-                        alt: 'Og Image Alt',
-                        type: 'image/jpeg',
-                    }],
-                    siteName: 'SiteName',
-                }}
-            />
             {showPublication ? <PublicationProfile publicationDetail={getProfileDetail} /> : <>
                 <Header userProfile={getProfileDetail} showContentForUserProfile={showDataOnHeader} />
                 {/* <Head>

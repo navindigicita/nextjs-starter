@@ -4,18 +4,21 @@ import { useRouter } from 'next/router'
 import { isMobile } from 'react-device-detect'
 import Image from 'next/image';
 import Header from '../components/common/header'
-import Head from 'next/head';
 import Footer from '../components/common/footer';
 import { firebaseApp } from '../firebase-config';
 // import { signIn } from 'next-auth/react'
+import { getAnalytics, logEvent } from "firebase/analytics";
 
-const Login = (props) => {
+const Login = () => {
     const router = useRouter()
+    const analytics = getAnalytics()
     const firebaseAuth = getAuth(firebaseApp);
     const provider = new GoogleAuthProvider();
 
-
     const handleGmailSignIn = async () => {
+        if (typeof window != undefined) {
+            logEvent(analytics, 'GOOGLE_MEDIUM');
+        }
         const { user } = await signInWithPopup(firebaseAuth, provider)
         const { refreshToken, providerData } = user;
         const providerUserData = providerData.find(obj => obj.providerId === "google.com")
