@@ -375,14 +375,14 @@ const UserProfile = (props) => {
     return (<>
         <NextSeo
             title={props.userData.responseData.Details.profileDetails.firstName + ' ' + props.userData.responseData.Details.profileDetails.lastName}
-            description={aboutUser}
+            description={props.userData.responseData.Details.profileDetails.aboutMe.trim()}
             canonical="https://nextjs-starter-thinkly-five.vercel.app/"
             openGraph={{
-                url: `https://nextjs-starter-thinkly-five.vercel.app/${getpenName}`,
+                url: `https://nextjs-starter-thinkly-five.vercel.app/${props.userData.responseData.Details.profileDetails.penName.charAt(0) === '@' ? props.userData.responseData.Details.profileDetails.penName.substring(1) : props.userData.responseData.Details.profileDetails.penName}`,
                 title: props.userData.responseData.Details.profileDetails.firstName + ' ' + props.userData.responseData.Details.profileDetails.lastName,
-                description: aboutUser ,
+                description: props.userData.responseData.Details.profileDetails.aboutMe.trim() ,
                 images: [{
-                    url: getProfileImage,
+                    url: props.userData.responseData.Details.profileDetails.profileImage.charAt(0) === '@' ? props.userData.responseData.Details.profileDetails.profileImage.substring(1) : props.userData.responseData.Details.profileDetails.profileImage,
                     width: 800,
                     height: 600,
                     alt: 'userImage',
