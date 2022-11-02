@@ -27,7 +27,7 @@ import { async } from '@firebase/util';
 
 export async function getServerSideProps(context) {
     const userName = context.params.username
-    var response, userFullName, penName, aboutText, imageUrl;
+    var response, titleName, penName, aboutText, imageUrl;
     var config = {
         headers: {
             "Content-Type": "application/json",
@@ -38,12 +38,22 @@ export async function getServerSideProps(context) {
     await Axios.get(`${baseUrl._currentValue}User/GetDetailsByPenName/${userName}`, config)
         .then((res) => {
             response = res.data
-            userFullName = res.data.responseData.Details.profileDetails.firstName + "" + res.data.responseData.Details.profileDetails.lastName
-            aboutText = res.data.responseData.Details.profileDetails.aboutMe
-            const data1 = res.data.responseData.Details.profileDetails.penName
-            penName = data1.charAt(0) === '@' ? data1.substring(1) : data1
-            const data2 = res.data.responseData.Details.profileDetails.profileImage
-            imageUrl = data2.charAt(0) === '@' ? data2.substring(1) : data2
+            if (response.responseData.Type === 'Publication') {
+                console.log("response of publication", response.responseData.Details)
+                titleName = response.responseData.Details.publicationDetails.publicationName
+                aboutText = response.responseData.Details.publicationDetails.about
+                const data1 = response.responseData.Details.publicationDetails.penName
+                penName = data1.charAt(0) === '@' ? data1.substring(1) : data1
+                const data2 = response.responseData.Details.publicationDetails.publicationImage
+                imageUrl = data2.charAt(0) === '@' ? data2.substring(1) : data2
+            } else {
+                titleName = response.responseData.Details.profileDetails.firstName + " " + response.responseData.Details.profileDetails.lastName
+                aboutText = response.responseData.Details.profileDetails.aboutMe
+                const data1 = response.responseData.Details.profileDetails.penName
+                penName = data1.charAt(0) === '@' ? data1.substring(1) : data1
+                const data2 = response.responseData.Details.profileDetails.profileImage
+                imageUrl = data2.charAt(0) === '@' ? data2.substring(1) : data2
+            }
         })
 
     console.log("data@@@@@", response);
@@ -51,7 +61,7 @@ export async function getServerSideProps(context) {
     return {
         props: {
             userData: response,
-            userFullName: userFullName,
+            titleName: titleName,
             userAboutText: aboutText,
             userPenName: penName,
             userProfileImage: imageUrl
@@ -145,14 +155,13 @@ const UserProfile = (props) => {
             const res = props.userData
             if (res.responseCode === '00') {
                 console.log("response@@@@@@@@@", res.responseData);
+                if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+                    UserProfileEvent()
+                }
                 setprofileDetail(res.responseData.Details)
-                if (res.responseData.Type === 'Publication') {
-                    setshowPublication(true)
-                } else { //for user
-                    if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
-                        UserProfileEvent()
-                    }
+                if (res.responseData.Type !== 'Publication') {
                     const response = res.responseData.Details.profileDetails
+                    console.log(localStorage.getItem('UserID'));
                     const storedUserID = localStorage.getItem('UserID')
                     if (parseInt(storedUserID) === response.userID) {
                         setshowDataOnHeader(true)  //for content on header for user profile detail page
@@ -169,7 +178,7 @@ const UserProfile = (props) => {
                     // getPublicationByAuthor(response.userID)  //api call params passed
                 }
             } else if (res.responseCode === '03') {
-
+                router.push('/login')
             }
         }
         // if (window.penName !== undefined) {
@@ -385,33 +394,49 @@ const UserProfile = (props) => {
     }
 
     return (<>
-        <NextSeo
-            title={props.userFullName}
-            description={props.userAboutText}
-            canonical="https://nextjs-starter-thinkly-five.vercel.app/"
-            openGraph={{
-                url: `https://nextjs-starter-thinkly-five.vercel.app/${props.userPenName}`,
-                title: props.userFullName,
-                description: props.userAboutText,
-                images: [{
-                    url: props.userProfileImage,
-                    width: 800,
-                    height: 600,
-                    alt: 'userImage',
-                    type: 'image/jpeg',
-                }],
-                siteName: 'Thinkly weblite',
-            }}
-        />
-        {getProfileDetail !== undefined ? <>
-            {showPublication ? <PublicationProfile publicationDetail={getProfileDetail} /> : <>
+        {props.userData.responseData.Type === 'Publication' ? <>
+            <NextSeo
+                title={props.titleName}
+                description={props.userAboutText}
+                canonical="https://nextjs-starter-thinkly-five.vercel.app/"
+                openGraph={{
+                    url: `https://nextjs-starter-thinkly-five.vercel.app/${props.userPenName}`,
+                    title: props.titleName,
+                    description: props.userAboutText,
+                    images: [{
+                        url: props.userProfileImage,
+                        width: 800,
+                        height: 600,
+                        alt: 'userImage',
+                        type: 'image/jpeg',
+                    }],
+                    siteName: 'Thinkly weblite',
+                }}
+            />
+            <PublicationProfile publicationDetail={props.userData.responseData.Details} />
+        </> : <>
+            <NextSeo
+                title={props.titleName}
+                description={props.userAboutText}
+                canonical="https://nextjs-starter-thinkly-five.vercel.app/"
+                openGraph={{
+                    url: `https://nextjs-starter-thinkly-five.vercel.app/${props.userPenName}`,
+                    title: props.titleName,
+                    description: props.userAboutText,
+                    images: [{
+                        url: props.userProfileImage,
+                        width: 800,
+                        height: 600,
+                        alt: 'userImage',
+                        type: 'image/jpeg',
+                    }],
+                    siteName: 'Thinkly weblite',
+                }}
+            />
+            {/* {showPublication && <PublicationProfile publicationDetail={props.userData.responseData.Details} />} */}
+
+            {getProfileDetail !== undefined ? <>
                 <Header userProfile={getProfileDetail} showContentForUserProfile={showDataOnHeader} />
-                {/* <Head>
-                    <title>{getpenName}</title>
-                    <meta property="og:title" content={getpenName} key="og-title" />
-                    <meta property="og:description" content={aboutUser} key="og-desc" />
-                    <meta property="og:image" content={getProfileImage} key="og-image" />
-                </Head> */}
                 {isMobile ? <UserProfileMob userProfileJson={getProfileDetail} />
                     : <div className='container' style={{ marginTop: '5rem' }}>
                         <div className='row mb-5'>
@@ -587,10 +612,10 @@ const UserProfile = (props) => {
                     </div>
                 }
                 <Footer />
-            </>} {/* closing of publication detail page condition */}
-        </> : <div className='grid place-items-center h-screen'>
-            <CircularProgress aria-label="Loading..." />
-        </div>}
+            </> : <div className='grid place-items-center h-screen'>
+                <CircularProgress aria-label="Loading..." />
+            </div>}
+        </>}
     </>)
 }
 

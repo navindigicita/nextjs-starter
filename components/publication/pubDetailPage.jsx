@@ -405,24 +405,6 @@ const PublicationDetailPage = (props) => {
     return (<>
         <Header />
         {PublicationDetail !== undefined && PublicationImage !== undefined ? <>
-            <NextSeo
-                title={PublicationDetail.publicationName}
-                description={PublicationDetail.about}
-                canonical="https://nextjs-starter-thinkly-five.vercel.app/"
-                openGraph={{
-                    url: `https://nextjs-starter-thinkly-five.vercel.app/${PublicationPenName}`,
-                    title: PublicationDetail.publicationName,
-                    description: PublicationDetail.about,
-                    images: [{
-                        url: PublicationImage,
-                        width: 800,
-                        height: 600,
-                        alt: 'Og Image Alt',
-                        type: 'image/jpeg',
-                    }],
-                    siteName: 'Thinkly WebLite',
-                }}
-            />
             {isMobile ? <PublicationDetailMob publicationDetail={PublicationDetail} /> :
                 <div className='container' style={{ marginTop: '4rem' }}>
                     <div className='d-flex justify-content-center'>
