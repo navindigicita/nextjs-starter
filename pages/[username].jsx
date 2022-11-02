@@ -38,34 +38,46 @@ export async function getServerSideProps(context) {
     await Axios.get(`${baseUrl._currentValue}User/GetDetailsByPenName/${userName}`, config)
         .then((res) => {
             response = res.data
-            if (response.responseData.Type === 'Publication') {
-                console.log("response of publication", response.responseData.Details)
-                titleName = response.responseData.Details.publicationDetails.publicationName
-                aboutText = response.responseData.Details.publicationDetails.about
-                const data1 = response.responseData.Details.publicationDetails.penName
-                penName = data1.charAt(0) === '@' ? data1.substring(1) : data1
-                const data2 = response.responseData.Details.publicationDetails.publicationImage
-                imageUrl = data2.charAt(0) === '@' ? data2.substring(1) : data2
-            } else {
-                titleName = response.responseData.Details.profileDetails.firstName + " " + response.responseData.Details.profileDetails.lastName
-                aboutText = response.responseData.Details.profileDetails.aboutMe
-                const data1 = response.responseData.Details.profileDetails.penName
-                penName = data1.charAt(0) === '@' ? data1.substring(1) : data1
-                const data2 = response.responseData.Details.profileDetails.profileImage
-                imageUrl = data2.charAt(0) === '@' ? data2.substring(1) : data2
+            console.log("data@@@@@", response);
+            if (response.responseCode === '00') {
+                if (response.responseData.Type === 'Publication') {
+                    titleName = response.responseData.Details.publicationDetails.publicationName
+                    aboutText = response.responseData.Details.publicationDetails.about
+                    const data1 = response.responseData.Details.publicationDetails.penName
+                    penName = data1.charAt(0) === '@' ? data1.substring(1) : data1
+                    const data2 = response.responseData.Details.publicationDetails.publicationImage
+                    imageUrl = data2.charAt(0) === '@' ? data2.substring(1) : data2
+                } else {
+                    titleName = response.responseData.Details.profileDetails.firstName + " " + response.responseData.Details.profileDetails.lastName
+                    aboutText = response.responseData.Details.profileDetails.aboutMe
+                    const data1 = response.responseData.Details.profileDetails.penName
+                    penName = data1.charAt(0) === '@' ? data1.substring(1) : data1
+                    const data2 = response.responseData.Details.profileDetails.profileImage
+                    imageUrl = data2.charAt(0) === '@' ? data2.substring(1) : data2
+                }
             }
         })
 
-    console.log("data@@@@@", response);
-
-    return {
-        props: {
-            userData: response,
-            titleName: titleName,
-            userAboutText: aboutText,
-            userPenName: penName,
-            userProfileImage: imageUrl
-        }, // will be passed to the page component as props
+    if (response.responseCode === '00') {
+        return {
+            props: {
+                userData: response,
+                titleName: titleName,
+                userAboutText: aboutText,
+                userPenName: penName,
+                userProfileImage: imageUrl
+            }, // will be passed to the page component as props
+        }
+    } else {
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/login",
+            },
+            props: {
+                userData: response
+            }
+        }
     }
 }
 
@@ -161,7 +173,6 @@ const UserProfile = (props) => {
                 setprofileDetail(res.responseData.Details)
                 if (res.responseData.Type !== 'Publication') {
                     const response = res.responseData.Details.profileDetails
-                    console.log(localStorage.getItem('UserID'));
                     const storedUserID = localStorage.getItem('UserID')
                     if (parseInt(storedUserID) === response.userID) {
                         setshowDataOnHeader(true)  //for content on header for user profile detail page
@@ -177,7 +188,7 @@ const UserProfile = (props) => {
                     // getThinkliesByAuthor(response.userID)  //api call params passed
                     // getPublicationByAuthor(response.userID)  //api call params passed
                 }
-            } else if (res.responseCode === '03') {
+            } else {
                 router.push('/login')
             }
         }
