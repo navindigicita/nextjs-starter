@@ -110,7 +110,7 @@ const PostDetail = (props) => {
                                     <img src={'/play-video.svg'} className="video-icon" style={{ width: '60px', height: '60px' }} />
                                 </div>
                             }
-                        </> : <iframe width="640" height="350" src={PostData.postData.videoURL.replace('https://youtu.be/', 'http://www.youtube.com/embed/') + '?autoplay=1&mute=1'}></iframe>}
+                        </> : <iframe width="640" height="350" src={PostData.postData.videoURL.replace('https://youtu.be/', 'https://www.youtube.com/embed/') + '?autoplay=1&mute=1'}></iframe>}
                     </div>
 
                     {PostData.postData.audioURL !== undefined && PostData.postData.audioURL !== null && PostData.postData.audioURL !== "" &&
