@@ -17,6 +17,8 @@ const Thinklies = (props) => {
     const [startIndexValue, setstartIndexValue] = useState(0)
     const [endIndexValue, setendIndexValue] = useState(10)
     const [NoRecord, setNoRecord] = useState(false)
+    const [thinklyID, setthinklyID] = useState()
+    const [EditPost, setEditPost] = useState(false)
     const [RemoteConfigJson, setRemoteConfigJson] = useState()
 
     useEffect(() => {

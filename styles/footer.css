@@ -8,7 +8,7 @@
 
 @media only screen and (max-width: 600px) {
     .footer {
-        /* background: #30333E 0% 0% no-repeat padding-box; */
+        margin-top: 50px;
         background: #FFFFFF 0% 0% no-repeat padding-box;
         width: 100%;
         height: auto;

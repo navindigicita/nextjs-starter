@@ -23,12 +23,7 @@ body {
         height: 350px;
         object-fit: cover;
     }
-
-    .body-content-align {
-        margin-right: 20px !important;
-        margin-top: 10px;
-    }
-
+    
     .body-left-content-align {
         margin-top: 10px;
         margin-left: 3rem !important;
@@ -90,8 +85,8 @@ body {
     }
 
     .spotify-resize {
-        width: 102%;
-        height: 90%;
+        width: 90%;
+        /* height: 90%; */
     }
 }
 

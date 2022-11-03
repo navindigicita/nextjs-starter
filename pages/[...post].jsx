@@ -8,6 +8,8 @@ import { ListItemText, CircularProgress, Avatar } from "@material-ui/core";
 import AssignmentIndOutlinedIcon from "@material-ui/icons/AssignmentIndOutlined";
 import { Carousel } from 'react-bootstrap';
 import { baseUrl } from "./api/api";
+import Header from "../components/common/header";
+import Footer from "../components/common/footer";
 
 const PostDetail = (props) => {
     const router = useRouter()
@@ -15,6 +17,7 @@ const PostDetail = (props) => {
     const [PostData, setPostData] = useState()
     const [getVedio, setVedio] = useState(false);
     const [getDateTime, setDateTime] = useState(0)
+    const [downloadPannel, setdownloadPannel] = useState(false)
 
     useEffect(() => {
         if (props.response !== undefined && props.response.postData !== null) {
@@ -46,6 +49,24 @@ const PostDetail = (props) => {
         }
     }, [])
 
+    const activeDownloadPannel = () => {  //for bottom static pannel(download link) on call to action
+        setdownloadPannel(true);
+    }
+
+    const handleOpenAppButtonClick = () => {
+        setdownloadPannel(false);
+        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        if (/android/i.test(userAgent)) {
+            return (
+                window.location = "https://play.google.com/store/apps/details?id=com.me.digicita.thinkly"
+            )
+        }
+        if (/iPad|iPhone|iPod/.test(userAgent)) {
+            return (
+                window.location = "https://apps.apple.com/in/app/thinkly/id1329943323"
+            )
+        }
+    }
 
     return (<>
         <NextSeo
@@ -66,7 +87,8 @@ const PostDetail = (props) => {
                 siteName: 'Thinkly weblite',
             }}
         />
-        {PostData !== undefined && PostData !== null ? <div id="fadeIT" className="container">
+        <Header />
+        {PostData !== undefined && PostData !== null ? <div id="fadeIT" className="container" style={{ marginTop: '5rem' }}>
             <div className="row d-flex">
                 <div className="col-md-7 mx-auto">
                     <div className="row body-img">
@@ -85,16 +107,99 @@ const PostDetail = (props) => {
                             }
                             {PostData.postData.videoURL !== undefined && PostData.postData.videoURL !== null && PostData.postData.videoURL !== "" &&
                                 <div className="video-icon-align" onClick={() => setVedio(true)}>
-                                    <img src={Play} className="video-icon" style={{ width: '60px', height: '60px' }} />
+                                    <img src={'/play-video.svg'} className="video-icon" style={{ width: '60px', height: '60px' }} />
                                 </div>
                             }
                         </> : <iframe width="640" height="350" src={PostData.postData.videoURL.replace('https://youtu.be/', 'http://www.youtube.com/embed/') + '?autoplay=1&mute=1'}></iframe>}
                     </div>
+
+                    {PostData.postData.audioURL !== undefined && PostData.postData.audioURL !== null && PostData.postData.audioURL !== "" &&
+                        <div className="row mt-4 spotify-resize" style={isMobile ? { marginLeft: '0px' } : {}} >
+                            <iframe src={PostData.postData.postOembedUrl} style={{ marginBottom: '-50px' }} width="100%" height="200" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                        </div>
+                    }
+
+                    <div className={PostData.postData.postImages.length > 0 ? `row body-content-align mt-5` : `row body-content-align`}>
+                        <span className="fw-bold fs-20 ff-lora"> {PostData.postData.postTitle} </span>
+                    </div>
+                    <div className="row body-content-align" style={{ marginTop: '-2px' }}>
+                        <span className="fw-mid fc-link fs-12"> {PostData.postData.subcategoryname.replaceAll(',', ' | ')} </span>
+                    </div>
+                    <div className="row body-content-align mt-4" style={{ cursor: 'pointer' }} onClick={() => router.push(`/${PostData.authorData.authorPenName.charAt(0) === '@' ? PostData.authorData.authorPenName.substring(1) : PostData.authorData.authorPenName}`)}>
+                        {PostData.authorData.authorProfileImage !== undefined ?
+                            <img src={PostData.authorData.authorProfileImage.charAt(0) === '@' ? PostData.authorData.authorProfileImage.substring(1) : PostData.authorData.authorProfileImage} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+                            : <Avatar src={<AssignmentIndOutlinedIcon />} />
+                        }
+                        <ListItemText style={{ marginTop: '6px', marginLeft: '10px' }}
+                            primary={<div className="header-font" style={{ lineHeight: '15px' }} >
+                                <span className='fs-15 fw-mid-bold'>
+                                    {PostData.authorData.authorPenName.charAt(0) === '@' ? PostData.authorData.authorPenName.substring(1) : PostData.authorData.authorPenName}
+                                </span>
+                            </div>}
+                            secondary={<div className="row" style={{ marginLeft: '0px' }}>
+                                <span className="fs-12">{getDateTime}</span>
+                            </div>}
+                        />
+                    </div>
+                    <div className="row my-4 body-content-align fs-15" dangerouslySetInnerHTML={{ __html: PostData.postData.postDescription }} />
+                    <hr />
+                    {PostData.publicationData !== null && <>
+                        <div className="row body-content-align font-weight-bold header-font fs-22 mt-4">About the Publication</div>
+                        <div className="row mt-4 body-content-align" >
+                            {PostData.publicationData.publicationImage !== undefined && PostData.publicationData.publicationImage !== null ?
+                                <img onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)} src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer' }} />
+                                : <Avatar src={<AssignmentIndOutlinedIcon />} />
+                            }
+                            <ListItemText style={{ marginTop: '6px', marginLeft: '10px' }}
+                                primary={<div style={{ lineHeight: '10px' }} >
+                                    <span className="header-font" onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)} style={{ cursor: 'pointer' }}>
+                                        <b> {PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}. </b>
+                                    </span> &nbsp;
+                                    {isMobile ? <a className="connect subheader-font" href="#Subscribe" onClick={() => activeDownloadPannel()}> Subscribe</a>
+                                        : <a className="connect header-font" href="#Subscribe" data-toggle="modal" data-target="#myModal" onClick={() => setShowModal(true)}> Subscribe</a>}
+                                </div>}
+                                secondary={<div className="row" style={{ marginLeft: '0px', lineHeight: '22px', cursor: 'pointer' }}>
+                                    <span className="subheader-font" onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)}>Author</span>
+                                </div>}
+                            />
+                        </div>
+                        <div className="row mt-4 body-content-align right-content-font"> {PostData.publicationData.description} </div>
+                    </>}
                 </div>
             </div>
+            {/* call to action bottom pannel for mobile view, using modal popup for desktop view(header) */}
+            {isMobile && downloadPannel && <div className="row">
+                <section className="bottom-section-mob">
+                    <div className="top-hr-colored"></div>
+                    <div className="col-12 py-2 mt-3">
+                        {PostData.publicationData !== null ? <>
+                            {/* {PostData.publicationData.publicationImage !== undefined ?
+                                <img src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
+                                : <Avatar src={<AssignmentIndOutlinedIcon />} />
+                            } */}
+                            <span>See All Thinklies From <b>
+                                {PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}
+                            </b></span>
+                        </> : <>
+                            {PostData.authorData.authorProfileImage !== undefined ?
+                                <img src={PostData.authorData.authorProfileImage.charAt(0) === '@' ? PostData.authorData.authorProfileImage.substring(1) : PostData.authorData.authorProfileImage} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
+                                : <Avatar src={<AssignmentIndOutlinedIcon />} />
+                            }
+                            <span className="ml-2">See All Thinklies From <b>
+                                {PostData.authorData.authorPenName.charAt(0) === '@' ? PostData.authorData.authorPenName.substring(1) : PostData.authorData.authorPenName}
+                            </b></span>
+                        </>}
+                    </div>
+                    <div className="col-12">
+                        <input className="float-right downloadLink-button" style={{ marginTop: '-42px', marginRight: '-10px' }} type="button" value="Open App" onClick={() => handleOpenAppButtonClick()} />
+                        <span className="float-right font-weight-bold fs-28" style={{ marginTop: '-90px', marginRight: '-9px' }} onClick={() => setdownloadPannel(false)}>&times;</span>
+                    </div>
+                </section>
+            </div>}
         </div> : <div className='grid place-items-center h-screen'>
             <CircularProgress aria-label="Loading..." />
         </div>}
+        <Footer />
     </>)
 }
 
