@@ -18,6 +18,18 @@
     width: 40%;
 }
 
+.close-button-post-image-creation {
+    border: 2px solid #faa422;
+    outline: none;
+    border-radius: 50%;
+    width: 25px;
+    margin-top: -108px;
+    margin-left: 82px;
+    background-color: #fff;
+    color: #faa422;
+    font-size: 14px;
+}
+
 .vertical-line {
     border-left: 1px solid lightgray;
     height: auto;

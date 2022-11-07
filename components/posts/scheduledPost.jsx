@@ -26,7 +26,7 @@ const ScheduledPost = (props) => {
     const fetchScheduledList = (id) => {
         var config = {
             headers: {
-                "DeviceID": process.env.REACT_APP_DEVICE_ID,
+                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
                 "UserID": id
             },
         };
@@ -54,7 +54,7 @@ const ScheduledPost = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                "DeviceID": process.env.REACT_APP_DEVICE_ID,
+                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
                 "UserID": AuthorID
             },
             data: {
@@ -80,7 +80,7 @@ const ScheduledPost = (props) => {
         setdraftLoader(true)
         var config = {
             headers: {
-                "DeviceID": process.env.REACT_APP_DEVICE_ID,
+                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
                 "UserID": AuthorID
             },
         };
@@ -99,7 +99,7 @@ const ScheduledPost = (props) => {
     const fetchPublicationDetailByID = (response) => {
         var config = {
             headers: {
-                "DeviceID": process.env.REACT_APP_DEVICE_ID,
+                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
                 "UserID": AuthorID
             },
         };
@@ -120,7 +120,7 @@ const ScheduledPost = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                DeviceID: process.env.REACT_APP_DEVICE_ID,
+                DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,
                 UserID: AuthorID,
                 contentType: 'application/json'
             },

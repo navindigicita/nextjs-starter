@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, lazy, Suspense } from 'react'
 import Axios from "axios";
 import $ from 'jquery'
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { isMobile } from "react-device-detect"
-import { Avatar, Card } from '@material-ui/core'
+import { Avatar, Card, CircularProgress } from '@material-ui/core'
 import { CheckCircleOutline, AssignmentIndOutlined, ArrowDropDown, Menu, ShareRounded } from '@material-ui/icons'
 import { baseUrlThinkly } from '../../pages/api/api';
 import SharePage from './sharePage';
-import NewThinkly from '../posts/newThinkly';
-import NewPublication from '../publication/newPublication';
+const NewThinkly = lazy(() => import('../posts/newThinkly'))
+const NewPublication = lazy(() => import('../publication/newPublication'))
 
 const Header = (props) => {
     const router = useRouter();
@@ -21,14 +21,11 @@ const Header = (props) => {
     const [userID, setuserID] = useState(false)  //stored props data of user ID
     const [userProfileImage, setuserProfileImage] = useState()  //stored props data of user profile image
     const [userPenName, setuserPenName] = useState()  //stored props data of user penName
-    const [user_status, setuser_status] = useState() //stored props data of user loggedIn status
-
     const [PublicationCount, setPublicationCount] = useState(0)  //stored props data of user publication count
-    const [pub_count, setpub_count] = useState(0)  //stored props data of user publication count
-
     const [thinklyRemoteConfigData, setthinklyRemoteConfigData] = useState()  //stored props data of thinkly remote config json
     const [showThinkly, setshowThinkly] = useState(false)  //hide and show modal box of new thinkly
     const [showPublication, setshowPublication] = useState(false)  //hide and show modal box of new publication
+    const [showCourse, setShowCourse] = useState(false)  //hide and show modal box of new course
     const [getPath, setPath] = useState('') //stored url fetch path
     const [showShareUrlPopup, setshowShareUrlPopup] = useState(false)  //hide and show modal popup of share url 
     const [showForUserProfile, setshowForUserProfile] = useState()  //to show header other half part according to page
@@ -82,18 +79,35 @@ const Header = (props) => {
         }
     }, [])
 
+    const handleCreate = () => {  //onClick of create button dropdown will hide and show
+        if ($('.dropdown-content').css('display') == 'none') {
+            $('.dropdown-content').css('display', 'block');
+        } else {
+            $('.dropdown-content').css('display', 'none');
+        }
+    }
+
+    const handleThinklyClick = () => {  //onClick of new thinkly dropdown menu option modal will popup and dropdown will hide
+        setshowThinkly(true)
+        $('.dropdown-content').css('display', 'none');
+    }
+
+    const handlePublicationClick = () => {  //onClick of new publication dropdown menu option modal will popup and dropdown will hide
+        setshowPublication(true)
+        $('.dropdown-content').css('display', 'none');
+    }
+
+    const handleCourseClick = () => {  //onClick of new course dropdown menu option modal will popup and dropdown will hide
+        setShowCourse(true)
+        $('.dropdown-content').css('display', 'none');
+    }
+
     const handleSignUpClick = () => {  //to switch path url and page UI, base of either login or signup
-        // if (typeof window != undefined) {
-        //     logEvent(analytics, 'SIGN_UP_CLICK');
-        // }
         router.push('/signup')
         setPath('signup')
     }
 
     const handleLoginClick = () => {  //to switch path url and page UI, base of either login or signup
-        // if (typeof window != undefined) {
-        //     logEvent(analytics, 'LOGIN_CLICK');
-        // }
         router.push('/login')
         setPath('login') //when update or replace state then on first click it store update data value in state as a queue data and after 2nd click replace the data that's why used another click event to recall state update
         document.addEventListener('click', function () {
@@ -147,6 +161,19 @@ const Header = (props) => {
             newWindow.penName = userPenName
             // newWindow.userStauts = user_status
         }
+    }
+
+    function createButton(pCount) {  //create button UI code for new thinkly and publication ---> on purpose of code reusability
+        return (<div className='col-3 dropdown' style={{ marginTop: '7px' }}>
+            <button className='fw-mid-bold border-radius-4 fc-white border-none primary-bg-color height-button fs-18 px-3 pt-2 text-center' style={{ outlineWidth: '0', display: 'inline-flex' }} onClick={() => handleCreate()} >
+                <img src={'/addThinklyPublicationIcon.svg'} /> Create<ArrowDropDown />
+            </button>
+            <div class="dropdown-content" >
+                {pCount !== undefined && pCount === 0 ? '' : <a href="#createNewThinkly" data-toggle="modal" data-target="#createThinkly" onClick={() => handleThinklyClick()}>New Post</a>}
+                <a href="#createNewPublication" data-toggle="modal" data-target="#newPublication" onClick={() => handlePublicationClick()}>New Publication</a>
+                <a href="#createNewCourse" data-toggle="modal" data-target="#newPublication" onClick={() => handleCourseClick()}>New Course</a>
+            </div>
+        </div>)
     }
 
     return (<>
@@ -224,7 +251,12 @@ const Header = (props) => {
                             </div>}
                             {/* header logo content end && loggedIn user condition starts */}
                             {getPath === 'LoggedIn' && showForUserProfile === 'dashboard' && <>
-                                <div className='col-4'></div>
+                                <div className='col-1'></div>
+                                {thinklyRemoteConfigData !== undefined && thinklyRemoteConfigData.allowIndividualPost === 'Y' ? <>
+                                    {createButton()}
+                                </> : thinklyRemoteConfigData !== undefined && thinklyRemoteConfigData.allowIndividualPost === 'N' ? <>
+                                    {PublicationCount > 0 ? <> {createButton()} </> : <> {createButton(PublicationCount)} </>}
+                                </> : ''}
                                 <div className='col-1' style={{ marginTop: '12px' }}>
                                     <Card className='float-right p-1 pointer' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
                                         <ShareRounded height={25} width={25} />
@@ -290,9 +322,12 @@ const Header = (props) => {
             </nav>
         </section>
 
-        {showThinkly && <NewThinkly authorID={userID} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
-        {showPublication && <NewPublication authorID={userID} />}
-        {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} />}
+        <Suspense fallback={<div> <CircularProgress /> </div>}>
+            {showThinkly && <NewThinkly authorID={userID} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
+            {showPublication && <NewPublication authorID={userID} label={'publication'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
+            {showCourse && <NewPublication authorID={userID} label={'course'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
+            {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} shareUrl={ShareUrl} />}
+        </Suspense>
 
         {/* modal popup for email trigger */}
         <div id="myModal" className="modal fade in" tabIndex="-1" role="dialog" data-backdrop="static">

@@ -4,6 +4,7 @@ import $ from "jquery";
 import { CircularProgress } from '@material-ui/core';
 import { baseUrlThinkly } from "../../pages/api/api.jsx";
 import { DeleteForever, Edit } from '@material-ui/icons';
+import NewThinkly from "./newThinkly.jsx";
 
 const Draft = (props) => {
     const BASE_URL_THINKLY = useContext(baseUrlThinkly)
@@ -40,7 +41,7 @@ const Draft = (props) => {
             });
     }
 
-    const deleteDraft = (ID) => {
+    const deleteDraftButton = (ID) => {
         setDraftId(ID)
         $('#deleteDraft').modal('show')
     }
@@ -50,7 +51,7 @@ const Draft = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                "DeviceID": process.env.REACT_APP_DEVICE_ID,
+                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
                 "UserID": AuthorID
             },
             data: {
@@ -68,7 +69,8 @@ const Draft = (props) => {
             .catch((err) => { });
     }
 
-    const editDraft = (id) => {
+    const handleEditButton = (id) => {
+        console.log("inside", id);
         setDraftId(id)
         setEditDraft(true)
     }
@@ -83,8 +85,8 @@ const Draft = (props) => {
                             : <div style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px', backgroundColor: 'lightgrey' }}></div>}
                     </div>
                     <div class="col-8"> <p className="fs-22 pt-1">{obj.Title}</p> </div>
-                    <div className="col-1 pt-1" onClick={() => deleteDraft(obj.DraftID)}> <DeleteForever /> </div>
-                    <div className="col-1 pt-1" onClick={() => editDraft(obj.DraftID)}> <Edit /> </div>
+                    <div className="col-1 pt-1" onClick={() => deleteDraftButton(obj.DraftID)}> <DeleteForever /> </div>
+                    <div className="col-1 pt-1" onClick={() => handleEditButton(obj.DraftID)}> <Edit /> </div>
                 </div>)
             })}
         </div> : DraftList !== undefined && DraftList !== null && DraftList.length === 0 ? <div className='row'>
@@ -92,6 +94,8 @@ const Draft = (props) => {
         </div> : <div className='grid place-items-center h-screen'>
             <CircularProgress aria-label="Loading..." />
         </div>}
+
+        {EditDraft && <NewThinkly draftID={DraftId} authorID={AuthorID} thinklyConfigJSON={props.thinklyConfigJSON} onChangeCallback={() => setEditDraft(false)} />}
 
         {/* Delete Draft Modal */}
         <div id="deleteDraft" className="modal fade" role="dialog">
@@ -111,9 +115,6 @@ const Draft = (props) => {
                 </div>
             </div>
         </div>
-
-        {/* {EditDraft && <NewThinkly draftID={DraftId} authorID={AuthorID} thinklyConfigJSON={props.thinklyConfigJSON} onChangeCallback={() => setEditDraft(false)} />} */}
-
     </>)
 }
 

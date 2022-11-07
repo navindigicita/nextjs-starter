@@ -10,6 +10,7 @@ import { Carousel } from 'react-bootstrap';
 import { baseUrl } from "./api/api";
 import Header from "../components/common/header";
 import Footer from "../components/common/footer";
+import PostTimeAgo from "../components/common/postTime";
 
 const PostDetail = (props) => {
     const router = useRouter()
@@ -28,22 +29,8 @@ const PostDetail = (props) => {
                 document.getElementById('fadeIT').classList.add("blur-body");
                 document.body.classList.add("stop-scrolling");
             }
-            // update this shit
-            var date1 = new Date(data.postData.postDateTime); //post date & time
-            var date2 = new Date; //current date & time
-            var Difference_In_Time = date2.getTime() - date1.getTime();  //substraction of current date to post date
-            var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);  // number of days in long flloat
-            const post_Date_Time = parseFloat(Difference_In_Days).toFixed(2);  //fixed decimal to 2
-            if (Math.floor(post_Date_Time) < 1) {
-                const diff = Difference_In_Time / 1000;
-                const difference = diff / (60 * 60);
-                const hours = Math.abs(Math.round(difference))
-                setDateTime(hours + ' hours ago')
-            } else {
-                const days = Math.floor(post_Date_Time);
-                setDateTime(days + ' days ago')
-            }
-            // till here
+            var final_time = PostTimeAgo(data.postData.postDateTime)
+            setDateTime(final_time)
         } else {
             router.push('/login')
         }
@@ -94,7 +81,7 @@ const PostDetail = (props) => {
                     <div className="row body-img">
                         {getVedio === false ? <>
                             {PostData.postData.postImages !== undefined && PostData.postData.postImages.length === 0 ? ''
-                                : PostData.postData.postImages !== undefined && PostData.postData.postImages.length === 1 ?
+                                : PostData.postData.postImages !== undefined && PostData.postData.videoURL === "" && PostData.postData.postImages.length === 1 ?
                                     <img src={PostData.postData.postImages[0].charAt(0) === '@' ? PostData.postData.postImages[0].substring(1) : PostData.postData.postImages[0]} alt="detailed poster" />
                                     : PostData.postData.postImages !== undefined && PostData.postData.postImages.length > 1 &&
                                     <Carousel controls={false} interval={2000}>
@@ -105,11 +92,13 @@ const PostDetail = (props) => {
                                         ))}
                                     </Carousel>
                             }
-                            {PostData.postData.videoURL !== undefined && PostData.postData.videoURL !== null && PostData.postData.videoURL !== "" &&
-                                <div className="video-icon-align" onClick={() => setVedio(true)}>
+                            {PostData.postData.videoURL !== undefined && PostData.postData.videoURL !== null && PostData.postData.videoURL !== "" && <>
+                                {isMobile ? <div className='row'>
+                                    <iframe width="640" height="350" src={PostData.postData.videoURL.replace('https://youtu.be/', 'https://www.youtube.com/embed/') + '?autoplay=1&mute=1'} ></iframe>
+                                </div> : <div className="video-icon-align" onClick={() => setVedio(true)}>
                                     <img src={'/play-video.svg'} className="video-icon" style={{ width: '60px', height: '60px' }} />
-                                </div>
-                            }
+                                </div>}
+                            </>}
                         </> : <iframe width="640" height="350" src={PostData.postData.videoURL.replace('https://youtu.be/', 'https://www.youtube.com/embed/') + '?autoplay=1&mute=1'}></iframe>}
                     </div>
 
@@ -198,7 +187,8 @@ const PostDetail = (props) => {
             </div>}
         </div> : <div className='grid place-items-center h-screen'>
             <CircularProgress aria-label="Loading..." />
-        </div>}
+        </div>
+        }
         <Footer />
     </>)
 }

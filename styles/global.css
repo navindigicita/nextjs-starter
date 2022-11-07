@@ -9,6 +9,10 @@
     position: none !important;
 }
 
+img {
+    max-width: none !important;
+}
+
 /* span {
     position: unset !important;
 } */

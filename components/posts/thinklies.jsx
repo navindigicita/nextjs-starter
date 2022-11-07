@@ -7,6 +7,7 @@ import { baseUrl } from "../../pages/api/api.jsx";
 import NewThinkly from "./newThinkly.jsx";
 import NoData from "../common/noData.jsx";
 import InfiniteScroll from "react-infinite-scroll-component";
+import PostTimeAgo from "../common/postTime.js";
 
 const Thinklies = (props) => {
     const BASE_URL = useContext(baseUrl)
@@ -89,35 +90,15 @@ const Thinklies = (props) => {
     }
 
     return (<>
-        {ThinklyList.length > 0 ? <InfiniteScroll dataLength={ThinklyList.length}
-            next={fetchThinklies(AuthorID)}
-            hasMore={isFetching}
+        {ThinklyList.length > 0 ? <InfiniteScroll dataLength={ThinklyList.length} next={fetchThinklies(AuthorID)} hasMore={isFetching}
             loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
-            endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}
-        >
+            endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>} >
             <div className="container py-2">
                 {ThinklyList.map((obj, index) => {
                     if (obj.postData.postImages.length > 0) {
                         var image_url = obj.postData.postImages[0].charAt(0) === '@' ? obj.postData.postImages[0].substring(1) : obj.postData.postImages[0]  //show once image only
                     }
-                    var final_time = ""
-                    var date1 = new Date(obj.postData.postUpdatedDateTime); //post date & time
-                    var date2 = new Date; //current date & time
-                    var Difference_In_Time = date2.getTime() - date1.getTime();  //substraction of current date to post date
-                    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);  // number of days in long float
-                    const post_Date_Time = parseFloat(Difference_In_Days).toFixed(2);  //fixed decimal to 2
-                    if (Math.floor(post_Date_Time) < 1) {
-                        const difference = Difference_In_Time / (1000 * 60 * 60);
-                        const hours = Math.abs(Math.round(difference))
-                        if (hours > 1) {
-                            final_time = hours + " hours ago"
-                        } else {
-                            final_time = hours + " hour ago"
-                        }
-                    } else {
-                        const days = Math.floor(post_Date_Time);
-                        final_time = days + " days ago"
-                    }
+                    var final_time = PostTimeAgo(obj.postData.postUpdatedDateTime)
                     return (<Card className='my-4 px-3 pb-4 pt-2'>
                         <div className="row" key={index}>
                             <div class="col-md-10">
