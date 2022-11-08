@@ -12,7 +12,6 @@ import { KeyboardArrowDown } from '@material-ui/icons';
 import ParaByNameFromUrl from '../common/paraByNameFromUrl'
 import { PublicationProfileEvent, PublicationSubscribeEvent } from '../../config/facebookPixelEvent';
 import { baseUrl } from '../../pages/api/api';
-import { isMobile } from 'react-device-detect';
 
 const meetAuthorResponsive = {
     mobile: {
@@ -85,7 +84,7 @@ const PublicationDetailMob = (props) => {
             })
     }
 
-    // fetch more thinkly by publication start
+    // fetch more thinkly by publication (onCLick of more will load more data and append with old data) start
     const fetchMoreThinklyByPublication = () => {
         scrollThinklies()
     }
@@ -206,14 +205,10 @@ const PublicationDetailMob = (props) => {
             <div className='mb-3'>
                 <Avatar className='mx-auto ma-profile' src={imageUrl} alt="author profile" />
             </div>
-            <div className='text-center mb-2'>
-                <p className='fs-26 fw-bold'>
-                    {obj.authorName.slice(0, 18) + (obj.authorName.length > 18 ? "..." : "")}
-                </p>
-            </div>
-            <p className='fs-18 text-center'>
+            <div className='text-center mb-2 fs-26 fw-bold'> {obj.authorName.slice(0, 18) + (obj.authorName.length > 18 ? "..." : "")} </div>
+            <div className='fs-18 text-center'>
                 {obj.authorProfileText.length > 200 ? <> {obj.authorProfileText.slice(0, 200)} <span className='fw-mid-bold pointer' onClick={() => handleUserProfile(obj.authorID)} >...read more</span> </> : obj.authorProfileText}
-            </p>
+            </div>
         </Card>)
     }
 
@@ -408,9 +403,7 @@ const PublicationDetailMob = (props) => {
                                     <Avatar className='mx-auto ma-profile' src={imageUrl} alt="author profile" />
                                 </div>
                                 <div className='text-center fs-30 fw-bold'>{obj.authorName.slice(0, 16) + (obj.authorName.length > 16 ? "..." : "")}</div>
-                                <p className='fs-18 text-center mb-4'>
-                                    {obj.authorProfileText !== '' && (obj.authorProfileText.slice(0, 200) + (obj.authorProfileText.length > 200 ? "..." : ""))}
-                                </p>
+                                <div className='fs-18 text-center mb-4'> {obj.authorProfileText !== '' && (obj.authorProfileText.slice(0, 200) + (obj.authorProfileText.length > 200 ? "..." : ""))} </div>
                             </Card>)
                         })}
                     </Carousel>
@@ -445,12 +438,12 @@ const PublicationDetailMob = (props) => {
                                     </div>
                                     <div className='text-center mb-2'>
                                         <span className='ff-lora fs-30 fw-bold'>{PublicationDetails.publicationName}</span>
-                                        <p className='fs-20 fw-mid'>{PublicationDetails.about}</p>
-                                        <p className='fs-32 fw-bold'>{PublicationDetails.publicationPlan[0].planName}</p>
-                                        <p className='fs-28 fw-bold mx-auto'>&#x20b9; {PublicationDetails.publicationPrice}</p>
+                                        <div className='fs-20 fw-mid'>{PublicationDetails.about}</div>
+                                        <div className='fs-32 fw-bold'>{PublicationDetails.publicationPlan[0].planName}</div>
+                                        <div className='fs-28 fw-bold mx-auto'>&#x20b9; {PublicationDetails.publicationPrice}</div>
                                     </div>
-                                    <p className='text-center fs-18 fw-normal mb-2'> {PublicationDetails.publicationPlan[0].description} </p>
-                                    <button type='submit' className='subscribe mx-auto px-4 d-flex' style={{ paddingTop: '0.4rem' }}>
+                                    <div className='text-center fs-18 fw-normal mb-2'> {PublicationDetails.publicationPlan[0].description} </div>
+                                    <button type='submit' className='subscribe mx-auto px-4 d-flex' style={{ paddingTop: '0.4rem', height: 'auto', paddingBottom: '0.4rem', }}>
                                         {submitLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#fff' }} /> : <>Subscribe @ &#x20b9;{PublicationDetails.publicationPrice} {PublicationDetails.publicationPlan[0].planName}</>}
                                     </button>
                                 </Card>
