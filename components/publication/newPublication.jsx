@@ -108,8 +108,6 @@ const NewPublication = (props) => {
     }
 
     const clearAllState = () => {
-        setthinklyRemoteConfigData()
-        setAuthorID()
         setPageType()
         setPublicationID(0)
         setpubName('')
