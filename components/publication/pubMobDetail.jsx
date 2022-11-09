@@ -298,17 +298,8 @@ const PublicationDetailMob = (props) => {
     return (<>
         <div className='container' style={{ marginTop: '2rem', marginBottom: '2rem' }}>
             {PublicationDetails !== undefined ? <div>
-                <Head>
-                    <title>{PublicationDetails.publicationName}</title>
-                    <meta name="description" content={PublicationDetails.about} />
-                    <meta property="og:url" content={`https://nextjs-starter-thinkly-five.vercel.app/${PublicationPenName}/`} />
-                    <meta property="og:type" content="website" />
-                    <meta property="og:title" content={PublicationDetails.publicationName} key="og-title" />
-                    <meta property="og:description" content={PublicationDetails.about} key="og-desc" />
-                    <meta property="og:image" content={PublicationImage} key="og-image" />
-                </Head>
                 <div className='d-flex justify-content-center'>
-                    <Image src={PublicationImage} alt="PublicationImage" className='pubProfile' width='100%' height='20rem' style={{ objectFit: 'contain', objectPosition: 'center' }} />
+                    <img src={PublicationImage} alt="PublicationImage" className='pubProfile' style={{ width:'100%', objectFit: 'contain', objectPosition: 'center' }} />
                 </div>
                 <div className='row mt-4 text-center'>
                     <div className='col-12'>

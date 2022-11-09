@@ -72,13 +72,12 @@ const Publication = (props) => {
                         const name = obj.penName.charAt(0) === '@' ? obj.penName.substring(1) : obj.penName
                         const imageUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
                         const authorData = obj.publicationAuthor.find(({ authorID }) => authorID == Author_ID)
-                        console.log(obj)
                         return (<Card className='mt-4' key={index}>
                             <div className='row cursor' onClick={() => handlePubicationClick(name)}>
-                                <div className='col-2'>
-                                    {obj.publicationImage !== undefined && <Image src={imageUrl} alt="publication Image" height={50} width={50} style={{ objectFit: 'cover' }} />}
+                                <div className='col-1'>
+                                    {obj.publicationImage !== undefined && <img src={imageUrl} alt="publication Image" style={{ height: '60px', width: '60px', objectFit: 'cover', objectPosition: 'center' }} />}
                                 </div>
-                                <div className='col-8'>
+                                <div className='col-8 ml-4'>
                                     <ListItemText className='my-auto' primary={<div>
                                         <span className='ff-lora fs-18 mr-2'>{obj.publicationName}</span>
                                         <Box component="span" className='py-1 fc-primary border-radius-4 fw-mid-bold fs-10 px-2 bg-lightgray'>{authorData !== undefined && authorData.authorType}</Box>

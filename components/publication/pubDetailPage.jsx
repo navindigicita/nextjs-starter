@@ -408,7 +408,7 @@ const PublicationDetailPage = (props) => {
             {isMobile ? <PublicationDetailMob publicationDetail={PublicationDetail} /> :
                 <div className='container' style={{ marginTop: '4rem' }}>
                     <div className='d-flex justify-content-center'>
-                        <Image src={PublicationImage} alt="PublicationImage" className='pubProfile' width='60%' height='25rem' style={{ objectFit: 'contain', objectPosition: 'center' }} />
+                        <img src={PublicationImage} alt="PublicationImage" className='pubProfile' style={{ objectFit: 'contain', objectPosition: 'center', width: '60%', height: '25rem' }} />
                     </div>
                     <div className='row text-center'>
                         <div className='col-12'>
@@ -493,8 +493,8 @@ const PublicationDetailPage = (props) => {
                                 return (<div className='col-4' key={index}>
                                     <Card className='t-in-p' onClick={() => handlePostView(obj.postData.postURL, obj.postData.postID)}>
                                         <div className='row d-flex'>
-                                            <div className='col-2 image-container'>
-                                                {obj.postData.postImages.length > 0 ? <Image src={image_url} className='image' layout="fill" />
+                                            <div className='col-2'>
+                                                {obj.postData.postImages.length > 0 ? <img src={image_url} className='image' style={{ height: '65px', width: '65px', objectFit: 'conver', objectPosition: 'center' }} />
                                                     : <Card className='publilcation-image' style={{ background: '#faa422' }}></Card>}
                                             </div>
                                             <div className='col-8 my-auto ml-3 fs-18'> {obj.postData.postTitle.slice(0, 44) + (obj.postData.postTitle.length > 44 ? "..." : "")} </div>

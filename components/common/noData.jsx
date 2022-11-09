@@ -24,7 +24,7 @@ const NoData = (props) => {
             <h5 className='my-3 fs-20 mb-2'>Create a publication to post a Thinkly</h5>
             <button className='fw-bold border-radius-4 fc-white border-none primary-bg-color height-button fs-18 ff-roboto w-50' data-toggle="modal" data-target="#newPublication" onClick={() => setshowPublication(true)} >New Publication</button>
         </div>
-        {showPublication && <NewPublication authorID={AuthorID} />}
+        {showPublication && <NewPublication authorID={AuthorID} label={'publication'} />}
     </>)
 }
 
