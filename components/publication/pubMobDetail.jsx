@@ -297,24 +297,24 @@ const PublicationDetailMob = (props) => {
 
     return (<>
         <div className='container' style={{ marginTop: '2rem', marginBottom: '2rem' }}>
-            {PublicationDetails !== undefined ? <div>
-                <div className='d-flex justify-content-center'>
-                    <img src={PublicationImage} alt="PublicationImage" className='pubProfile' style={{ width:'100%', objectFit: 'contain', objectPosition: 'center' }} />
+            {PublicationDetails !== undefined ? <>
+                <div className='row'>
+                    <img src={PublicationImage} alt="PublicationImage" className='mx-auto' style={{ width: '100%', objectFit: 'cover', objectPosition: 'center' }} />
                 </div>
-                <div className='row mt-4 text-center'>
+                <div className='row mt-2 text-center'>
                     <div className='col-12'>
-                        <h1 className='ff-lora fs-36 fw-bold'>{PublicationDetails.publicationName}</h1>
-                        {AuthorList !== undefined && AuthorList.length > 2 ? <p className='fs-26'> Authored by <b>{AuthorList[0].authorName}</b> and {AuthorList.length - 1} others</p>
-                            : AuthorList.length === 2 ? <p className='fs-26'> Authored by <b>{AuthorList[0].authorName}</b> and <b>{AuthorList[1].authorName}</b> </p>
-                                : <p className='fs-26'> Authored by <b>{AuthorList[0].authorName}</b> </p>}
+                        <p className='ff-lora fs-36 fw-bold'>{PublicationDetails.publicationName}</p>
+                        {AuthorList !== undefined && AuthorList.length > 2 ? <h6 className='fs-26'> Authored by <span className='fw-bold'>{AuthorList[0].authorName}</span> and {AuthorList.length - 1} others</h6>
+                            : AuthorList.length === 2 ? <h6 className='fs-26'> Authored by <span className='fw-bold'>{AuthorList[0].authorName}</span> and <span className='fw-bold'>{AuthorList[1].authorName}</span> </h6>
+                                : <h6 className='fs-26'> Authored by <span className='fw-bold'>{AuthorList[0].authorName}</span> </h6>}
                     </div>
                 </div>
                 <div className='vertical-line my-4'></div>
                 {/* description */}
                 {PublicationDetails.description !== undefined && <>
-                    <div className='row d-flex story-content'>
-                        <div className='col-12 mb-3 fs-28 fw-bold'>{PublicationDetails.about}</div>
-                        <div className='col-12 text-left mb-3'>{PublicationDetails.description}</div>
+                    <div className='row d-flex'>
+                        <div className='col-12 mb-3 fs-30 fw-bold'>{PublicationDetails.about}</div>
+                        <div className='col-12 text-left fs-18 mb-3'>{PublicationDetails.description}</div>
                         <button className='mx-auto subscribe px-4' onClick={() => subscribeHandle(PublicationDetails.publicationPayType)}>
                             {PublicationDetails.publicationPayType === 'Paid' ? <>Subscribe Now </> : <>Subscribe for free</>}
                         </button>
@@ -329,7 +329,7 @@ const PublicationDetailMob = (props) => {
                             <div class="modal-body px-5 pb-4 pt-1">
                                 <h5 className='text-center mb-4'>We need your emailID to send you a voucher code</h5>
                                 <input type='text' placeholder='Your email ID' value={emailID} onChange={(e) => setemailID(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
-                                {<div id="infoPlease" className='error-msg'></div>}
+                                <div id="infoPlease" className='error-msg'></div>
                                 <div className='text-center'>
                                     <button type='submit' className='mt-3 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 w-50 primary-bg-color' onClick={() => onSubmit('Free')} >Continue</button>
                                 </div>
@@ -343,12 +343,12 @@ const PublicationDetailMob = (props) => {
                         return (obj.sectionTitle !== '' && obj.sectionDescription !== '' && <>
                             <div className='row d-flex' key={index}>
                                 <div className='col-12'>
-                                    <p className='text-center fs-28 fw-bold mb-4'>{obj.sectionTitle}</p>
+                                    <h6 className='text-center ff-lora fs-30 fw-bold mb-4'>{obj.sectionTitle}</h6>
                                     {obj.sectionContents !== undefined && obj.sectionContents.length > 0 && obj.sectionContents.map((data) => {
                                         return (<div className='row'>
                                             <div className='col-12'>
                                                 {data.sectionImage !== null && data.sectionImage !== undefined && data.sectionImage !== ''
-                                                    && <Image src={data.sectionImage} alt='sectionImage' height={100} width={100} className='section-image-center' />}
+                                                    && <img src={data.sectionImage} alt='sectionImage' className='section-image-center' />}
                                                 {data.sectionDescription !== undefined && data.sectionDescription !== null && data.sectionDescription !== ''
                                                     && <div className='' dangerouslySetInnerHTML={{ __html: data.sectionDescription }} />}
                                             </div>
@@ -365,27 +365,24 @@ const PublicationDetailMob = (props) => {
                 </>}
                 {/* thinklies in this publication */}
                 {PublicationThinklies !== undefined && PublicationThinklies.length > 0 && <>
-                    <p className='p-heading mb-4'>Posts in this Publication</p>
+                    <h6 className='text-center fs-30 fw-bold ff-lora mb-4'>Posts in this Publication</h6>
                     {PublicationThinklies.map((obj, index) => {
                         const image_url = obj.postData.postImages.length > 0 && obj.postData.postImages[0].charAt(0) === '@' ? obj.postData.postImages[0].substring(1) : obj.postData.postImages[0]
                         return (<Card className='t-in-p' key={index} onClick={() => handlePostView(obj.postData.postURL, obj.postData.postID)}>
                             <div className='row d-flex'>
                                 <div className='col-3'>
-                                    {obj.postData.postImages.length > 0 ? <Image src={image_url} height={100} width={100} className='publilcation-image' />
-                                        : <Card className='publilcation-image' style={{ background: '#faa422' }}></Card>}
+                                    {obj.postData.postImages.length > 0 ? <img src={image_url} className='publilcation-image' /> : <Card className='publilcation-image' style={{ background: '#faa422' }}></Card>}
                                 </div>
-                                <div className='col-8 my-auto'>
-                                    <h4 className='fs-22'> {obj.postData.postTitle.slice(0, 45) + (obj.postData.postTitle.length > 45 ? "..." : "")} </h4>
-                                </div>
+                                <div className='col-9 my-auto fs-22'> {obj.postData.postTitle.slice(0, 45) + (obj.postData.postTitle.length > 45 ? "..." : "")} </div>
                             </div>
                         </Card>)
                     })}
-                    {!NoMoreData && <p className='col-12 fs-22 fw-mid' onClick={() => fetchMoreThinklyByPublication()}> <KeyboardArrowDown /> show more</p>}
+                    {!NoMoreData && <h6 className='col-12 fs-22 fw-mid' onClick={() => fetchMoreThinklyByPublication()}> <KeyboardArrowDown /> show more</h6>}
                     <div className='vertical-line mt-4 mb-3'></div>
                 </>}
                 {/* meet the authors */}
                 {PublicationDetails.publicationAuthor !== undefined && PublicationDetails.publicationAuthor.length > 0 && <div>
-                    <p className='text-center fs-26 fw-bold mb-2'>Authored by</p>
+                    <h6 className='text-center fs-28 fw-bold ff-lora mb-2'>Authored by</h6>
                     <Carousel responsive={meetAuthorResponsive}>
                         {PublicationDetails.publicationAuthor.map((obj, index) => { //onClick={() => handleUserProfile(obj.authorID)}
                             const imageUrl = obj.authorProfileImage.charAt(0) === '@' ? obj.authorProfileImage.substring(1) : obj.authorProfileImage
@@ -402,38 +399,38 @@ const PublicationDetailMob = (props) => {
                 {/* more publication from abc */}
                 {UserPublication !== undefined && UserPublication.length > 0 && <>
                     <div className='vertical-line mt-3 mb-4'></div>
-                    <p className='p-heading mb-4'>More Publications By {AuthorList[0].authorName}</p>
+                    <h6 className='text-center ff-lora fs-30 fw-bold mb-4'>More Publications By {AuthorList[0].authorName}</h6>
                     {UserPublication.map((obj, index) => {
                         const imageUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
                         return (<div className='row mb-3 ml-1' key={index} onClick={() => handlePubView(obj.penName)}>
-                            <div className='col-3'>
-                                <Image src={imageUrl} alt="Image" height={100} width={100} className="publilcation-image" />
+                            <div className='col-2'>
+                                <img src={imageUrl} alt="Image" className="publilcation-image" />
                             </div>
-                            <div className='col-9'>
-                                <ListItemText primary={<h5 className='fs-22 fw-bold'>{obj.publicationName.slice(0, 18) + (obj.publicationName.length > 18 ? "..." : "")}</h5>}
-                                    secondary={<p className='fs-14'>{obj.description.slice(0, 70) + (obj.description.length > 70 ? "..." : "")}</p>} />
+                            <div className='col-9 ml-2'>
+                                <ListItemText className='my-auto' primary={<span className='fs-18 fw-bold'>{obj.publicationName.slice(0, 18) + (obj.publicationName.length > 18 ? "..." : "")}</span>}
+                                    secondary={<span className='fs-15'>{obj.description.slice(0, 65) + (obj.description.length > 65 ? "..." : "")}</span>} />
                             </div>
                         </div>)
                     })}
-                    {!NoMorePubByAuthor && <p className='col-12 text-center fs-18 fw-bold fc-primary' onClick={() => fetchMorePubByAuthor()}>+MORE</p>}
+                    {!NoMorePubByAuthor && <h6 className='col-12 text-center fs-18 fw-bold fc-primary' onClick={() => fetchMorePubByAuthor()}>+MORE</h6>}
                 </>}
                 {/* publication profile  */}
                 {PublicationDetails.publicationPayType === 'Paid' && <>
                     <div className='vertical-line my-4'></div>
                     {PublicationDetails !== undefined && PublicationDetails.publicationImage !== undefined && <div id='paidpublicationdiv'>
                         <form name="paymentGatewayrazorpay" onSubmit={handleSubmit(onSubmit)}>
-                            <div className='col-12 mx-auto' >
+                            <div className='col-12 mx-auto'>
                                 <Card className="t-in-p">
                                     <div className='row mb-3'>
                                         <img className='mx-auto pay-pub-profile' src={PublicationDetails.publicationImage.charAt(0) === '@' ? PublicationDetails.publicationImage.substring(1) : PublicationDetails.publicationImage} alt="author profile" />
                                     </div>
                                     <div className='text-center mb-2'>
-                                        <span className='ff-lora fs-30 fw-bold'>{PublicationDetails.publicationName}</span>
-                                        <div className='fs-20 fw-mid'>{PublicationDetails.about}</div>
-                                        <div className='fs-32 fw-bold'>{PublicationDetails.publicationPlan[0].planName}</div>
+                                        <h5 className='ff-lora fs-30 fw-bold'>{PublicationDetails.publicationName}</h5>
+                                        <h6 className='fs-18'>{PublicationDetails.about}</h6>
+                                        <div className='mt-3 fs-20 fw-bold'>{PublicationDetails.publicationPlan[0].planName}</div>
                                         <div className='fs-28 fw-bold mx-auto'>&#x20b9; {PublicationDetails.publicationPrice}</div>
+                                        <div className='fs-18 my-3'> {PublicationDetails.publicationPlan[0].description} </div>
                                     </div>
-                                    <div className='text-center fs-18 fw-normal mb-2'> {PublicationDetails.publicationPlan[0].description} </div>
                                     <button type='submit' className='subscribe mx-auto px-4 d-flex' style={{ paddingTop: '0.4rem', height: 'auto', paddingBottom: '0.4rem', }}>
                                         {submitLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#fff' }} /> : <>Subscribe @ &#x20b9;{PublicationDetails.publicationPrice} {PublicationDetails.publicationPlan[0].planName}</>}
                                     </button>
@@ -445,23 +442,23 @@ const PublicationDetailMob = (props) => {
                 {/* you may also like */}
                 {MorePubByInterest !== undefined && MorePubByInterest.length > 0 && <>
                     <div className='vertical-line my-3'></div>
-                    <p className='p-heading mb-4'>Other Publilcations you may like</p>
+                    <p className='text-center fs-30 fw-bold ff-lora mb-4'>Other Publilcations you may like</p>
                     {MorePubByInterest.map((obj, index) => {
                         const imageUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
                         return (<div className='row mb-3 ml-1' key={index}>
                             <div className='col-3'>
-                                <Image src={imageUrl} alt="Image" height={100} width={100} className="publilcation-image" />
+                                <img src={imageUrl} alt="Image" height={100} width={100} className="publilcation-image" />
                             </div>
                             <div className='col-9'>
-                                <ListItemText primary={<h5 className='fs-22 fw-bold'>{obj.publicationName.slice(0, 15) + (obj.publicationName.length > 15 ? "..." : "")}</h5>}
-                                    secondary={<p className='fs-14'>{obj.description.slice(0, 60) + (obj.description.length > 60 ? "..." : "")}</p>} />
+                                <ListItemText primary={<span className='fs-18 fw-bold'>{obj.publicationName.slice(0, 20) + (obj.publicationName.length > 20 ? "..." : "")}</span>}
+                                    secondary={<span className='fs-15'>{obj.description.slice(0, 60) + (obj.description.length > 60 ? "..." : "")}</span>} />
                                 {/* <h4 className='fs-14 fc-link' onClick={() => handlePubView(obj.penName)}>View the Publication</h4> */}
                             </div>
                         </div>)
                     })}
                     {/* {!NoMorePubByInterest && <p className='col-12 text-center fs-22 fw-bold fc-primary' onClick={() => fetchMorePubByInterest()}>+MORE</p>} */}
                 </>}
-            </div> : <div className='grid place-items-center h-screen'>
+            </> : <div className='grid place-items-center h-screen'>
                 <CircularProgress aria-label="Loading..." />
             </div>}
         </div>
