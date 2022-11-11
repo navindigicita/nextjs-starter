@@ -397,9 +397,11 @@ const PublicationDetailPage = (props) => {
         newWindow.penName = name
     }
 
-    const handlePostView = (oldUrl, postID) => {
-        // logEvent(analytics, 'PUB_POST_CLICK', { thinklyID: postID }) //google analytic log
-        window.open(oldUrl, '_blank')
+    const handlePostView = (oldUrl, postID, postTitle) => {
+        const title = postTitle.trimEnd()
+        const thinkly_title = title.replaceAll(' ', '-')
+        window.open(`/${thinkly_title}/${postID}`, '_blank') // above commented codes are for new UI of thinkly detail page
+        // window.open(oldUrl)  //this one for old UI
     }
 
     return (<>
@@ -413,9 +415,9 @@ const PublicationDetailPage = (props) => {
                     <div className='row text-center'>
                         <div className='col-12'>
                             <h1 className='ff-lora fs-56 fw-bold'>{PublicationDetail.publicationName}</h1>
-                            {AuthorList !== undefined && AuthorList.length > 2 ? <p className='fs-28'> Authored by <b>{AuthorList[0].authorName}</b> and {AuthorList.length - 1} others</p>
-                                : AuthorList.length === 2 ? <p className='fs-28'> Authored by <b>{AuthorList[0].authorName}</b> and <b>{AuthorList[1].authorName}</b> </p>
-                                    : <p className='fs-28'> Authored by <b>{AuthorList[0].authorName}</b> </p>}
+                            {AuthorList !== undefined && AuthorList.length > 2 ? <p className='fs-28'> Authored by <span className='fw-bold'>{AuthorList[0].authorName}</span> and {AuthorList.length - 1} others</p>
+                                : AuthorList.length === 2 ? <p className='fs-28'> Authored by <span className='fw-bold'>{AuthorList[0].authorName}</span> and <span className='fw-bold'>{AuthorList[1].authorName}</span> </p>
+                                    : <p className='fs-28'> Authored by <span className='fw-bold'>{AuthorList[0].authorName}</span> </p>}
                         </div>
                     </div>
                     <div className='vertical-line my-4'></div>
@@ -491,7 +493,7 @@ const PublicationDetailPage = (props) => {
                             {getPublicationThinkly.map((obj, index) => {
                                 const image_url = obj.postData.postImages.length > 0 && obj.postData.postImages[0].charAt(0) === '@' ? obj.postData.postImages[0].substring(1) : obj.postData.postImages[0]
                                 return (<div className='col-4' key={index}>
-                                    <Card className='t-in-p' onClick={() => handlePostView(obj.postData.postURL, obj.postData.postID)}>
+                                    <Card className='t-in-p' onClick={() => handlePostView(obj.postData.postURL, obj.postData.postID, obj.postData.postTitle)}>
                                         <div className='row d-flex'>
                                             <div className='col-2'>
                                                 {obj.postData.postImages.length > 0 ? <img src={image_url} className='image' style={{ height: '65px', width: '65px', objectFit: 'conver', objectPosition: 'center' }} />
@@ -539,7 +541,7 @@ const PublicationDetailPage = (props) => {
                             {getUserPublication.map((obj, index) => {
                                 const imageUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
                                 return (<Card className="mb-4 morePub-card" key={index} onClick={() => viewpub(obj.penName)}>
-                                    <CardMedia component="img" height="250" image={imageUrl} alt="publication profile" className='morePub-cardmedia' />
+                                    <img src={imageUrl} className='morePub-cardmedia' style={{ height: '15rem', width: '100%'  }} />
                                     <div className='px-2 pb-2'>
                                         <h6 className='fs-24 fw-bold'>{obj.publicationName.slice(0, 18) + (obj.publicationName.length > 18 ? "..." : "")}</h6>
                                         <p className='fs-14'> {obj.description.slice(0, 50) + (obj.description.length > 50 ? "..." : "")} </p>
@@ -583,11 +585,10 @@ const PublicationDetailPage = (props) => {
                             {getMorePubByInterest.map((obj, index) => {
                                 const imageUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
                                 return (<Card className="mb-4 morePub-card" key={index}>
-                                    <CardMedia component="img" height="250" image={imageUrl} alt="publication profile" className='morePub-cardmedia' />
+                                    <img src={imageUrl} className='morePub-cardmedia' style={{ height: '15rem', width: '100%' }} />
                                     <div className='px-2 pb-2'>
                                         <p className='fs-24 fw-bold'>{obj.publicationName.slice(0, 15) + (obj.publicationName.length > 15 ? "..." : "")}</p>
                                         <p className='fs-14'> {obj.description.slice(0, 30) + (obj.description.length > 30 ? "..." : "")} </p>
-                                        <p className='fs-14 fc-link' >View the Publication</p>
                                     </div>
                                 </Card>)
                             })}

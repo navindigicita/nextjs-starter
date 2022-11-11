@@ -26,7 +26,6 @@ const NewPublication = (props) => {
     const [descriptionSlide, setDescriptionSlide] = useState(false);
     const [shortDescription, setshortDescription] = useState('');
     const [description, setdescription] = useState('');
-    const [IsPenNameAvailable, setIsPenNameAvailable] = useState(true);
     const [webUrl, setwebUrl] = useState('');  //store publication pen  name
     const [privateView, setPrivateView] = useState(false) //store private view data true or false (as setcommentView in thinkly)
 
@@ -152,7 +151,6 @@ const NewPublication = (props) => {
     }
 
     const hideAboutandShowDescription = () => {
-        console.log(pubName);
         if (pubName === '') {
             document.getElementById('pubNameError').innerHTML = `Please Enter the ${pageType} Name`
         } else if (pubImage === undefined || pubImage.length === 0) {
@@ -164,22 +162,32 @@ const NewPublication = (props) => {
         }
     }
 
-    const fetchPenName = (pen_name) => {
-        setwebUrl(pen_name)
-        if (pen_name.length >= 5 || pen_name.length === 15) {
-            var config = {
-                headers: {
-                    DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,
-                    UserID: AuthorID
-                }
-            }
-            Axios.get(`${BASE_URL_THINKLY}Publication/IsPennameAvailable/@${pen_name}`, config)
-                .then((res) => {
-                    if (res.data.responseCode === '00') {
-                        setIsPenNameAvailable(res.data.responseData.available)
+    const fetchPenName = (event) => {
+        var name = event.target.value
+        let result = name.trim()
+        if (result.match(/[^$&+,:;=?[\]@#|{}'<>.^*()%!-/]/g)) {
+            const data = result.replace(/[$&+,:;=?[\]@#|{}'<>.^*()%!-/]/g, "")
+            console.log(data, data.length);
+            setwebUrl(data)
+            if (data.length > 5) {
+                var config = {
+                    headers: {
+                        DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,
+                        UserID: AuthorID
                     }
-                })
-                .catch((err) => { });
+                }
+                Axios.get(`${BASE_URL_THINKLY}Publication/IsPennameAvailable/@${data}`, config)
+                    .then((res) => {
+                        if (res.data.responseCode === '00') {
+                            if (res.data.responseData.available === false) {
+                                document.getElementById('penNameTakenError').innerHTML = 'This Pen name is already taken'
+                            } else {
+                                document.getElementById('penNameTakenError').innerHTML = ''
+                            }
+                        }
+                    })
+                    .catch((err) => { });
+            }
         }
     }
 
@@ -314,7 +322,7 @@ const NewPublication = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                "DeviceID": process.env.REACT_APP_DEVICE_ID,
+                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
                 "UserID": AuthorID
             },
             data: {
@@ -496,13 +504,13 @@ const NewPublication = (props) => {
                         <div className='row mt-4 input-box'>
                             <ListItemText primary={<h6 className='fs-15 fw-bold'>{pageType === 'course' ? 'Unique Web Link*' : 'Web Link*'}</h6>}
                                 secondary={<h6 className='fs-12'>Unique url for your {pageType}. Choose wisely! This cannot be changed after the {pageType} is created.</h6>} />
-                            <input type="text" id='web-url' className='interest-textbox' minLength='2' maxLength='20' placeholder={pageType === 'course' && 'E.g. "yogaathome"'}
-                                value={webUrl} onChange={(e) => fetchPenName(e.target.value)} style={{ paddingLeft: '124px' }} />
+                           
+                            <input type="text" className='interest-textbox' maxLength={15} value={webUrl} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px' }} />
                             <span className='fixed-text-input'>www.thinkly.me/</span>
-                            {pageType === 'course' ? <label className='fs-10'>minimum 5 characters, maximum 15 characters, no space, no special characters except (_)</label> : ''}
-                            {webUrl === '' || webUrl.length === 0 ? <div id="UrlError" className='error-msg'></div> : ''}
-                            {webUrl.length > 1 && webUrl.length < 5 && <div id="penNameError" className='error-msg'></div>}
-                            {!IsPenNameAvailable && <div id="penNameAvailableError" className='error-msg'>This Pen name is already taken</div>}
+                            
+                            {(webUrl === '' || webUrl.length === 0) && <div id="UrlError" className='error-msg'></div>}
+                            {(webUrl.length > 1 && webUrl.length < 5) && <div id="penNameError" className='error-msg'></div>}
+                            <div id="penNameTakenError" className='error-msg'></div>
                         </div>
                         {pageType === 'course' && <div className='row mt-4'>
                             <ListItemText primary={<h6 className='fs-15 fw-bold'>Make Private</h6>}

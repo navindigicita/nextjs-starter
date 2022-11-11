@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Axios from "axios"
 import $ from 'jquery'
+import Link from 'next/link';
 import { AssignmentIndOutlined, Star } from '@material-ui/icons'
-import { Avatar, Tab, Tabs, withStyles, CardMedia, CircularProgress } from '@material-ui/core'
-import StarIcon from '../public/star.svg'
+import { Avatar, Tab, Tabs, withStyles, CardMedia, CircularProgress, ListItemText } from '@material-ui/core'
 import Audio_Icon from '../public/audio-icon.svg'
 import Video_Icon from '../public/video-icon.svg'
 import { Card } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
-import Durgajasraj from '../public/durgajashraj.png'
 import { baseUrl, baseUrlThinkly } from '../pages/api/api'
 import Faq from './common/faq'
-import Image from 'next/image'
-import Head from 'next/head'
+import { isMobile } from 'react-device-detect'
 
 const StyledTabs = withStyles({
     indicator: {
@@ -99,10 +97,8 @@ const UserProfileMob = (props) => {
         Axios.get(`${BASE_URL_THINKLY}Star/GetStarPriceDetails`, config)
             .then((res) => {
                 if (res.data.responseCode === '00') {
-                    console.log("inside getAmountForStar @@@@@@@@", res.data.responseData);
                     var fixAmount = res.data.responseData.starPriceData
                     var amount = star_count * parseInt(fixAmount.perStarPrice)
-                    console.log(amount);
                     setcurrency(fixAmount.currencySymbol)
                     setfinalAmount(amount)
                 }
@@ -113,7 +109,6 @@ const UserProfileMob = (props) => {
     }
 
     const handleStar = (star) => {
-        console.log("handle star function triggered", star);
         setstarCount(star)  //set starCount in state
         setSupportButton(false)
         getAmountForStar(star)
@@ -177,7 +172,6 @@ const UserProfileMob = (props) => {
                             hiddenField.style.display = 'none'
                             form.appendChild(hiddenField);
                         }
-                        console.log("DONE", form);
                         document.body.appendChild(form);
                         form.submit();
                         $('#userContactInfo').modal('hide');
@@ -190,30 +184,18 @@ const UserProfileMob = (props) => {
                 document.getElementById('infoPlease').innerHTML = 'Please Enter Email ID and Contact number to continue'
             }
         }
-
-
-
     }
 
     return (<>
         {getProfileDetail !== undefined && getProfileDetail !== null ? <>
-            <Head>
-                <title>{getpenName}</title>
-                <meta property="og:title" content={getpenName} key="og-title" />
-                <meta property="og:description" content={getProfileDetail.profileDetails.aboutMe} key="og-desc" />
-                <meta property="og:image" content={getProfileImage} key="og-image" />
-            </Head>
             <div className='row text-center header-gap'>
                 <div className='col-12 d-flex justify-content-center align-items-center'>
-                    {getProfileImage !== undefined ? <Avatar src={getProfileImage} alt="user profile" style={{ width: '180px', height: '180px' }} />
-                        : <Avatar src={<AssignmentIndOutlined />} style={{ width: '180px', height: '180px' }} />}
+                    <Avatar src={getProfileImage !== undefined ? getProfileImage : <AssignmentIndOutlined />} alt="user profile" style={{ width: '180px', height: '180px' }} />
                 </div>
             </div>
-            <div className='row text-center mb-5'>
-                <div className='col-12 mt-2'>
-                    <div className=''>
-                        <span className='fs-20 fw-bold'> {getpenName} </span>
-                    </div>
+            <div className='row text-center mt-2 mb-4'>
+                <div className='col-12'>
+                    <h6 className='fs-20 fw-bold'> {getpenName} </h6>
                     <div className='fs-18 fw-mid'>{getProfileDetail.profileDetails.firstName}  {getProfileDetail.profileDetails.lastName}</div>
                     <p className='fs-12 px-3' id='aboutMe'>
                         {getProfileDetail.profileDetails.aboutMe.length > 200 ? <>
@@ -223,10 +205,11 @@ const UserProfileMob = (props) => {
                             </span>
                         </> : getProfileDetail.profileDetails.aboutMe}
                     </p>
-                    <text data-toggle="modal" data-target="#myModal" className='fs-14 fc-link fw-mid'>View Full Profile</text>
+                    <span data-toggle="modal" data-target="#myModal" className='fs-14 fc-link fw-mid-bold'>View Full Profile</span>
                 </div>
             </div>
-            {getpenName === 'Durgajasraj' && <Image src={Durgajasraj} alt="durgajasraj" className='mb-5 mx-4' width={90} height={60} style={{ objectFit: 'cover', objectPosition: 'center' }} />}
+
+            {getpenName !== undefined && getpenName.toUpperCase() === 'DURGAJASRAJ' && <img src={'/durgajashraj.png'} alt="durgajasraj" className='mb-4' style={{ objectFit: 'cover', objectPosition: 'center', width: '100%' }} />}
 
             {getProfileDetail.profileDetails.isSupportEnabled === true && <>
                 <Card className='mt-1' style={{ padding: '10px 20px 30px 20px', marginBottom: '30px', marginLeft: '8px', marginRight: '8px', marginTop: '8px', background: '#fff', width: '96%' }}>
@@ -234,8 +217,8 @@ const UserProfileMob = (props) => {
                         <div className='text-center'>
                             <p className='fw-mid mb-4'>Gift <Star className='star-color' style={{ marginTop: '-4px' }} /> to {getpenName}. Become a True-fan!</p>
                             <div className='row ml-1'>
-                                <div className='col-1' style={{ marginLeft: '18px', marginRight: '5px' }}>
-                                    <Image src={StarIcon} width={36} height={36} />
+                                <div className='col-1' style={{ marginLeft: '0px', marginRight: '22px', marginTop: '-3px' }}>
+                                    <img src={'/star.svg'} style={{ width: '36px', height: '36px' }} />
                                 </div>
                                 <div className='col-1' style={{ fontSize: '22px' }}> x </div>
                                 <div className='col-2 mt-1'>
@@ -255,7 +238,7 @@ const UserProfileMob = (props) => {
                             <textarea className='mt-3 w-96' name='remarks' id='remarks' rows={4} cols={40} type="text" maxLength={1000} value={Remarks} onChange={(e) => setRemarks(e.target.value)} style={{ outline: 'none', border: '1px solid lightgray' }} placeholder="Say something nice... (Optional)"></textarea>
                             {starCount > 0 ? '' : <div id="starCountError" className='error-msg'></div>}
                             <button onClick={() => setUserDetail('star')} className={`mt-3 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 w-96 ${finalAmount <= 0 ? 'bg-gray' : 'primary-bg-color'}`} id='getStarValue' disabled={SupportButton}>
-                                Support {!SupportButton && starCount}<Star style={{ color: 'antiquewhite', marginTop: '-4px' }} /> to {getpenName} {currency}{finalAmount}
+                                Support {!SupportButton && starCount}<Star style={{ color: 'antiquewhite', marginTop: '-5px' }} /> to {getpenName} {currency}{finalAmount}
                             </button>
                         </div>
                         {/* popup modal box for user information to pass on payment gateway page */}
@@ -335,6 +318,19 @@ const UserProfileMob = (props) => {
                     </div>)}
                 </div>
             </>}
+            {/* open in app section */}
+            {isMobile && <div className="row">
+                <section className="bottom-section-mob">
+                    <div className="top-hr-colored"></div>
+                    <div className="col-12 py-2">
+                        <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
+                            secondary={<span className='fs-12'>Read all Publications and more on the App</span>} />
+                        <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }}>
+                            <Link href={process.env.NEXT_PUBLIC_DYNAMIC_OPEN_IN_APP + `https://thinkly.me/${getpenName}`}> OPEN IN APP </Link>
+                        </button>
+                    </div>
+                </section>
+            </div>}
         </> : <div style={{ padding: '100px', textAlign: 'center' }}>
             <CircularProgress aria-label="Loading..." />
         </div>

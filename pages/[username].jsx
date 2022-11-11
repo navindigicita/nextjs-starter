@@ -444,7 +444,6 @@ const UserProfile = (props) => {
                     siteName: 'Thinkly weblite',
                 }}
             />
-            {/* {showPublication && <PublicationProfile publicationDetail={props.userData.responseData.Details} />} */}
 
             {getProfileDetail !== undefined ? <>
                 <Header userProfile={getProfileDetail} showContentForUserProfile={showDataOnHeader} />
@@ -452,24 +451,24 @@ const UserProfile = (props) => {
                     : <div className='container' style={{ marginTop: '5rem' }}>
                         <div className='row mb-5'>
                             <div className='col-4 right-content'>
-                                {getProfileImage !== undefined ? <Image src={getProfileImage} alt="profile image" layout='fill' /> : <Avatar src={<AssignmentIndOutlinedIcon />} />}
+                                {getProfileImage !== undefined ? <img src={getProfileImage} alt="profile image" /> : <Avatar src={<AssignmentIndOutlinedIcon />} />}
                             </div>
                             <div className='col-8 mt-2'>
                                 <div className="card left-content" style={{ height: '500px' }}>
                                     <div className='mb-1 fs-30 fw-bold'> {getpenName} </div>
                                     <div className='fs-20 fw-mid mb-3'>{getProfileDetail.profileDetails.firstName} {getProfileDetail.profileDetails.lastName !== undefined && getProfileDetail.profileDetails.lastName}</div>
                                     <p className='fs-18'>{aboutUser}</p>
-                                    <h6 className='fs-15 fc-link fw-mid pointer' data-toggle="modal" data-target="#myModal">View Full Profile</h6>
+                                    <h6 className='fs-15 fc-link fw-mid pointer mb-4' data-toggle="modal" data-target="#myModal">View Full Profile</h6>
 
-                                    {getpenName === 'Durgajasraj' && <Image src={Durgajasraj} alt="durgajasraj" className='mb-4' width={100} height={50} style={{ objectFit: 'cover', objectPosition: 'center' }} />}
+                                    {getpenName !== undefined && getpenName.toUpperCase() === 'DURGAJASRAJ' && <img src={'/durgajashraj.png'} alt="durgajasraj" className='mb-4' style={{ objectFit: 'cover', objectPosition: 'center', width: '100%', height: '20rem' }} />}
 
                                     {getProfileDetail.profileDetails.isSupportEnabled === true && <Card className='mt-4' style={{ padding: '10px 20px 20px 20px', background: '#fff', width: '50%', height: 'auto', overflow: 'initial' }}>
                                         <form name="paymentGateway" onSubmit={handleSubmit(onSubmit)}>
                                             <div className='text-center'>
-                                                <p className='fw-mid mb-3'>Support <Star className='star-color' /> to {getpenName}</p>
+                                                <p className='fw-mid mb-3'>Support <Star className='star-color' /> to {getpenName}. Become a True-Fan!</p>
                                                 <div className='row ml-1'>
-                                                    <div className='col-1' style={{ marginLeft: '10px', marginRight: '10px' }}>
-                                                        <Image src={'/star.svg'} alt="icon" height={60} width={60} />
+                                                    <div className='col-1' style={{ marginLeft: '0px', marginRight: '20px', marginTop: '-3px' }}>
+                                                        <img src={'/star.svg'} alt="icon" style={{ width: '36px', height: '36px' }} />
                                                     </div>
                                                     <div className='col-1' style={{ fontSize: '22px' }}> x </div>
                                                     <div className='col-2 mt-1'>

@@ -45,7 +45,7 @@ body {
         font-size: 12px;
         font-weight: bold;
         border-radius: 4px;
-        color: #ffff;
+        color: #fff !important;
         background-color: #e98c37;
         width: 117px;
         height: 35px;
@@ -172,12 +172,16 @@ div .sticky-left-section {
         font-size: 14px;
         font-weight: bold;
         border-radius: 20px;
-        color: #ffff;
+        color: #fff !important;
         background-color: dodgerblue;
         width: auto;
         height: 30px;
         border: 0;
         padding: 0 20px;
+    }
+
+    div > button > a {
+        color: #fff;
     }
 
     .comment-top-align {

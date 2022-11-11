@@ -471,7 +471,7 @@ const PublicationDetailMob = (props) => {
                             <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
                                 secondary={<span className='fs-12'>Read all Publications and more on the App</span>} />
                             <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }}>
-                                <a href={`https://app.thinkly.me/?&apn=com.me.digicita.thinkly&ibi=com.Thinkly.Thinkly&imv=10.0&isi=1329943323&link=https://thinkly.me/${PublicationPenName}`}> OPEN IN APP </a>
+                                <a href={process.env.NEXT_PUBLIC_DYNAMIC_OPEN_IN_APP + `https://thinkly.me/${PublicationPenName}`}> OPEN IN APP </a>
                             </button>
                         </div>
                     </section>

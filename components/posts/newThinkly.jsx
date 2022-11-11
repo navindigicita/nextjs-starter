@@ -120,14 +120,14 @@ const NewThinkly = (props) => {
                     } else {
                         setthinklyPayType(true)
                     }
-                    if (response.postData.postImages.length > 0) {  //set image list in state
+                    if (response.postData.postImages !== undefined && response.postData.postImages.length > 0) {  //set image list in state
                         const images = []
                         const imageName = []
-                        for (let i = 0; i >= response.postData.postImages.length; i++) {
+                        for (let i = 0; i < response.postData.postImages.length; i++) {
                             var element = response.postData.postImages[i];
                             var data = element.charAt(0) === '@' ? element.substring(1) : element
                             images.push(data)
-                            const nameImg = response.ImageNames[i].substring(response.ImageNames[i].lastIndexOf('/') + 1)
+                            const nameImg = element.substring(element.lastIndexOf('/') + 1)
                             imageName.push(nameImg)
                         }
                         setthinklyImage(images)
@@ -778,7 +778,6 @@ const NewThinkly = (props) => {
         setPublicationID('')
         setpubSelectedIndex('')
         setSelectedPubDetail(undefined)
-        // setpublicationPayType('')
         setthinklyName('')
         setInputValue(moment().format("DD-MM-YYYY hh:mm A"))
         setthinklyImage(undefined)
@@ -791,6 +790,8 @@ const NewThinkly = (props) => {
         setDraftLoader(false)
         setcopyLinkMsg(false)
         setEmbededUrl(undefined)
+        setShowScheduled(false)
+        setSeclectedDate(moment())
     }
 
     const handleCopyLink = () => {

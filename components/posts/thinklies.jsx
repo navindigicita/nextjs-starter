@@ -127,6 +127,8 @@ const Thinklies = (props) => {
         </InfiniteScroll> : NoRecord === true ? <NoData /> : <div className='grid place-items-center h-screen'>
             <CircularProgress aria-label="Loading..." />
         </div>}
+
+        {EditPost && <NewThinkly authorID={AuthorID} thinklyRemoteConfigData={RemoteConfigJson} thinklyID={thinklyID} onChangeCallback={() => setEditPost(false)} /> }
     </>);
 }
 

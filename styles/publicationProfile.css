@@ -120,7 +120,7 @@
         border-top-right-radius: 25px !important;
         object-fit: cover;
         object-position: center;
-        height: 250;
+        /* height: 250 !important; */
     }
 
     .pay-pub-profile {
