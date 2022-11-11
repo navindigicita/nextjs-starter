@@ -171,13 +171,13 @@ div .sticky-left-section {
     .downloadLink-button {
         font-size: 14px;
         font-weight: bold;
-        border-radius: 3px;
+        border-radius: 20px;
         color: #ffff;
-        background-color: #e98c37;
+        background-color: dodgerblue;
         width: auto;
         height: 30px;
         border: 0;
-        padding: 0 10px;
+        padding: 0 20px;
     }
 
     .comment-top-align {
@@ -354,7 +354,7 @@ a.connect {
 .bottom-section-mob {
     background: rgba(var(--d87, 255, 255, 255), .95);
     bottom: 0;
-    height: auto;
+    height: 4rem;
     left: 0;
     /* padding: 5px; */
     position: fixed;
@@ -363,7 +363,7 @@ a.connect {
 }
 
 .top-hr-colored {
-    background: linear-gradient(to right, #e98c37, #66360a);
+    background: linear-gradient(to right, #e98c37, #66360ad6);
     height: 4px;
     opacity: 85%;
     position: absolute;

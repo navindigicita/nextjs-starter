@@ -12,6 +12,7 @@ import { KeyboardArrowDown } from '@material-ui/icons';
 import ParaByNameFromUrl from '../common/paraByNameFromUrl'
 import { PublicationProfileEvent, PublicationSubscribeEvent } from '../../config/facebookPixelEvent';
 import { baseUrl } from '../../pages/api/api';
+import { isMobile } from 'react-device-detect';
 
 const meetAuthorResponsive = {
     mobile: {
@@ -295,6 +296,10 @@ const PublicationDetailMob = (props) => {
         window.open(oldUrl, '_blank')
     }
 
+    const handleAppButtonCLick = () => {
+        window.location()
+    }
+
     return (<>
         <div className='container' style={{ marginTop: '2rem', marginBottom: '2rem' }}>
             {PublicationDetails !== undefined ? <>
@@ -458,6 +463,17 @@ const PublicationDetailMob = (props) => {
                     })}
                     {/* {!NoMorePubByInterest && <p className='col-12 text-center fs-22 fw-bold fc-primary' onClick={() => fetchMorePubByInterest()}>+MORE</p>} */}
                 </>}
+                {/* open in app section */}
+                {isMobile && <div className="row">
+                    <section className="bottom-section-mob">
+                        <div className="top-hr-colored"></div>
+                        <div className="col-12 py-2">
+                            <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
+                                secondary={<span className='fs-12'>Read all Publications and more on the App</span>} />
+                            <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }} onClick={`https://app.thinkly.me/?&apn=com.me.digicita.thinkly&ibi=com.Thinkly.Thinkly&imv=10.0&isi=1329943323&link=https://thinkly.me/${PublicationPenName}`}> OPEN IN APP </button>
+                        </div>
+                    </section>
+                </div>}
             </> : <div className='grid place-items-center h-screen'>
                 <CircularProgress aria-label="Loading..." />
             </div>}

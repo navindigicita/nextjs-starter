@@ -157,31 +157,13 @@ const PostDetail = (props) => {
                 </div>
             </div>
             {/* call to action bottom pannel for mobile view, using modal popup for desktop view(header) */}
-            {isMobile && downloadPannel && <div className="row">
+            {isMobile && <div className="row">
                 <section className="bottom-section-mob">
                     <div className="top-hr-colored"></div>
-                    <div className="col-12 py-2 mt-3">
-                        {PostData.publicationData !== null ? <>
-                            {/* {PostData.publicationData.publicationImage !== undefined ?
-                                <img src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
-                                : <Avatar src={<AssignmentIndOutlinedIcon />} />
-                            } */}
-                            <span>See All Thinklies From <b>
-                                {PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}
-                            </b></span>
-                        </> : <>
-                            {PostData.authorData.authorProfileImage !== undefined ?
-                                <img src={PostData.authorData.authorProfileImage.charAt(0) === '@' ? PostData.authorData.authorProfileImage.substring(1) : PostData.authorData.authorProfileImage} alt="" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
-                                : <Avatar src={<AssignmentIndOutlinedIcon />} />
-                            }
-                            <span className="ml-2">See All Thinklies From <b>
-                                {PostData.authorData.authorPenName.charAt(0) === '@' ? PostData.authorData.authorPenName.substring(1) : PostData.authorData.authorPenName}
-                            </b></span>
-                        </>}
-                    </div>
-                    <div className="col-12">
-                        <input className="float-right downloadLink-button" style={{ marginTop: '-42px', marginRight: '-10px' }} type="button" value="Open App" onClick={() => handleOpenAppButtonClick()} />
-                        <span className="float-right font-weight-bold fs-28" style={{ marginTop: '-90px', marginRight: '-9px' }} onClick={() => setdownloadPannel(false)}>&times;</span>
+                    <div className="col-12 py-2">
+                        <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
+                            secondary={<span className='fs-12'>Read all Thinklies and more on the App</span>} />
+                        <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }} onClick={`https://app.thinkly.me/?ibi=com%2EThinkly%2EThinkly&isi=1329943323&apn=com%2Eme%2Edigicita%2Ethinkly&link=https://thinkly.me/Thinkly/Post/Index/${PostData.postData.postID}`}> OPEN IN APP </button>
                     </div>
                 </section>
             </div>}
