@@ -163,7 +163,9 @@ const PostDetail = (props) => {
                     <div className="col-12 py-2">
                         <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
                             secondary={<span className='fs-12'>Read all Thinklies and more on the App</span>} />
-                        <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }} onClick={`https://app.thinkly.me/?ibi=com%2EThinkly%2EThinkly&isi=1329943323&apn=com%2Eme%2Edigicita%2Ethinkly&link=https://thinkly.me/Thinkly/Post/Index/${PostData.postData.postID}`}> OPEN IN APP </button>
+                        <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }}>
+                            <a href={`https://app.thinkly.me/?ibi=com%2EThinkly%2EThinkly&isi=1329943323&apn=com%2Eme%2Edigicita%2Ethinkly&link=https://thinkly.me/Thinkly/Post/Index/${PostData.postData.postID}`}></a>  OPEN IN APP
+                        </button>
                     </div>
                 </section>
             </div>}
