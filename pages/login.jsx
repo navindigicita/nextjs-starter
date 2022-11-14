@@ -22,7 +22,6 @@ const Login = () => {
         const { user } = await signInWithPopup(firebaseAuth, provider)
         const { refreshToken, providerData } = user;
         const providerUserData = providerData.find(obj => obj.providerId === "google.com")
-        console.log("First log for test");
         localStorage.setItem('user', JSON.stringify(providerUserData))
         localStorage.setItem('accessToken', JSON.stringify(refreshToken))
         router.push('/user/userAuth')
