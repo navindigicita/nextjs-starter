@@ -48,7 +48,7 @@ const Header = (props) => {
         }
         // from user profile detail page
         if (props.userProfile !== undefined && props.showContentForUserProfile !== undefined) {
-            setshowForUserProfile(props.showContentForUserProfile === true && 'loggedInUserProfile')
+            setshowForUserProfile(props.showContentForUserProfile === true ? 'loggedInUserProfile' : 'otherUserProfile')
             var data = props.userProfile.profileDetails
             setuserID(data.userID)
             setisPartialUser(data.isPartialProfile)
@@ -326,7 +326,8 @@ const Header = (props) => {
             {showThinkly && <NewThinkly authorID={userID} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
             {showPublication && <NewPublication authorID={userID} label={'publication'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
             {showCourse && <NewPublication authorID={userID} label={'course'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
-            {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} shareUrl={ShareUrl} />}
+            {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} />} 
+            {/* shareUrl --> shareUrl={shareUrl} --> pass old url here in case want to show api url */}
         </Suspense>
 
         {/* modal popup for email trigger */}

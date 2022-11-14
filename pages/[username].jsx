@@ -38,7 +38,6 @@ export async function getServerSideProps(context) {
     await Axios.get(`${baseUrl._currentValue}User/GetDetailsByPenName/${userName}`, config)
         .then((res) => {
             response = res.data
-            console.log("data@@@@@", response);
             if (response.responseCode === '00') {
                 if (response.responseData.Type === 'Publication') {
                     titleName = response.responseData.Details.publicationDetails.publicationName
