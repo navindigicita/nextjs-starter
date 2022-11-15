@@ -78,11 +78,7 @@ const NewPublication = (props) => {
                     setPublicationID(response.publicationID)  // set publication ID in state
                     setpubName(response.publicationName)  //publication name
                     var image = response.publicationImage.charAt(0) === '@' ? response.publicationImage.substring(1) : response.publicationImage
-                    const imgPreview = document.getElementById("img-preview");
-                    imgPreview.innerHTML = '<img src="' + image + '" />';  //create img and preview wth help of id show there
-                    const nameImg = image.substring(image.lastIndexOf('/') + 1)
-                    setpubImage(nameImg)  //pub image name
-                    // setshowImage(true)  //set show image true
+                    setpubImage(image)//image of publication H
                     setshortDescription(response.about)  //short description of publication
                     setdescription(response.description)  //long description of publication
                     const penName_pub = response.publicationProfileUrl.substring(response.publicationProfileUrl.lastIndexOf('/') + 1)
@@ -276,32 +272,63 @@ const NewPublication = (props) => {
         }
     }, [Interest, editInterest])
 
-    const handleInterest = (index) => {   //selection of interest
+    // const handleInterest = (index) => {   //selection of interest
+    //     var random_color = color[Math.floor(Math.random() * color.length)];
+    //     if (arrayList.length <= 0) {
+    //         if (index.length > 0) {  //if user coming from edit
+    //             for (let i = 0; i < index.length; i++) {
+    //                 const element = index[i];
+    //                 document.getElementById(element).style.background = random_color;
+    //             }
+    //             setarrayList(index)
+    //             setRandomColor(random_color)
+    //         } else {  //for manual selection of intrest
+    //             document.getElementById(`${index}`).style.background = random_color;
+    //             setarrayList(oldData => [...oldData, index])  //add index in array state with old data
+    //             setRandomColor(oldcolor => [...oldcolor, random_color])
+    //         }
+    //     } else if (arrayList.length > 0 && arrayList.find(element => element === index)) {
+    //         document.getElementById(`${index}`).style.background = 'none';
+    //         setarrayList(arrayList.filter(item => item !== index));
+    //         setRandomColor(randomColor.filter(item => item !== random_color))
+    //     } else {
+    //         document.getElementById(`${index}`).style.background = random_color;
+    //         setarrayList(oldData => [...oldData, index])
+    //         setRandomColor(oldcolor => [...oldcolor, random_color])
+    //     }
+    // }
+    const handleInterest = (index) => { //selection of interest push and pull in array logic is here  H
+        console.log("call handle interest function!!!!! ", index);
         var random_color = color[Math.floor(Math.random() * color.length)];
         if (arrayList.length <= 0) {
-            if (index.length > 0) {  //if user coming from edit
+            console.log("1st if");
+            if (index.length > 0) {
+                console.log("1st if and if");
                 for (let i = 0; i < index.length; i++) {
                     const element = index[i];
                     document.getElementById(element).style.background = random_color;
                 }
                 setarrayList(index)
                 setRandomColor(random_color)
-            } else {  //for manual selection of intrest
+            } else {
+                console.log("1st if and else");
                 document.getElementById(`${index}`).style.background = random_color;
                 setarrayList(oldData => [...oldData, index])  //add index in array state with old data
                 setRandomColor(oldcolor => [...oldcolor, random_color])
             }
         } else if (arrayList.length > 0 && arrayList.find(element => element === index)) {
+            // if arrayList state length is greater than 0 and match element as index
             document.getElementById(`${index}`).style.background = 'none';
-            setarrayList(arrayList.filter(item => item !== index));
+            setarrayList(arrayList.filter(item => item !== index));  //remove only clicked index from array
             setRandomColor(randomColor.filter(item => item !== random_color))
         } else {
             document.getElementById(`${index}`).style.background = random_color;
             setarrayList(oldData => [...oldData, index])
             setRandomColor(oldcolor => [...oldcolor, random_color])
         }
-    }
 
+    }
+    
     const hideInterestAndShowSuccess = () => {
         if (arrayList.length < 3) {
             document.getElementById('InterestError').innerHTML = 'Please select at least 3 interest'
@@ -315,6 +342,7 @@ const NewPublication = (props) => {
         var starPrice = 0
         if (PlanDetailData !== undefined) {
             var planIndex = PlanDetailData.findIndex(function (obj) {
+                console.log(obj.publicationPlanID);
                 return obj.publicationPlanID == PlanID
             })
             starPrice = parseInt(PlanPrice) / PlanDetailData[planIndex].perStarPrice
@@ -360,14 +388,17 @@ const NewPublication = (props) => {
     }
 
     const editPublicationCourse = () => {
+        console.log("inside editPublicationCourse");
         const CategoryList = editInterest.toString() //interest array to string
         var starPrice = 0
         if (PlanDetailData !== undefined) {
             var planIndex = PlanDetailData.findIndex(function (obj) {
-                return obj.name == PlanType
+                console.log(obj.name,PlanID);
+                return obj.name == PlanID //PlanType H
             })
             starPrice = parseInt(PlanPrice) / PlanDetailData[planIndex].perStarPrice
         }
+        
         var config = {
             method: 'POST',
             headers: {

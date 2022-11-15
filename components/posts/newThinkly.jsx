@@ -237,9 +237,10 @@ const NewThinkly = (props) => {
             $('#draftModal').modal('show')// modal call for draft confirmation
         } else {
             clearAllSlideCatch() //catch clear function call(state clearance)
-            // if (successSlide) {
-            //     window.location.reload(false);
-            // }
+            if (successSlide) {
+                window.location.reload(false);
+                // router.push('/Thinkly')
+            }
             setselectTypeSlide(true)
             $('#createThinkly').modal('hide')
             { newThinklyID !== 0 && props.onChangeCallback(false) }
