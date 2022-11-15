@@ -1,24 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { firebaseApp } from '../firebase-config';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
 import { useRouter } from 'next/router'
 import { isMobile } from 'react-device-detect'
 import Image from 'next/image';
 import Header from '../components/common/header'
 import Footer from '../components/common/footer';
-import { firebaseApp } from '../firebase-config';
-// import { signIn } from 'next-auth/react'
-// import { getAnalytics, logEvent } from "firebase/analytics";
 
 const Login = () => {
+    let analytics = ''
     const router = useRouter()
-    // const analytics = getAnalytics()
     const firebaseAuth = getAuth(firebaseApp);
     const provider = new GoogleAuthProvider();
 
+    useEffect(() => {
+        isSupported().then((result) => {
+            if (result) {
+                analytics = getAnalytics();
+            }
+        })
+    }, [])
+
     const handleGmailSignIn = async () => {
-        // if (typeof window != undefined) {
-        //     logEvent(analytics, 'GOOGLE_MEDIUM');
-        // }
+        logEvent(analytics, 'LOGIN_CLICK_GOOGLE');
         const { user } = await signInWithPopup(firebaseAuth, provider)
         const { refreshToken, providerData } = user;
         const providerUserData = providerData.find(obj => obj.providerId === "google.com")

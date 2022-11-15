@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useContext, lazy, Suspense } from 'react'
+import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from '../../firebase-config';
 import Axios from "axios";
 import $ from 'jquery'
 import Image from 'next/image';
@@ -12,6 +15,7 @@ const NewThinkly = lazy(() => import('../posts/newThinkly'))
 const NewPublication = lazy(() => import('../publication/newPublication'))
 
 const Header = (props) => {
+    var analytics = ''
     const router = useRouter();
     const BASE_URL = useContext(baseUrlThinkly);
     const emailValidate = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
@@ -60,6 +64,12 @@ const Header = (props) => {
         } else if (props.showContentForUserProfile !== undefined) {
             setshowForUserProfile(props.showContentForUserProfile === false && 'otherUserProfile')
         }
+        isSupported().then((result) => {
+            if (result) {
+                const app = initializeApp(firebaseConfig)
+                analytics = getAnalytics(app);
+            }
+        })
     }, [])
 
     useEffect(() => {  //set path value on base of url handled here
@@ -105,10 +115,12 @@ const Header = (props) => {
     const handleSignUpClick = () => {  //to switch path url and page UI, base of either login or signup
         router.push('/signup')
         setPath('signup')
+        logEvent(analytics, 'SIGN_UP_CLICK');
     }
 
     const handleLoginClick = () => {  //to switch path url and page UI, base of either login or signup
         router.push('/login')
+        logEvent(analytics, 'LOGIN_CLICK');
         setPath('login') //when update or replace state then on first click it store update data value in state as a queue data and after 2nd click replace the data that's why used another click event to recall state update
         document.addEventListener('click', function () {
             setPath('login')
@@ -157,9 +169,8 @@ const Header = (props) => {
 
     const handleViewProfile = () => {  //onClick of view profile take to new tab for profile detail page
         if (typeof window !== undefined) {
-            var newWindow = window.open(`${userPenName}`, '_blank')
-            newWindow.penName = userPenName
-            // newWindow.userStauts = user_status
+            window.open(`/${userPenName}`, '_blank')
+            logEvent(analytics, 'PROFILE_PAGE_CLICK_HEADER', { penName: userPenName });
         }
     }
 
@@ -326,7 +337,7 @@ const Header = (props) => {
             {showThinkly && <NewThinkly authorID={userID} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
             {showPublication && <NewPublication authorID={userID} label={'publication'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
             {showCourse && <NewPublication authorID={userID} label={'course'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
-            {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} />} 
+            {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} />}
             {/* shareUrl --> shareUrl={shareUrl} --> pass old url here in case want to show api url */}
         </Suspense>
 

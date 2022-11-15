@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react'
 import Axios from "axios";
-import Image from 'next/image';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ListItemText, CircularProgress } from "@material-ui/core"
 import { Card } from 'react-bootstrap'
 import { baseUrl } from '../../pages/api/api';
+import PostTimeAgo from '../common/postTime';
 
 
 const Libraries = (props) => {
@@ -17,7 +17,7 @@ const Libraries = (props) => {
     const [IsSubscribedFetching, setIsSubscribedFetching] = useState(false) //scroll more subscribed publication show loader
     const [SubscriptionStartIndex, setSubscriptionStartIndex] = useState(0)  //start index of subscribe publication api
     const [SubscriptionEndIndex, setSubscriptionEndIndex] = useState(10)  //end index of subscribe publication api
-    
+
     const [BookMarkList, setBookMarkList] = useState([])  //store bookmarks list
     const [NoBookMarkRecord, setNoBookMarkRecord] = useState(false)  //if no record found then show msg
     const [IsBookmarkFetching, setIsBookmarkFetching] = useState(false)  //scroll more bookmark, show loader
@@ -127,7 +127,7 @@ const Libraries = (props) => {
                         return (<Card className='mt-4' key={index}>
                             <div className='row cursor'>
                                 <div className='col-2'>
-                                    {obj.publicationImage !== undefined && <Image src={imgUrl} alt="publication Image" height={50} width={50} style={{ objectFit: 'cover' }} />}
+                                    {obj.publicationImage !== undefined && <img src={imgUrl} alt="publication Image" style={{ objectFit: 'contain', height: '36px', width: '36px' }} />}
                                 </div>
                                 <div className='col-8'>
                                     <ListItemText className='my-auto' primary={<span className='ff-lora fs-18'>{obj.publicationName}</span>}
@@ -136,7 +136,9 @@ const Libraries = (props) => {
                             </div>
                         </Card>)
                     })}
-                </InfiniteScroll> : NoRecord === true ? <NoData authorID={AuthorID} /> : <div className='grid place-items-center h-screen'>
+                </InfiniteScroll> : NoRecord === true ? <div className='grid place-items-center'>
+                    <p className='fs-22 fw-mid-bold mt-5'>No Subscribed Publication Found</p>
+                </div> : <div className='grid place-items-center h-screen'>
                     <CircularProgress aria-label="Loading..." />
                 </div>}
             </div>
@@ -151,24 +153,7 @@ const Libraries = (props) => {
                         if (obj.postData.postImages.length > 0) {
                             var image_url = obj.postData.postImages[0].charAt(0) === '@' ? obj.postData.postImages[0].substring(1) : obj.postData.postImages[0]  //show once image only
                         }
-                        var final_time = ""
-                        var date1 = new Date(obj.postData.postUpdatedDateTime); //post date & time
-                        var date2 = new Date; //current date & time
-                        var Difference_In_Time = date2.getTime() - date1.getTime();  //substraction of current date to post date
-                        var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);  // number of days in long float
-                        const post_Date_Time = parseFloat(Difference_In_Days).toFixed(2);  //fixed decimal to 2
-                        if (Math.floor(post_Date_Time) < 1) {
-                            const difference = Difference_In_Time / (1000 * 60 * 60);
-                            const hours = Math.abs(Math.round(difference))
-                            if (hours > 1) {
-                                final_time = hours + " hours ago"
-                            } else {
-                                final_time = hours + " hour ago"
-                            }
-                        } else {
-                            const days = Math.floor(post_Date_Time);
-                            final_time = days + " days ago"
-                        }
+                        var final_time = PostTimeAgo(obj.postData.postUpdatedDateTime)
                         return (<Card className='p-2'>
                             <div className="row my-3" key={index}>
                                 <div class="col-md-10">
@@ -180,8 +165,8 @@ const Libraries = (props) => {
                                 </div>
                                 <div className="col-md-2">
                                     {obj.postData.postImages !== undefined && obj.postData.postImages.length > 0 &&
-                                        <Image alt="thinkly Image" src={image_url} width={80} height={80}
-                                            style={{ objectFit: 'cover', objectPosition: 'center', borderRadius: '4px', float: 'right' }} />
+                                        <img alt="thinkly Image" src={image_url}
+                                            style={{ objectFit: 'cover', objectPosition: 'center', borderRadius: '4px', float: 'right', height: '60px', width: '60px' }} />
                                     }
                                 </div>
                                 <div className="col-md-12">
@@ -191,8 +176,8 @@ const Libraries = (props) => {
                             <hr />
                         </Card>)
                     })}
-                </InfiniteScroll> : NoBookMarkRecord === true ? <div className='grid place-items-center h-screen'>
-                    <p className='fs-22 fw-mid-bold'>No Bookmarks Found</p>
+                </InfiniteScroll> : NoBookMarkRecord === true ? <div className='grid place-items-center'>
+                    <p className='fs-22 fw-mid-bold mt-5'>No Bookmarks Found</p>
                 </div> : <div className='grid place-items-center h-screen'>
                     <CircularProgress aria-label="Loading..." />
                 </div>}
