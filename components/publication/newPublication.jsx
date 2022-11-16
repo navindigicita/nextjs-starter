@@ -78,11 +78,7 @@ const NewPublication = (props) => {
                     setPublicationID(response.publicationID)  // set publication ID in state
                     setpubName(response.publicationName)  //publication name
                     var image = response.publicationImage.charAt(0) === '@' ? response.publicationImage.substring(1) : response.publicationImage
-                    const imgPreview = document.getElementById("img-preview");
-                    imgPreview.innerHTML = '<img src="' + image + '" />';  //create img and preview wth help of id show there
-                    const nameImg = image.substring(image.lastIndexOf('/') + 1)
-                    setpubImage(nameImg)  //pub image name
-                    // setshowImage(true)  //set show image true
+                    setpubImage(image)//image of publication    H*
                     setshortDescription(response.about)  //short description of publication
                     setdescription(response.description)  //long description of publication
                     const penName_pub = response.publicationProfileUrl.substring(response.publicationProfileUrl.lastIndexOf('/') + 1)
@@ -97,11 +93,18 @@ const NewPublication = (props) => {
     }
 
     const closeFunction = () => {
-        clearAllState() //function call for clear all state
         if (publicationID !== 0) {
             props.onChangeCallback(false)
-        } else {
-            window.location.reload(false);
+        } else if (descriptionSlide || subscriptionSlide) {
+            console.log("inside else if");
+            $('#closeConfirmation').modal('show')
+        }
+        else {
+            clearAllState() //function call for clear all state
+            if (!descriptionSlide) {
+                $('#newPublication').modal('hide')
+                window.location.reload(false);
+            }
             setwelcomeSlide(true)
         }
     }
@@ -125,6 +128,12 @@ const NewPublication = (props) => {
         setRandomColor([])
     }
 
+    const handleOkClose = () => {
+        clearAllState()
+        $('#closeConfirmation').modal('hide')
+        window.location.reload(false);
+
+    }
     const hideWelcomeAndShowAbout = () => {
         setwelcomeSlide(false)
         setaboutSlide(true)
@@ -133,7 +142,6 @@ const NewPublication = (props) => {
     const uploadImage = (event) => {
         let ImagesArray = Object.entries(event.target.files).map((e) => URL.createObjectURL(e[1]));
         setpubImage(ImagesArray[0])
-        console.log(ImagesArray);
         const files = event.target.files;
         const element = files[0]
         const name = `${AuthorID}_${element.lastModified}`
@@ -315,6 +323,7 @@ const NewPublication = (props) => {
         var starPrice = 0
         if (PlanDetailData !== undefined) {
             var planIndex = PlanDetailData.findIndex(function (obj) {
+                console.log(obj.publicationPlanID);
                 return obj.publicationPlanID == PlanID
             })
             starPrice = parseInt(PlanPrice) / PlanDetailData[planIndex].perStarPrice
@@ -364,10 +373,12 @@ const NewPublication = (props) => {
         var starPrice = 0
         if (PlanDetailData !== undefined) {
             var planIndex = PlanDetailData.findIndex(function (obj) {
-                return obj.name == PlanType
+                console.log(obj.name, PlanID);
+                return obj.publicationPlanID == PlanID //PlanType H
             })
             starPrice = parseInt(PlanPrice) / PlanDetailData[planIndex].perStarPrice
         }
+
         var config = {
             method: 'POST',
             headers: {
@@ -425,7 +436,7 @@ const NewPublication = (props) => {
         <div id="newPublication" class="modal fade in" tabIndex={-1} role="dialog" data-backdrop="static">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content modal-background">
-                    <button type="button" class="close text-right pr-2" data-dismiss="modal" onClick={() => closeFunction()} >&times;</button>
+                    <button type="button" class="close text-right pr-2" onClick={() => closeFunction()} >&times;</button>
                     {welcomeSlide ? <div class="modal-body px-5">
                         <h6 className='text-center fs-18 fw-bold'>Create Your {pageType !== undefined && pageType.charAt(0).toUpperCase() + pageType.slice(1)}</h6>
                         <p className='text-center fs-15 mb-2'> Thinkly provides a one stop solution for all your {pageType} needs.</p>
@@ -504,10 +515,10 @@ const NewPublication = (props) => {
                         <div className='row mt-4 input-box'>
                             <ListItemText primary={<h6 className='fs-15 fw-bold'>{pageType === 'course' ? 'Unique Web Link*' : 'Web Link*'}</h6>}
                                 secondary={<h6 className='fs-12'>Unique url for your {pageType}. Choose wisely! This cannot be changed after the {pageType} is created.</h6>} />
-                           
+
                             <input type="text" className='interest-textbox' maxLength={15} value={webUrl} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px' }} />
                             <span className='fixed-text-input'>www.thinkly.me/</span>
-                            
+
                             {(webUrl === '' || webUrl.length === 0) && <div id="UrlError" className='error-msg'></div>}
                             {(webUrl.length > 1 && webUrl.length < 5) && <div id="penNameError" className='error-msg'></div>}
                             <div id="penNameTakenError" className='error-msg'></div>
@@ -574,6 +585,7 @@ const NewPublication = (props) => {
                             </div>
                         </div>
                         {arrayList.length < 3 && <div id="InterestError" className='error-msg text-center'></div>}
+
                         <div className='text-center my-4'>
                             <button className='primary-bg-button' disabled={Loader} onClick={() => hideInterestAndShowSuccess()}>
                                 {Loader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#fff' }} /> : 'Done'}
@@ -623,6 +635,24 @@ const NewPublication = (props) => {
                 </div>
             </div>
         </div>
+
+        {/* Close Modal Confirmation H*/}
+        <div id="closeConfirmation" className="modal fade" role="dialog" data-backdrop="static" tabindex="-1" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                    <button type="button" className="close text-right pr-2" data-dismiss="modal">&times;</button>
+                    <div className="modal-body">
+                        <p className='text-center fs-22 fw-bold'>Are you sure you want to close this modal?</p>
+                        <p className='text-center mb-5'>If you select OK then you will lose all data</p>
+                        <div className="text-center d-flex justify-content-center">
+                            <button className='primary-border-button mr-4' data-dismiss="modal" onClick={() => setDescriptionSlide(true)}>Cancel</button>
+                            <button className='primary-bg-button' onClick={() => handleOkClose()}>Ok</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         {OpenCreateThinkly && <NewThinkly authorID={AuthorID} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
     </>)

@@ -101,7 +101,7 @@ const HomePage = (props) => {
         <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>
           {getIsValue ? <>
             {value === 'Libraries' ? <Libraries authorID={AuthorID} />
-              : value === 'Publication' ? <Publication authorID={AuthorID} />
+              : value === 'Publication' ? <Publication authorID={AuthorID} thinklyConfigJSON={thinklyConfigData}/>
                 : value === 'Thinkly' ? <PostCollection authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
                   : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
           </> : <DashboardPage profileJson={profileData} supporterData={supporterData} />}
