@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useContext, lazy, Suspense } from 'react'
+import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from '../../firebase-config';
 import Axios from "axios";
 import $ from 'jquery'
 import Image from 'next/image';
@@ -12,6 +15,7 @@ const NewThinkly = lazy(() => import('../posts/newThinkly'))
 const NewPublication = lazy(() => import('../publication/newPublication'))
 
 const Header = (props) => {
+    var analytics = ''
     const router = useRouter();
     const BASE_URL = useContext(baseUrlThinkly);
     const emailValidate = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
@@ -103,11 +107,25 @@ const Header = (props) => {
     }
 
     const handleSignUpClick = () => {  //to switch path url and page UI, base of either login or signup
+        isSupported().then((result) => {
+            if (result) {
+                const app = initializeApp(firebaseConfig)
+                analytics = getAnalytics(app);
+                logEvent(analytics, 'SIGN_UP_CLICK');
+            }
+        })
         router.push('/signup')
         setPath('signup')
     }
 
     const handleLoginClick = () => {  //to switch path url and page UI, base of either login or signup
+        isSupported().then((result) => {
+            if (result) {
+                const app = initializeApp(firebaseConfig)
+                analytics = getAnalytics(app);
+                logEvent(analytics, 'LOGIN_CLICK');
+            }
+        })
         router.push('/login')
         setPath('login') //when update or replace state then on first click it store update data value in state as a queue data and after 2nd click replace the data that's why used another click event to recall state update
         document.addEventListener('click', function () {
@@ -131,6 +149,13 @@ const Header = (props) => {
                 .then((res) => {
                     if (res.data.responseCode === '00') {
                         setEmail(true)
+                        isSupported().then((result) => {
+                            if (result) {
+                                const app = initializeApp(firebaseConfig)
+                                analytics = getAnalytics(app);
+                                logEvent(analytics, 'MAIL_SEND_APP_LINK', { emailId: EmailInput })
+                            }
+                        })
                     }
                 })
                 .catch((err) => {
@@ -149,17 +174,35 @@ const Header = (props) => {
         }
     }
 
-    const handleLogout = () => {  //onClick of logout it will clear all history and local&Session storage
-        localStorage.clear();
-        sessionStorage.clear();
+    const handleLogout = (statusCount) => {  //onClick of logout it will clear all history and local&Session storage
+        isSupported().then((result) => {
+            if (result) {
+                const app = initializeApp(firebaseConfig)
+                analytics = getAnalytics(app);
+                if (statusCount === 1) {
+                    logEvent(analytics, 'SIGN_IN');
+                } else {
+                    logEvent(analytics, 'SIGN_OUT', { userId: userID });
+                }
+            }
+        })
+        if (statusCount === 2) {  //if already signed in then on other user profile menu click don't clear local and session storage
+            localStorage.clear();
+            sessionStorage.clear();
+        }
         router.push('/login')
     }
 
     const handleViewProfile = () => {  //onClick of view profile take to new tab for profile detail page
         if (typeof window !== undefined) {
-            var newWindow = window.open(`${userPenName}`, '_blank')
-            newWindow.penName = userPenName
-            // newWindow.userStauts = user_status
+            window.open(`/${userPenName}`, '_blank')
+            isSupported().then((result) => {
+                if (result) {
+                    const app = initializeApp(firebaseConfig)
+                    analytics = getAnalytics(app);
+                    logEvent(analytics, 'PROFILE_PAGE_CLICK_HEADER', { penname: userPenName });
+                }
+            })
         }
     }
 
@@ -174,6 +217,27 @@ const Header = (props) => {
                 <a href="#createNewCourse" data-toggle="modal" data-target="#newPublication" onClick={() => handleCourseClick()}>New Course</a>
             </div>
         </div>)
+    }
+
+    const handleShareButtonClick = () => {
+        setshowShareUrlPopup(true)
+        isSupported().then((result) => {
+            if (result) {
+                const app = initializeApp(firebaseConfig)
+                analytics = getAnalytics(app);
+                logEvent(analytics, 'SHARE_CLICK_HEADER', { penname: userPenName });
+            }
+        })
+    }
+
+    const handleFollowButton = () => {
+        isSupported().then((result) => {
+            if (result) {
+                const app = initializeApp(firebaseConfig)
+                analytics = getAnalytics(app);
+                logEvent(analytics, 'FOLLOW_CLICK', { penname: userPenName });
+            }
+        })
     }
 
     return (<>
@@ -192,7 +256,7 @@ const Header = (props) => {
                                 </span> : (getPath === 'login') ? <span className='float-right mt-1'>New User?
                                     <span className='fc-link pointer' onClick={() => handleSignUpClick()}> Sign Up </span>
                                 </span> : (getPath === 'LoggedIn' && showForUserProfile === 'dashboard') && <div className='float-right' style={{ marginTop: '0px' }}>
-                                    <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}> <ShareRounded /> </Card>
+                                    <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => handleShareButtonClick()}> <ShareRounded /> </Card>
                                     <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px' }}>
                                         {(userProfileImage !== undefined && userProfileImage !== null && userProfileImage !== '') ?
                                             <Image src={userProfileImage} alt="user profile" height={22} width={22} style={{ borderRadius: '50%' }} />
@@ -200,16 +264,13 @@ const Header = (props) => {
                                         <ArrowDropDown onClick={() => handleUserProfle()} style={{ marginTop: '-10px' }} />
                                         <div className="dropdown-user" >
                                             <a onClick={() => handleViewProfile()}>View My Page</a>
-                                            <a onClick={() => handleLogout()}>Sign out</a>
+                                            <a onClick={() => handleLogout(2)}>Sign out</a>
                                         </div>
                                     </Card>
                                 </div>}
                                 {/* user detail page for loggedin user */}
                                 {showForUserProfile === 'loggedInUserProfile' && <div className='float-right' style={{ marginTop: '0px' }}>
-                                    {!isPartialUser && <Card className='float-right' style={{ borderRadius: '40px', padding: '4px 1px', marginLeft: '-110px', position: 'absolute', zIndex: '99' }}>
-                                        <button className="pointer bg-white border-radius-100 border-none fc-black mx-2" data-toggle="modal" data-target="#myModal">Follow</button>
-                                    </Card>}
-                                    <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
+                                    <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => handleShareButtonClick()}>
                                         <ShareRounded />
                                     </Card>
                                     <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px', height: '34px' }}>
@@ -218,20 +279,23 @@ const Header = (props) => {
                                         <ArrowDropDown onClick={() => handleUserProfle()} style={{ marginTop: '-14px', marginLeft: '0px' }} />
                                         <div className="dropdown-user">
                                             {/* if logged in then sign out if not loggod in then call same function to redirect on login page with clear localstorage */}
-                                            {(getPath === 'LoggedIn') ? <a onClick={() => handleLogout()}>Sign out</a> : <a onClick={() => handleLogout()}>Sign In</a>}
+                                            {(getPath === 'LoggedIn') ? <a onClick={() => handleLogout(2)}>Sign out</a> : <a onClick={() => handleLogout(1)}>Sign In</a>}
                                         </div>
                                     </Card>
                                 </div>}
                                 {/* user detail page for none logged in user */}
                                 {showForUserProfile === 'otherUserProfile' && <div className='float-right' style={{ marginTop: '0px' }}>
-                                    <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
+                                    {!isPartialUser && <Card className='float-right' style={{ borderRadius: '40px', padding: '4px 1px', marginLeft: '-110px', position: 'absolute', zIndex: '99' }}>
+                                        <button className="pointer bg-white border-radius-100 border-none fc-black mx-2" data-toggle="modal" data-target="#myModal" onClick={() => handleFollowButton()}>Follow</button>
+                                    </Card>}
+                                    <Card className='float-right p-1' style={{ borderRadius: '50%', marginLeft: '-40px', position: 'absolute', zIndex: '9' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => handleShareButtonClick()}>
                                         <ShareRounded />
                                     </Card>
                                     <Card style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '4px', height: '34px' }}>
                                         <Avatar style={{ height: '22px', width: '22px' }} src={<AssignmentIndOutlined />} />
                                         <ArrowDropDown onClick={() => handleUserProfle()} style={{ marginTop: '-50px', marginLeft: '20px' }} />
                                         <div className="dropdown-user">
-                                            <a onClick={() => handleLogout()}>Sign In</a>
+                                            <a onClick={() => handleLogout(1)}>Sign In</a>
                                         </div>
                                     </Card>
                                 </div>}
@@ -258,7 +322,7 @@ const Header = (props) => {
                                     {PublicationCount > 0 ? <> {createButton()} </> : <> {createButton(PublicationCount)} </>}
                                 </> : ''}
                                 <div className='col-1' style={{ marginTop: '12px' }}>
-                                    <Card className='float-right p-1 pointer' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
+                                    <Card className='float-right p-1 pointer' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => handleShareButtonClick()}>
                                         <ShareRounded height={25} width={25} />
                                     </Card>
                                 </div>
@@ -270,39 +334,39 @@ const Header = (props) => {
                                             : <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
                                         <div className="dropdown-user">
                                             <a onClick={() => handleViewProfile()}>View My Page</a>
-                                            <a onClick={() => handleLogout()}>Sign out</a>
+                                            <a onClick={() => handleLogout(2)}>Sign out</a>
                                         </div>
                                     </Card>
                                 </div>
                             </>}
                             {/* open other user profile or own profile */}
                             {showForUserProfile === 'otherUserProfile' && <>
-                                <div className='col-4'></div>
-                                <div className='col-1' style={{ marginTop: '12px' }}>
-                                    <Card className='float-right p-1 pointer' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
+                                <div className='col-3'></div>
+                                <div className='col-2' style={{ marginTop: '12px' }}>
+                                    <Card className='float-right p-1 pointer ml-4' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => handleShareButtonClick()}>
                                         <ShareRounded height={25} width={25} />
                                     </Card>
+                                    {!isPartialUser && <Card className='float-right' style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '10px' }}>
+                                        <button className="pointer bg-white border-radius-100 border-none" data-toggle="modal" data-target="#myModal" onClick={() => handleFollowButton()}>Follow</button>
+                                    </Card>}
                                 </div>
                                 <div className='col-1' style={{ marginTop: '12px' }}>
                                     <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingLeft: '12px', paddingTop: '4px', paddingBottom: '4px' }}>
                                         <Menu height={25} width={25} style={{ marginTop: '0px' }} />
                                         <Avatar style={{ width: '25px', height: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />
                                         <div className="dropdown-user">
-                                            <a onClick={() => handleLogout()}>Sign out</a>
+                                            <a onClick={() => handleLogout(1)}>Sign In</a>
                                         </div>
                                     </Card>
                                 </div>
                             </>}
                             {/* if user logged in show own profile */}
                             {showForUserProfile === 'loggedInUserProfile' && <>
-                                <div className='col-3'></div>
-                                <div className='col-2' style={{ marginTop: '12px' }}>
-                                    <Card className='float-right p-1 pointer ml-4' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => setshowShareUrlPopup(true)}>
+                                <div className='col-4'></div>
+                                <div className='col-1' style={{ marginTop: '12px' }}>
+                                    <Card className='float-right p-1 pointer' style={{ borderRadius: '50%' }} data-toggle="modal" data-target="#ShareProfile" onClick={() => handleShareButtonClick()}>
                                         <ShareRounded />
                                     </Card>
-                                    {!isPartialUser && <Card className='float-right' style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '10px' }}>
-                                        <button className="pointer bg-white border-radius-100 border-none" data-toggle="modal" data-target="#myModal">Follow</button>
-                                    </Card>}
                                 </div>
                                 <div className='col-1' style={{ marginTop: '12px' }}>
                                     <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingLeft: '12px', paddingTop: '4px', paddingBottom: getPath === 'LoggedIn' ? '0px' : '4px' }}>
@@ -311,7 +375,7 @@ const Header = (props) => {
                                             <Image src={userProfileImage} alt="user profile" height={25} width={25} style={{ borderRadius: '50%' }} />
                                             : <Avatar style={{ height: '25px', width: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
                                         <div className="dropdown-user">
-                                            {getPath === 'LoggedIn' ? <a onClick={() => handleLogout()}>Sign out</a> : <a onClick={() => handleLogout()}>Sign In</a>}
+                                            {getPath === 'LoggedIn' ? <a onClick={() => handleLogout(2)}>Sign out</a> : <a onClick={() => handleLogout(1)}>Sign In</a>}
                                         </div>
                                     </Card>
                                 </div>
@@ -326,7 +390,7 @@ const Header = (props) => {
             {showThinkly && <NewThinkly authorID={userID} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
             {showPublication && <NewPublication authorID={userID} label={'publication'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
             {showCourse && <NewPublication authorID={userID} label={'course'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
-            {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} />} 
+            {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} />}
             {/* shareUrl --> shareUrl={shareUrl} --> pass old url here in case want to show api url */}
         </Suspense>
 

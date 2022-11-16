@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useRouter, withRouter } from 'next/router';
 import { Avatar, Card, ListItemText } from '@material-ui/core'
 import { AssignmentIndOutlined } from '@material-ui/icons'
-import Image from 'next/image';
 import $ from 'jquery'
 
 const MultiAccount = () => {

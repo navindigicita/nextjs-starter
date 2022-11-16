@@ -1,11 +1,13 @@
 import React from 'react'
+import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
+import { firebaseApp, firebaseConfig } from '../firebase-config';
 import { useRouter } from 'next/router'
 import { isMobile } from 'react-device-detect'
 import Image from 'next/image';
 import Header from '../components/common/header'
 import Footer from '../components/common/footer';
-import { firebaseApp } from '../firebase-config';
 
 const SignUp = (props) => {
     const router = useRouter()
@@ -13,6 +15,13 @@ const SignUp = (props) => {
     const provider = new GoogleAuthProvider();
 
     const handleGmailSignIn = async () => {
+        isSupported().then((result) => {
+            if (result) {
+                const app = initializeApp(firebaseConfig)
+                const analytics = getAnalytics(app);
+                logEvent(analytics, 'GOOGLE_MEDIUM');
+            }
+        })
         const { user } = await signInWithPopup(firebaseAuth, provider)
         const { refreshToken, providerData } = user;
         const providerUserData = providerData.find(obj => obj.providerId === "google.com")

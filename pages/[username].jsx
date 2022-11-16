@@ -4,26 +4,22 @@ import { NextSeo } from 'next-seo';
 import $ from 'jquery';
 import Axios from "axios";
 import { useRouter } from 'next/router'
-import Image from 'next/image';
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+// import Carousel from "react-multi-carousel";
+// import "react-multi-carousel/lib/styles.css";
 import { isMobile } from 'react-device-detect';
 import { Avatar, Card, CardMedia, Tabs, Tab, withStyles, CircularProgress } from '@material-ui/core';
 import { Star } from '@material-ui/icons';
 import AssignmentIndOutlinedIcon from "@material-ui/icons/AssignmentIndOutlined";
-import StarIcon from '../public/star.svg'
-import Durgajasraj from '../public/durgajashraj.png'
-import Audio_Icon from '../public/audio-icon.svg'
-import Video_Icon from '../public/video-icon.svg'
 import { baseUrl, baseUrlThinkly } from '../pages/api/api'
 import Header from '../components/common/header'
 import Footer from '../components/common/footer';
 import Faq from '../components/common/faq';
+import PublicationProfile from '../components/publication/pubDetailPage';
 import UserProfileMob from '../components/userProfileMob';
 import { UserProfileEvent, UserSupportStarEvent } from '../config/facebookPixelEvent';
-// import { getAnalytics, logEvent } from "firebase/analytics";
-import PublicationProfile from '../components/publication/pubDetailPage';
-import { async } from '@firebase/util';
+import { initializeApp } from "firebase/app";
+import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
+import { firebaseConfig } from '../firebase-config';
 
 export async function getServerSideProps(context) {
     const userName = context.params.username
@@ -132,7 +128,7 @@ const StyledTab = withStyles((theme) => ({
 
 const UserProfile = (props) => {
     const emailValidate = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-    // const analytics = getAnalytics();
+    let analytics = ''
     const router = useRouter()
     const BASE_URL = useContext(baseUrl);
     const BASE_URL_THINKLY = useContext(baseUrlThinkly);
@@ -165,10 +161,16 @@ const UserProfile = (props) => {
         if (props.userData !== undefined) {
             const res = props.userData
             if (res.responseCode === '00') {
-                console.log("response@@@@@@@@@", res.responseData);
-                if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+                if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {  //google pixel event
                     UserProfileEvent()
                 }
+                isSupported().then((result) => {
+                    if (result) {
+                        const app = initializeApp(firebaseConfig)
+                        analytics = getAnalytics(app);
+                        logEvent(analytics, 'USER_DETAIL_PAGE', { penname: props.userPenName })  //firebase analytic logEvent
+                    }
+                })
                 setprofileDetail(res.responseData.Details)
                 if (res.responseData.Type !== 'Publication') {
                     const response = res.responseData.Details.profileDetails
@@ -391,6 +393,13 @@ const UserProfile = (props) => {
                         if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
                             UserSupportStarEvent()  //google pixel event
                         }
+                        isSupported().then((result) => {
+                            if (result) {
+                                const app = initializeApp(firebaseConfig)
+                                analytics = getAnalytics(app);
+                                logEvent(analytics, 'USER_SUPPORT_BUTTON_CLICK', { penname: getpenName })  //firebase analytic logEvent
+                            }
+                        })
                         resolve();
                     });
                 } else {
@@ -401,6 +410,16 @@ const UserProfile = (props) => {
             }
         }
 
+    }
+
+    const handleViewFullProfileClick = () => {
+        isSupported().then((result) => {
+            if (result) {
+                const app = initializeApp(firebaseConfig)
+                analytics = getAnalytics(app);
+                logEvent(analytics, 'VIEW_FULL_PROFILE_USER', { penname: getpenName })
+            }
+        })
     }
 
     return (<>
@@ -454,10 +473,10 @@ const UserProfile = (props) => {
                             </div>
                             <div className='col-8 mt-2'>
                                 <div className="card left-content" style={{ height: '500px' }}>
-                                    <div className='mb-1 fs-30 fw-bold'> {getpenName} </div>
-                                    <div className='fs-20 fw-mid mb-3'>{getProfileDetail.profileDetails.firstName} {getProfileDetail.profileDetails.lastName !== undefined && getProfileDetail.profileDetails.lastName}</div>
-                                    <p className='fs-18'>{aboutUser}</p>
-                                    <h6 className='fs-15 fc-link fw-mid pointer mb-4' data-toggle="modal" data-target="#myModal">View Full Profile</h6>
+                                    <h6 className='fs-30 fw-bold'> {getpenName} </h6>
+                                    <h6 className='fs-20 fw-mid mb-3'>{getProfileDetail.profileDetails.firstName} {getProfileDetail.profileDetails.lastName !== undefined && getProfileDetail.profileDetails.lastName}</h6>
+                                    <p className='fs-16'>{aboutUser}</p>
+                                    <h6 className='fs-15 fw-mid-bold fc-link fw-mid pointer mb-4' data-toggle="modal" data-target="#myModal" onClick={() => handleViewFullProfileClick()}>View Full Profile</h6>
 
                                     {getpenName !== undefined && getpenName.toUpperCase() === 'DURGAJASRAJ' && <img src={'/durgajashraj.png'} alt="durgajasraj" className='mb-4' style={{ objectFit: 'cover', objectPosition: 'center', width: '100%', height: '20rem' }} />}
 
@@ -511,7 +530,6 @@ const UserProfile = (props) => {
                                             </div>
                                         </form>
                                     </Card>}
-
 
                                     {/* if viewFullProfile is true then show thinkly and publication list below for now not in use */}
                                     {/* {viewFullProfile && <> <div className='mt-5'>
@@ -617,7 +635,7 @@ const UserProfile = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <Faq />
+                        {getProfileDetail.profileDetails.isSupportEnabled === true && <Faq />}
                     </div>
                 }
                 <Footer />
