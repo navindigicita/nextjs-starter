@@ -27,6 +27,7 @@ const NewPublication = (props) => {
     const [shortDescription, setshortDescription] = useState('');
     const [description, setdescription] = useState('');
     const [webUrl, setwebUrl] = useState('');  //store publication pen  name
+    const [disabled, setDisabled] = useState(false); // to disable input
     const [privateView, setPrivateView] = useState(false) //store private view data true or false (as setcommentView in thinkly)
 
     const [subscriptionSlide, setsubscriptionSlide] = useState(false);
@@ -82,6 +83,7 @@ const NewPublication = (props) => {
                     setshortDescription(response.about)  //short description of publication
                     setdescription(response.description)  //long description of publication
                     const penName_pub = response.publicationProfileUrl.substring(response.publicationProfileUrl.lastIndexOf('/') + 1)
+                    setDisabled(true);
                     setwebUrl(penName_pub)  //pename of publication
                     setPrivateView(response.isPrivate)  //store fetched boolean value for course's view
                     setPlanPrice(response.publicationPrice)  //plan price
@@ -92,21 +94,22 @@ const NewPublication = (props) => {
             })
     }
 
-    const closeFunction = () => {
+    const closeFunction = (cancel) => {
         if (publicationID !== 0) {
             props.onChangeCallback(false)
-        } else if (descriptionSlide || subscriptionSlide) {
+        } else if (descriptionSlide || subscriptionSlide || InterestSlide) {
             console.log("inside else if");
             $('#closeConfirmation').modal('show')
         }
         else {
             clearAllState() //function call for clear all state
-            if (!descriptionSlide) {
-                $('#newPublication').modal('hide')
-                window.location.reload(false);
-            }
+            $('#newPublication').modal('hide')
+            window.location.reload(false);
             setwelcomeSlide(true)
         }
+        // if(discard === 'cancel'){
+        //     setDescriptionSlide(true)
+        // }
     }
 
     const clearAllState = () => {
@@ -134,6 +137,7 @@ const NewPublication = (props) => {
         window.location.reload(false);
 
     }
+
     const hideWelcomeAndShowAbout = () => {
         setwelcomeSlide(false)
         setaboutSlide(true)
@@ -516,7 +520,7 @@ const NewPublication = (props) => {
                             <ListItemText primary={<h6 className='fs-15 fw-bold'>{pageType === 'course' ? 'Unique Web Link*' : 'Web Link*'}</h6>}
                                 secondary={<h6 className='fs-12'>Unique url for your {pageType}. Choose wisely! This cannot be changed after the {pageType} is created.</h6>} />
 
-                            <input type="text" className='interest-textbox' maxLength={15} value={webUrl} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px' }} />
+                            <input type="text" className='interest-textbox' maxLength={15} value={webUrl} disabled={disabled} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px', cursor: disabled ? 'not-allowed' : 'pointer' }} />
                             <span className='fixed-text-input'>www.thinkly.me/</span>
 
                             {(webUrl === '' || webUrl.length === 0) && <div id="UrlError" className='error-msg'></div>}
@@ -647,6 +651,8 @@ const NewPublication = (props) => {
                         <div className="text-center d-flex justify-content-center">
                             <button className='primary-border-button mr-4' data-dismiss="modal" onClick={() => setDescriptionSlide(true)}>Cancel</button>
                             <button className='primary-bg-button' onClick={() => handleOkClose()}>Ok</button>
+                            {/* <button className='primary-border-button mr-4' data-dismiss="modal" onClick={() => closeFunction('cancel')}>Cancel</button>
+                            <button className='primary-bg-button' onClick={() => handleOkClose()}>Ok</button> */}
                         </div>
                     </div>
                 </div>
