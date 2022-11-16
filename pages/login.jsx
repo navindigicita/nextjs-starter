@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
-import { firebaseApp } from '../firebase-config';
+import React from 'react'
+import { initializeApp } from "firebase/app";
+import { firebaseApp, firebaseConfig } from '../firebase-config';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
 import { useRouter } from 'next/router'
@@ -9,21 +10,18 @@ import Header from '../components/common/header'
 import Footer from '../components/common/footer';
 
 const Login = () => {
-    let analytics = ''
     const router = useRouter()
     const firebaseAuth = getAuth(firebaseApp);
     const provider = new GoogleAuthProvider();
 
-    useEffect(() => {
+    const handleGmailSignIn = async () => {
         isSupported().then((result) => {
             if (result) {
-                analytics = getAnalytics();
+                const app = initializeApp(firebaseConfig)
+                const analytics = getAnalytics(app);
+                logEvent(analytics, 'GOOGLE_MEDIUM');
             }
         })
-    }, [])
-
-    const handleGmailSignIn = async () => {
-        logEvent(analytics, 'LOGIN_CLICK_GOOGLE');
         const { user } = await signInWithPopup(firebaseAuth, provider)
         const { refreshToken, providerData } = user;
         const providerUserData = providerData.find(obj => obj.providerId === "google.com")

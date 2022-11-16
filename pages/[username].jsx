@@ -393,6 +393,13 @@ const UserProfile = (props) => {
                         if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
                             UserSupportStarEvent()  //google pixel event
                         }
+                        isSupported().then((result) => {
+                            if (result) {
+                                const app = initializeApp(firebaseConfig)
+                                analytics = getAnalytics(app);
+                                logEvent(analytics, 'USER_SUPPORT_BUTTON_CLICK', { penname: getpenName })  //firebase analytic logEvent
+                            }
+                        })
                         resolve();
                     });
                 } else {
@@ -403,6 +410,16 @@ const UserProfile = (props) => {
             }
         }
 
+    }
+
+    const handleViewFullProfileClick = () => {
+        isSupported().then((result) => {
+            if (result) {
+                const app = initializeApp(firebaseConfig)
+                analytics = getAnalytics(app);
+                logEvent(analytics, 'VIEW_FULL_PROFILE_USER', { penname: getpenName })
+            }
+        })
     }
 
     return (<>
@@ -456,10 +473,10 @@ const UserProfile = (props) => {
                             </div>
                             <div className='col-8 mt-2'>
                                 <div className="card left-content" style={{ height: '500px' }}>
-                                    <div className='mb-1 fs-30 fw-bold'> {getpenName} </div>
-                                    <div className='fs-20 fw-mid mb-3'>{getProfileDetail.profileDetails.firstName} {getProfileDetail.profileDetails.lastName !== undefined && getProfileDetail.profileDetails.lastName}</div>
-                                    <p className='fs-18'>{aboutUser}</p>
-                                    <h6 className='fs-15 fc-link fw-mid pointer mb-4' data-toggle="modal" data-target="#myModal">View Full Profile</h6>
+                                    <h6 className='fs-30 fw-bold'> {getpenName} </h6>
+                                    <h6 className='fs-20 fw-mid mb-3'>{getProfileDetail.profileDetails.firstName} {getProfileDetail.profileDetails.lastName !== undefined && getProfileDetail.profileDetails.lastName}</h6>
+                                    <p className='fs-16'>{aboutUser}</p>
+                                    <h6 className='fs-15 fw-mid-bold fc-link fw-mid pointer mb-4' data-toggle="modal" data-target="#myModal" onClick={() => handleViewFullProfileClick()}>View Full Profile</h6>
 
                                     {getpenName !== undefined && getpenName.toUpperCase() === 'DURGAJASRAJ' && <img src={'/durgajashraj.png'} alt="durgajasraj" className='mb-4' style={{ objectFit: 'cover', objectPosition: 'center', width: '100%', height: '20rem' }} />}
 
@@ -513,7 +530,6 @@ const UserProfile = (props) => {
                                             </div>
                                         </form>
                                     </Card>}
-
 
                                     {/* if viewFullProfile is true then show thinkly and publication list below for now not in use */}
                                     {/* {viewFullProfile && <> <div className='mt-5'>
@@ -619,7 +635,7 @@ const UserProfile = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <Faq />
+                        {getProfileDetail.profileDetails.isSupportEnabled === true && <Faq />}
                     </div>
                 }
                 <Footer />
