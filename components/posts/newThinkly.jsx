@@ -232,7 +232,7 @@ const NewThinkly = (props) => {
                 window.location.reload(false);
             }
         }
-        if ((newThinklyID === 0) && (tContentSlide || settingSlide || InterestSlide) && (thinklyName !== '' || blogContent !== '' || (thinklyImage !== undefined && thinklyImage.length > 0))) {
+        if ((tContentSlide || settingSlide || InterestSlide) && (thinklyName !== '' || blogContent !== '' || (thinklyImage !== undefined && thinklyImage.length > 0))) {
             $('#draftModal').modal('show')// modal call for draft confirmation
         } else {
             clearAllSlideCatch() //catch clear function call(state clearance)
