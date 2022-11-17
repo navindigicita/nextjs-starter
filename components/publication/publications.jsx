@@ -87,14 +87,14 @@ const Publication = (props) => {
                                 <div className='col-1'>
                                     {obj.publicationImage !== undefined && <img src={imageUrl} alt="publication Image" style={{ height: '60px', width: '60px', objectFit: 'cover', objectPosition: 'center' }} />}
                                 </div>
-                                <div className='col-8 ml-4' onClick={() => handlePubicationClick(name)}>
-                                    <ListItemText className='my-auto' primary={<div>
+                                <div className='col-10' onClick={() => handlePubicationClick(name)}>
+                                    <ListItemText className='my-auto ml-4' primary={<div>
                                         <span className='ff-lora fs-18 mr-2'>{obj.publicationName}</span>
                                         <Box component="span" className='py-1 fc-primary border-radius-4 fw-mid-bold fs-10 px-2 bg-lightgray'>{authorData !== undefined && authorData.authorType}</Box>
                                     </div>}
-                                        secondary={<text className='fs-15'>{obj.description}</text>} />
+                                        secondary={<text className='fs-15'>{obj.about}</text>} />
                                 </div>
-                                {authorData !== undefined && authorData.authorType === 'AUTHOR' && <div className="col-2 mt-1" onClick={() => editButton(obj.publicationID)}> <Edit /> </div>}
+                                {authorData !== undefined && authorData.authorType === 'AUTHOR' && <div className="col-1 mt-1" onClick={() => editButton(obj.publicationID)}> <Edit /> </div>}
                             </div>
                         </Card>)
                     })}

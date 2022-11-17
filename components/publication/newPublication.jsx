@@ -82,8 +82,8 @@ const NewPublication = (props) => {
                     const image_name = image.substring(image.lastIndexOf('/') + 1)
                     console.log(image_name);
                     setImageNames(image_name)
-                    setshortDescription(response.description)  //short description of publication(api issue reverse)
-                    setdescription(response.about)  //long description of publication(api issue reverse)
+                    setshortDescription(response.about)  //short description of publication
+                    setdescription(response.description)  //long description of publication
                     const penName_pub = response.publicationProfileUrl.substring(response.publicationProfileUrl.lastIndexOf('/') + 1)
                     setwebUrl(penName_pub)  //pename of publication
                     setPrivateView(response.isPrivate)  //store fetched boolean value for course's view
@@ -136,6 +136,7 @@ const NewPublication = (props) => {
         window.location.reload(false);
 
     }
+    
     const hideWelcomeAndShowAbout = () => {
         setwelcomeSlide(false)
         setaboutSlide(true)
@@ -395,10 +396,10 @@ const NewPublication = (props) => {
                 UserID: parseInt(AuthorID),
                 PublicationID: publicationID,
                 Name: pubName,
-                About: shortDescription,
+                About: description,
                 Image: ImageNames,
                 CreatedBy: parseInt(AuthorID),
-                ShortDes: description,
+                ShortDes: shortDescription,
                 Category: CategoryList,
                 AuthorsID: "",
                 PayType: PlanID == 22 ? 'Free' : 'Paid',

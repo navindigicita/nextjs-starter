@@ -71,8 +71,7 @@ const Thinklies = (props) => {
     }
 
     const handlePostEdit = (thinklyPostId) => {
-        $(".dropdown-post").css('display', 'none') //once click on edit dropdown should hide
-        $(`.${thinklyPostId}`).removeClass("dropdown-post") //after on edit click class should get remove for that index
+        $(`.${thinklyPostId}`).css('display', 'none') //once click on edit dropdown should hide
         setthinklyID(thinklyPostId)
         setEditPost(true)
     }
@@ -110,8 +109,8 @@ const Thinklies = (props) => {
                                     </div>} />
                             </div>
                             <div className="col-md-2" id="editdiv" >
-                                <span className="pointer fs-30" style={{ marginLeft: '69px' }} onClick={() => handlePostAction(index)}>...</span>
-                                <div className={`${index}`} style={{ display: 'none' }}>
+                                <span className="pointer fs-30" style={{ marginLeft: '69px' }} onClick={() => handlePostAction(obj.postData.postID)}>...</span>
+                                <div className={`${obj.postData.postID}`} style={{ display: 'none' }}>
                                     <a className="cursor-pointer font-bold" onClick={() => handlePostEdit(obj.postData.postID)}>Edit</a>
                                     {/* <a onClick={() => handlePostDelete()}>Delete</a> */}
                                 </div>
@@ -128,7 +127,7 @@ const Thinklies = (props) => {
             <CircularProgress aria-label="Loading..." />
         </div>}
 
-        {EditPost && <NewThinkly authorID={AuthorID} thinklyRemoteConfigData={RemoteConfigJson} thinklyID={thinklyID} onChangeCallback={() => setEditPost(false)} /> }
+        {EditPost && <NewThinkly authorID={AuthorID} thinklyRemoteConfigData={RemoteConfigJson} thinklyID={thinklyID} onChangeCallback={() => setEditPost(false)} />}
     </>);
 }
 
