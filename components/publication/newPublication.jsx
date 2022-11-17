@@ -97,22 +97,37 @@ const NewPublication = (props) => {
             })
     }
 
-    const closeFunction = (cancel) => {
+    const closeFunction = (e) => {
+        console.log(PlanDetailData);
+        clearAllState() //function call for clear all state
         if (publicationID !== 0) {
             props.onChangeCallback(false)
-        } else if (descriptionSlide || subscriptionSlide || InterestSlide) {
+        } else if(e === e && descriptionSlide || subscriptionSlide || InterestSlide){
+            ("inside @@") 
             $('#closeConfirmation').modal('show')
+           
         }
         else {
-            clearAllState() //function call for clear all state
-            // if (!descriptionSlide) {
-            $('#newPublication').modal('hide')
+        $('#newPublication').modal('hide')
+            if(successSlide){
             window.location.reload(false);
-            // }
+            }
             setwelcomeSlide(true)
         }
-        // if(discard === 'cancel'){
-        //     setDescriptionSlide(true)
+        // if (publicationID !== 0) {
+        //     props.onChangeCallback(false)
+        // } else if (descriptionSlide || subscriptionSlide || InterestSlide) {
+        //     $('#closeConfirmation').modal('show')
+        // }
+        // else {
+        //     console.log("inside else closeFunction");
+        //     clearAllState() //function call for clear all state
+        //     // if (!descriptionSlide) {
+        //     $('#newPublication').modal('hide')
+        //     history.go(-1);
+        //     // window.location.reload(false);
+        //     // }
+        //     setwelcomeSlide(true)
         // }
     }
 
@@ -211,7 +226,6 @@ const NewPublication = (props) => {
     }
 
     const hideDescriptionAndShowPlan = () => {
-        console.log(ImageNames);
         setLoader(false)
         if (shortDescription === '') {
             document.getElementById('shortDescriptionError').innerHTML = `please Enter about the ${pageType}`
@@ -450,7 +464,7 @@ const NewPublication = (props) => {
         <div id="newPublication" class="modal fade in" tabIndex={-1} role="dialog" data-backdrop="static">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content modal-background">
-                    <button type="button" class="close text-right pr-2" onClick={() => closeFunction()} >&times;</button>
+                    <button type="button" class="close text-right pr-2"  onClick={() => closeFunction()} >&times;</button>
                     {welcomeSlide ? <div class="modal-body px-5">
                         <h6 className='text-center fs-18 fw-bold'>Create Your {pageType !== undefined && pageType.charAt(0).toUpperCase() + pageType.slice(1)}</h6>
                         <p className='text-center fs-15 mb-2'> Thinkly provides a one stop solution for all your {pageType} needs.</p>
@@ -659,10 +673,10 @@ const NewPublication = (props) => {
                         <p className='text-center fs-22 fw-mid-bold'>Are you sure you want to close this modal?</p>
                         <p className='text-center fs-18 mb-5'>If you select Ok then you will lose all data</p>
                         <div className="text-center d-flex justify-content-center">
-                            <button className='primary-border-button mr-4' data-dismiss="modal" onClick={() => setDescriptionSlide(true)}>Cancel</button>
-                            <button className='primary-bg-button' onClick={() => handleOkClose()}>Ok</button>
-                            {/* <button className='primary-border-button mr-4' data-dismiss="modal" onClick={() => closeFunction('cancel')}>Cancel</button>
+                            {/* <button className='primary-border-button mr-4' data-dismiss="modal" onClick={() => setDescriptionSlide(true)}>Cancel</button>
                             <button className='primary-bg-button' onClick={() => handleOkClose()}>Ok</button> */}
+                            <button className='primary-border-button mr-4' data-dismiss="modal" onClick={(e) => closeFunction(e)}>Cancel</button>
+                            <button className='primary-bg-button' onClick={() => handleOkClose()}>Ok</button>
                         </div>
                     </div>
                 </div>

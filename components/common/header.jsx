@@ -388,7 +388,7 @@ const Header = (props) => {
 
         <Suspense fallback={<div> <CircularProgress /> </div>}>
             {showThinkly && <NewThinkly authorID={userID} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
-            {showPublication && <NewPublication authorID={userID} label={'publication'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
+            {showPublication && <NewPublication authorID={userID} label={'publication'} thinklyRemoteConfigData={thinklyRemoteConfigData}  />}
             {showCourse && <NewPublication authorID={userID} label={'course'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
             {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} />}
             {/* shareUrl --> shareUrl={shareUrl} --> pass old url here in case want to show api url */}
