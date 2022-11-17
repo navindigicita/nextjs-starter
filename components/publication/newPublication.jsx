@@ -646,8 +646,8 @@ const NewPublication = (props) => {
                 <div className="modal-content">
                     <button type="button" className="close text-right pr-2" data-dismiss="modal">&times;</button>
                     <div className="modal-body">
-                        <p className='text-center fs-22 fw-bold'>Are you sure you want to close this modal?</p>
-                        <p className='text-center mb-5'>If you select OK then you will lose all data</p>
+                        <p className='text-center fs-22 fw-mid-bold'>Are you sure you want to close this modal?</p>
+                        <p className='text-center fs-18 mb-5'>If you select Ok then you will lose all data</p>
                         <div className="text-center d-flex justify-content-center">
                             <button className='primary-border-button mr-4' data-dismiss="modal" onClick={() => setDescriptionSlide(true)}>Cancel</button>
                             <button className='primary-bg-button' onClick={() => handleOkClose()}>Ok</button>
