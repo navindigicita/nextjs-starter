@@ -14,7 +14,6 @@ import { baseUrl, baseUrlThinkly } from '../../pages/api/api';
 import 'react-quill/dist/quill.snow.css';
 // import('quill-paste-smart')
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
-// const ReactQuillPaste = dynamic(() => import('quill-paste-smart'), { ssr: false });
 
 const NewThinkly = (props) => {
     const BASE_URL = useContext(baseUrl);
@@ -449,6 +448,7 @@ const NewThinkly = (props) => {
     const handlePaste = () => {
         const editor = document.querySelector('.ql-editor')
         editor.addEventListener("paste", (e) => {
+            console.log("inside quill page event");
             e.preventDefault();
             e.clipboardData.getData('text');
         });

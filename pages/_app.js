@@ -1,7 +1,5 @@
 import { useEffect } from 'react';
-import Head from 'next/head';
 import "bootstrap/dist/css/bootstrap.css";
-
 import '../styles/global.css';
 import '../styles/reset.css';
 import '../styles/main.css';
@@ -30,27 +28,7 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <div>
-      {/* <Head>
-        <title>Thinkly</title>
-        <meta name="description" content="Platform for thinklers" />
-        <meta property="og:url" content="https://nextjs-starter-thinkly-five.vercel.app" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Thinkly app.js" key="og-title" />
-        <meta property="og:description" content="Platform for thinklers app.js" key="og-desc" />
-      </Head> */}
       <Component {...pageProps} />
     </div>
   );
 }
-
-// export async function getServerSideProps({ req, res }) {
-//   debugger;
-//   if (req.headers.accept === "application/json") {
-//     res.setHeader('Content-Type', 'application/json')
-//     res.write(JSON.stringify({ "dummy": "data" }))
-//     res.end()
-//   }
-//   return {
-//     props: {}, // will be passed to the page component as props
-//   }
-// }

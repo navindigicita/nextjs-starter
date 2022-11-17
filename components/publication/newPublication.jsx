@@ -351,7 +351,7 @@ const NewPublication = (props) => {
                 PublicationPlanID: PlanID,
                 NoOfStars: PlanID == 22 ? 0 : starPrice,
                 PublicationPrice: PlanPrice,
-                PublicationType: pageType === 'course' ? toUpperCase(pageType) : "",
+                PublicationType: pageType === 'course' ? 'COURSE' : "",
                 IsLiveStream: false,
                 IsDiscussions: false,
                 IsPrivate: privateView
