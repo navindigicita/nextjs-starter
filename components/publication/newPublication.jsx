@@ -155,9 +155,7 @@ const NewPublication = (props) => {
             headers: { "Content-type": "multipart/form-data" }
         }
         Axios.post(`${BASE_URL_THINKLY}Image/PostUploadFile/${myRenamedFile.name}`, data, config)
-            .then((res) => {
-                console.log("image uploaded", res.data);
-            }).catch((err) => {
+            .then((res) => { }).catch((err) => {
                 document.getElementById('pubImageUploadError').innerHTML = 'Oops! Something went wrong. Try again'
             });
     }
