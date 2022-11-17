@@ -92,18 +92,18 @@ const Publication = (props) => {
                                         <span className='ff-lora fs-18 mr-2'>{obj.publicationName}</span>
                                         <Box component="span" className='py-1 fc-primary border-radius-4 fw-mid-bold fs-10 px-2 bg-lightgray'>{authorData !== undefined && authorData.authorType}</Box>
                                     </div>}
-                                        secondary={<text className='fs-15'>{obj.about}</text>} />
+                                        secondary={<text className='fs-15'>{obj.description}</text>} />
                                 </div>
-                            {authorData !== undefined && authorData.authorType === 'AUTHOR' && <div className="col-2 mt-1" onClick={() => editButton(obj.publicationID)}> <Edit /> </div>}
+                                {authorData !== undefined && authorData.authorType === 'AUTHOR' && <div className="col-2 mt-1" onClick={() => editButton(obj.publicationID)}> <Edit /> </div>}
                             </div>
                         </Card>)
                     })}
                 </InfiniteScroll> : NoRecord === true ? <NoData authorID={Author_ID} /> : <div className='grid place-items-center h-screen'>
                     <CircularProgress aria-label="Loading..." />
                 </div>}
-            {showEdit ? <NewPublication authorID={Author_ID} publicationID={publicationID} thinklyRemoteConfigData={props.thinklyConfigJSON} onChangeCallback={() => setshowEdit(false)}/> : ""}
+            {showEdit ? <NewPublication authorID={Author_ID} publicationID={publicationID} thinklyRemoteConfigData={props.thinklyConfigJSON} onChangeCallback={() => setshowEdit(false)} /> : ""}
         </div>
-        
+
     </>)
 }
 

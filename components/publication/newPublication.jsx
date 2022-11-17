@@ -80,8 +80,11 @@ const NewPublication = (props) => {
                     setpubName(response.publicationName)  //publication name
                     var image = response.publicationImage.charAt(0) === '@' ? response.publicationImage.substring(1) : response.publicationImage
                     setpubImage(image)//image of publication    H*
-                    setshortDescription(response.about)  //short description of publication
-                    setdescription(response.description)  //long description of publication
+                    const image_name = image.substring(image.lastIndexOf('/') + 1)
+                    console.log(image_name);
+                    setImageNames(image_name)
+                    setshortDescription(response.description)  //short description of publication(api issue reverse)
+                    setdescription(response.about)  //long description of publication(api issue reverse)
                     const penName_pub = response.publicationProfileUrl.substring(response.publicationProfileUrl.lastIndexOf('/') + 1)
                     setDisabled(true);
                     setwebUrl(penName_pub)  //pename of publication
@@ -98,13 +101,14 @@ const NewPublication = (props) => {
         if (publicationID !== 0) {
             props.onChangeCallback(false)
         } else if (descriptionSlide || subscriptionSlide || InterestSlide) {
-            console.log("inside else if");
             $('#closeConfirmation').modal('show')
         }
         else {
             clearAllState() //function call for clear all state
+            // if (!descriptionSlide) {
             $('#newPublication').modal('hide')
             window.location.reload(false);
+            // }
             setwelcomeSlide(true)
         }
         // if(discard === 'cancel'){
@@ -157,12 +161,15 @@ const NewPublication = (props) => {
             headers: { "Content-type": "multipart/form-data" }
         }
         Axios.post(`${BASE_URL_THINKLY}Image/PostUploadFile/${myRenamedFile.name}`, data, config)
-            .then((res) => { }).catch((err) => {
+            .then((res) => {
+                console.log("image uploaded", res.data);
+            }).catch((err) => {
                 document.getElementById('pubImageUploadError').innerHTML = 'Oops! Something went wrong. Try again'
             });
     }
 
     const hideAboutandShowDescription = () => {
+        console.log(ImageNames);
         if (pubName === '') {
             document.getElementById('pubNameError').innerHTML = `Please Enter the ${pageType} Name`
         } else if (pubImage === undefined || pubImage.length === 0) {
@@ -204,6 +211,7 @@ const NewPublication = (props) => {
     }
 
     const hideDescriptionAndShowPlan = () => {
+        console.log(ImageNames);
         setLoader(false)
         if (shortDescription === '') {
             document.getElementById('shortDescriptionError').innerHTML = `please Enter about the ${pageType}`
@@ -246,6 +254,7 @@ const NewPublication = (props) => {
     };
 
     const hidePlanAndShowInterest = () => {
+        console.log(ImageNames);
         if (PlanID !== undefined && PlanID !== null && PlanID !== '') {
             if (PlanID == 22) {
                 setsubscriptionSlide(false)
@@ -315,6 +324,7 @@ const NewPublication = (props) => {
     }
 
     const hideInterestAndShowSuccess = () => {
+        console.log(ImageNames);
         if (arrayList.length < 3) {
             document.getElementById('InterestError').innerHTML = 'Please select at least 3 interest'
         } else {
@@ -394,7 +404,7 @@ const NewPublication = (props) => {
                 PublicationID: publicationID,
                 Name: pubName,
                 About: shortDescription,
-                Image: pubImage,
+                Image: ImageNames,
                 CreatedBy: parseInt(AuthorID),
                 ShortDes: description,
                 Category: CategoryList,
