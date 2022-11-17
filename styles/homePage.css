@@ -175,9 +175,9 @@ div.tab button.active {
     overflow: auto;
 }
 /* for avoid doble quill toolbar */
-.quill > .ql-toolbar:first-child {
+/* .quill > .ql-toolbar:first-child {
     display: none !important;
-  }
+  } */
 
 /* default selected background color */
 .MuiListItem-root.Mui-selected,
