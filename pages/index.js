@@ -13,7 +13,7 @@ import Publication from '../components/publication/publications';
 import DashboardPage from '../components/dashboard/deshaboardPage';
 import Libraries from '../components/publication/libraries';
 import PostCollection from '../components/posts/postCollection';
-
+import MyStar from '../components/star/index'
 
 const HomePage = (props) => {
   const router = useRouter()
@@ -24,8 +24,10 @@ const HomePage = (props) => {
   const [getIsValue, setIsvalue] = useState(false);
   const [profileData, setProfileData] = useState();
   const [supporterData, setsupporterData] = useState()
+  const [UserBalance, setUserBalance] = useState()  //Stars count
 
   useEffect(() => {
+    console.log(props.UserID)
     async function fetchData() {
       const data = await RemoteConfiguration()
       if (data !== undefined) {
@@ -37,6 +39,7 @@ const HomePage = (props) => {
         setAuthorID(data) //state
         fetchUserProfileData(data)   //function
         fetchSupporterData(data) //function
+        GetMyStarBalance(data)  //function call for user balance
       } else {
         router.push('/login')
       }
@@ -80,6 +83,27 @@ const HomePage = (props) => {
       })
   }
 
+  const GetMyStarBalance = (userID) => {
+    ("inside GetMyStarBalance")
+    var config = {
+      headers: {
+        "Content-Type": "application/json",
+        "DeviceID": process.env.REACT_APP_DEVICE_ID,
+        "UserID": userID
+      },
+    };
+    Axios.get(`${BASE_URL}User/GetMyBalance`, config)
+      .then((res) => {
+        if (res.data.responseCode === '00') {
+          console.log("inside User/GetMyBalance", res.data.responseData.UserBalance);
+          setUserBalance(res.data.responseData.UserBalance)
+        }
+      })
+      .catch((err) => {
+        console.log("GetSummaryDetailsByID error in catch", err);
+      });
+  }
+
   const profileDetail = (value) => {
     setIsvalue(true);
     setValue(value);
@@ -101,16 +125,17 @@ const HomePage = (props) => {
         <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>
           {getIsValue ? <>
             {value === 'Libraries' ? <Libraries authorID={AuthorID} />
-              : value === 'Publication' ? <Publication authorID={AuthorID} thinklyConfigJSON={thinklyConfigData}/>
-                : value === 'Thinkly' ? <PostCollection authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
-                  : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
+              : value === 'Stars' ? <MyStar authorID={AuthorID} UserBalance={UserBalance} onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)} />
+                : value === 'Publication' ? <Publication authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
+                  : value === 'Thinkly' ? <PostCollection authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
+                    : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
           </> : <DashboardPage profileJson={profileData} supporterData={supporterData} />}
         </div>
         <div style={{ background: 'lightgray', height: 'auto', width: '1px', marginRight: '-40px', marginLeft: '38px' }}></div>
         {!isMobile && <>
           <div className='col-1'></div>
           <div className='col-3 card-fixed'>
-            <SideBar profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} supporterData={supporterData} />
+            <SideBar profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} supporterData={supporterData} UserBalance={UserBalance}/>
           </div>
         </>}
       </div>

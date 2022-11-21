@@ -6,6 +6,7 @@ import { CircularProgress, List, ListItem, ListItemAvatar, ListItemText, Tooltip
 import { Edit, EventAvailableOutlined, ToggleOff, ToggleOn, Check } from '@material-ui/icons';
 import { baseUrl, baseUrlThinkly } from '../../pages/api/api'
 import NewThinkly from '../posts/newThinkly';
+import Header from '../common/header';
 
 const NewPublication = (props) => {
     const BASE_URL = useContext(baseUrl)
@@ -55,6 +56,7 @@ const NewPublication = (props) => {
             setaboutSlide(true) //call about data slide beacuse it's edit call
             setthinklyRemoteConfigData(props.thinklyRemoteConfigData)
         } else if (props.authorID !== undefined && props.label !== undefined) {
+            console.log("inside else if",props.label);
             setPageType(props.label)
             setAuthorID(props.authorID)
             $('#newPublication').modal('show')
@@ -98,17 +100,15 @@ const NewPublication = (props) => {
     }
 
     const closeFunction = (e) => {
-        console.log(PlanDetailData);
-        clearAllState() //function call for clear all state
         if (publicationID !== 0) {
             props.onChangeCallback(false)
         } else if(e === e && descriptionSlide || subscriptionSlide || InterestSlide){
-            ("inside @@") 
-            $('#closeConfirmation').modal('show')
-           
+            $('#closeConfirmation').modal('show')       
         }
         else {
         $('#newPublication').modal('hide')
+        clearAllState() //function call for clear all state
+        setPageType(props.label)
             if(successSlide){
             window.location.reload(false);
             }

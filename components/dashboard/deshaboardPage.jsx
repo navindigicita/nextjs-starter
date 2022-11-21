@@ -69,7 +69,7 @@ const DashboardPage = (props) => {
 
     return (<>
         <div className='container'>
-            <text className={isMobile ? 'fs-18 fw-mid' : 'fs-20 fw-mid'}>My True-fans</text> <hr />
+            <span className={isMobile ? 'fs-18 fw-mid' : 'fs-20 fw-mid'}>My True-fans</span> <hr /> 
             <div className='row mt-5'>
                 <div className='col-6 mb-3'>
                     <Card className='py-2' style={{ border: 'lightgray 1px solid', borderRadius: '10px' }}>

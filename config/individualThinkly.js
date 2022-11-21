@@ -15,3 +15,15 @@ export const RemoteConfiguration = async () => {
         console.log("remoteConfig not found in firebase");
     }
 }
+
+// star Transactions data from remote config
+export const UserTransactionsConfiguration = async () => {
+    const remoteConfig = getRemoteConfig();
+    const isFetched = await fetchAndActivate(remoteConfig)
+    if (!isFetched) {
+        let data = getValue(remoteConfig, "UserTransactionsFilterSettings1")
+        return data._value;
+    } else {
+        console.log("user transaction configuration fetch failed");
+    }
+}

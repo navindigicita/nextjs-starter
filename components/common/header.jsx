@@ -211,7 +211,7 @@ const Header = (props) => {
             <button className='fw-mid-bold border-radius-4 fc-white border-none primary-bg-color height-button fs-18 px-3 pt-2 text-center' style={{ outlineWidth: '0', display: 'inline-flex' }} onClick={() => handleCreate()} >
                 <img src={'/addThinklyPublicationIcon.svg'} /> Create<ArrowDropDown />
             </button>
-            <div class="dropdown-content" >
+            <div className="dropdown-content" >
                 {pCount !== undefined && pCount === 0 ? '' : <a href="#createNewThinkly" data-toggle="modal" data-target="#createThinkly" onClick={() => handleThinklyClick()}>New Post</a>}
                 <a href="#createNewPublication" data-toggle="modal" data-target="#newPublication" onClick={() => handlePublicationClick()}>New Publication</a>
                 <a href="#createNewCourse" data-toggle="modal" data-target="#newPublication" onClick={() => handleCourseClick()}>New Course</a>
@@ -388,8 +388,8 @@ const Header = (props) => {
 
         <Suspense fallback={<div> <CircularProgress /> </div>}>
             {showThinkly && <NewThinkly authorID={userID} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
-            {showPublication && <NewPublication authorID={userID} label={'publication'} thinklyRemoteConfigData={thinklyRemoteConfigData}  />}
-            {showCourse && <NewPublication authorID={userID} label={'course'} thinklyRemoteConfigData={thinklyRemoteConfigData} />}
+            {showPublication && <NewPublication authorID={userID} label={'publication'} thinklyRemoteConfigData={thinklyRemoteConfigData}/>}
+            {showCourse && <NewPublication authorID={userID} label={'course'} thinklyRemoteConfigData={thinklyRemoteConfigData}/>}
             {showShareUrlPopup && <SharePage profile={userProfileImage} penName={userPenName} />}
             {/* shareUrl --> shareUrl={shareUrl} --> pass old url here in case want to show api url */}
         </Suspense>

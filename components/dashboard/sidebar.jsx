@@ -10,11 +10,13 @@ const SideBar = (props) => {
     const [isPartialUser, setisPartialUser] = useState(false)
     const [UserUrl, setUserUrl] = useState()
     const [supporterData, setsupporterData] = useState()
+    const [UserBalance, setUserBalance] = useState()
 
     useEffect(() => {
         if (props.profileJson !== undefined && props.supporterData !== undefined) {
             setProfileData(props.profileJson)
             setsupporterData(props.supporterData)
+            setUserBalance(props.UserBalance) // my stars balance
         }
     }, []);
 
@@ -36,21 +38,31 @@ const SideBar = (props) => {
         props.profileDetail(page)
         if (index === 0) {
             document.getElementById('dashboard').style.background = '#ffe7cc'
+            document.getElementById('stars').style.background = '#fff'
             document.getElementById('Publication').style.background = '#fff'
             document.getElementById('Libraries').style.background = '#fff'
             document.getElementById('thinkly').style.background = '#fff'
-        } else if (index === 1) {
+        } else if (index === 1) { //stars H*
             document.getElementById('dashboard').style.background = '#fff'
-            document.getElementById('Publication').style.background = '#ffe7cc'
+            document.getElementById('stars').style.background = '#ffe7cc'
+            document.getElementById('Publication').style.background = '#fff'
             document.getElementById('Libraries').style.background = '#fff'
             document.getElementById('thinkly').style.background = '#fff'
         } else if (index === 2) {
             document.getElementById('dashboard').style.background = '#fff'
-            document.getElementById('Publication').style.background = '#fff'
-            document.getElementById('Libraries').style.background = '#ffe7cc'
+            document.getElementById('stars').style.background = '#fff'
+            document.getElementById('Publication').style.background = '#ffe7cc'
+            document.getElementById('Libraries').style.background = '#fff'
             document.getElementById('thinkly').style.background = '#fff'
         } else if (index === 3) {
             document.getElementById('dashboard').style.background = '#fff'
+            document.getElementById('stars').style.background = '#fff'
+            document.getElementById('Publication').style.background = '#fff'
+            document.getElementById('Libraries').style.background = '#ffe7cc'
+            document.getElementById('thinkly').style.background = '#fff'
+        } else if (index === 4) {
+            document.getElementById('dashboard').style.background = '#fff'
+            document.getElementById('stars').style.background = '#fff'
             document.getElementById('Publication').style.background = '#fff'
             document.getElementById('Libraries').style.background = '#fff'
             document.getElementById('thinkly').style.background = '#ffe7cc'
@@ -111,15 +123,19 @@ const SideBar = (props) => {
                         <span>My True-fans</span>
                         <span className='float-right'>{supporterData !== undefined && supporterData.TotalSupporters}</span>
                     </Card>
+                    <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="stars" onClick={(event) => handleListItemClick(event, 1, 'Stars')}>
+                        <span>My Stars</span>
+                        <span className='float-right'>{UserBalance !== undefined && UserBalance}</span>
+                    </Card>
                     {!isPartialUser && <>
-                        <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="Publication" onClick={(event) => handleListItemClick(event, 1, 'Publication')}>
+                        <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="Publication" onClick={(event) => handleListItemClick(event, 2, 'Publication')}>
                             <span>My Publication</span>
                             <span className='float-right'>{profileData.otherDetails.totalPublicationsCount}</span>
                         </Card>
-                        <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="Libraries" onClick={(event) => handleListItemClick(event, 2, 'Libraries')}>
+                        <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="Libraries" onClick={(event) => handleListItemClick(event, 3, 'Libraries')}>
                             <span>My Library</span>
                         </Card>
-                        <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="thinkly" onClick={(event) => handleListItemClick(event, 3, 'Thinkly')}>
+                        <Card className="p-2 mt-2 fs-16 fw-mid cursor-pointer" id="thinkly" onClick={(event) => handleListItemClick(event, 4, 'Thinkly')}>
                             <span>My Posts</span>
                         </Card>
                     </>}
