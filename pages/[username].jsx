@@ -160,9 +160,9 @@ const UserProfile = (props) => {
         if (props.userData !== undefined) {
             const res = props.userData
             if (res.responseCode === '00') {
-                if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {  //google pixel event
-                    UserProfileEvent()
-                }
+                // if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {  //google pixel event
+                //     UserProfileEvent()
+                // }
                 isSupported().then((result) => {
                     if (result) {
                         analytics = getAnalytics(firebaseApp);
@@ -220,9 +220,9 @@ const UserProfile = (props) => {
                     if (res.data.responseData.Type === 'Publication') {
                         setshowPublication(true)
                     } else { //for user
-                        if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
-                            UserProfileEvent()
-                        }
+                        // if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+                        //     UserProfileEvent()
+                        // }
                         const response = res.data.responseData.Details.profileDetails
                         const storedUserID = localStorage.getItem('UserID')
                         if (parseInt(storedUserID) === response.userID) {
@@ -388,9 +388,9 @@ const UserProfile = (props) => {
                         document.body.appendChild(form);
                         form.submit();
                         $('#userContactInfo').modal('hide');
-                        if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
-                            UserSupportStarEvent()  //google pixel event
-                        }
+                        // if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+                        //     UserSupportStarEvent()  //google pixel event
+                        // }
                         isSupported().then((result) => {
                             if (result) {
                                 analytics = getAnalytics(firebaseApp);

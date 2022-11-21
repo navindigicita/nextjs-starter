@@ -267,9 +267,9 @@ const PublicationDetailMob = (props) => {
             }
             // logEvent(analytics, 'PUB_PAYMENT_GATEWAY', { payToPub: freePub === 'Free' ? '' : getPublicationID }) //google analytic log
             document.body.appendChild(form);
-            if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
-                PublicationSubscribeEvent()  //google pixel event
-            }
+            // if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+            //     PublicationSubscribeEvent()  //google pixel event
+            // }
             form.submit();
             resolve();
         });
