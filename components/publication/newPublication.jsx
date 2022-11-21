@@ -136,7 +136,7 @@ const NewPublication = (props) => {
         window.location.reload(false);
 
     }
-    
+
     const hideWelcomeAndShowAbout = () => {
         setwelcomeSlide(false)
         setaboutSlide(true)
@@ -322,7 +322,7 @@ const NewPublication = (props) => {
             document.getElementById('InterestError').innerHTML = 'Please select at least 3 interest'
         } else {
             setLoader(true)
-            { publicationID ? editPublicationCourse() : createPublicationCourse() }
+            { publicationID > 0 ? editPublicationCourse() : createPublicationCourse() }
         }
     }
 
@@ -523,7 +523,7 @@ const NewPublication = (props) => {
                             <ListItemText primary={<h6 className='fs-15 fw-bold'>{pageType === 'course' ? 'Unique Web Link*' : 'Web Link*'}</h6>}
                                 secondary={<h6 className='fs-12'>Unique url for your {pageType}. Choose wisely! This cannot be changed after the {pageType} is created.</h6>} />
 
-                            <input type="text" className='interest-textbox' maxLength={15} value={webUrl} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px' }} />
+                            <input type="text" className='interest-textbox' maxLength={15} value={webUrl} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px' }} disabled={publicationID > 0 ? true : false} />
                             <span className='fixed-text-input'>www.thinkly.me/</span>
 
                             {(webUrl === '' || webUrl.length === 0) && <div id="UrlError" className='error-msg'></div>}

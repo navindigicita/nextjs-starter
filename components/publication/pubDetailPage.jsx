@@ -115,9 +115,9 @@ const PublicationDetailPage = (props) => {
     const [emailID, setemailID] = useState()  //for modal box(free subscription)
 
     useEffect(() => {
-        if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
-            PublicationProfileEvent()
-        }
+        // if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+        //     PublicationProfileEvent()
+        // }
         if (props.publicationDetail !== undefined) {  //cause 1st user go to profile detail page if type publication then pass data here
             commonFunctionForDataSet(props.publicationDetail)
         } else {
@@ -373,9 +373,9 @@ const PublicationDetailPage = (props) => {
             }
             // logEvent(analytics, 'PUB_PAYMENT_GATEWAY', { payToPub: freePub === 'Free' ? '' : getPublicationID }) //google analytic log
             document.body.appendChild(form);
-            if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
-                PublicationSubscribeEvent()  //google pixel event
-            }
+            // if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+            //     PublicationSubscribeEvent()  //google pixel event
+            // }
             form.submit();
             resolve();
         });
