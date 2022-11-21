@@ -1,6 +1,5 @@
 import React from 'react'
-import { initializeApp } from "firebase/app";
-import { firebaseApp, firebaseConfig } from '../firebase-config';
+import firebaseApp from '../firebase-config';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
 import { useRouter } from 'next/router'
@@ -17,8 +16,7 @@ const Login = () => {
     const handleGmailSignIn = async () => {
         isSupported().then((result) => {
             if (result) {
-                const app = initializeApp(firebaseConfig)
-                const analytics = getAnalytics(app);
+                const analytics = getAnalytics(firebaseApp);
                 logEvent(analytics, 'GOOGLE_MEDIUM');
             }
         })
