@@ -17,9 +17,8 @@ import Faq from '../components/common/faq';
 import PublicationProfile from '../components/publication/pubDetailPage';
 import UserProfileMob from '../components/userProfileMob';
 import { UserProfileEvent, UserSupportStarEvent } from '../config/facebookPixelEvent';
-import { initializeApp } from "firebase/app";
 import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
-import { firebaseConfig } from '../firebase-config';
+import firebaseApp from '../firebase-config';
 
 export async function getServerSideProps(context) {
     const userName = context.params.username
@@ -166,8 +165,7 @@ const UserProfile = (props) => {
                 }
                 isSupported().then((result) => {
                     if (result) {
-                        const app = initializeApp(firebaseConfig)
-                        analytics = getAnalytics(app);
+                        analytics = getAnalytics(firebaseApp);
                         logEvent(analytics, 'USER_DETAIL_PAGE', { penname: props.userPenName })  //firebase analytic logEvent
                     }
                 })
@@ -395,8 +393,7 @@ const UserProfile = (props) => {
                         }
                         isSupported().then((result) => {
                             if (result) {
-                                const app = initializeApp(firebaseConfig)
-                                analytics = getAnalytics(app);
+                                analytics = getAnalytics(firebaseApp);
                                 logEvent(analytics, 'USER_SUPPORT_BUTTON_CLICK', { penname: getpenName })  //firebase analytic logEvent
                             }
                         })
@@ -415,8 +412,7 @@ const UserProfile = (props) => {
     const handleViewFullProfileClick = () => {
         isSupported().then((result) => {
             if (result) {
-                const app = initializeApp(firebaseConfig)
-                analytics = getAnalytics(app);
+                analytics = getAnalytics(firebaseApp);
                 logEvent(analytics, 'VIEW_FULL_PROFILE_USER', { penname: getpenName })
             }
         })

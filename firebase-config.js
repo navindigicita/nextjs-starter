@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+// import { getAuth } from "firebase/compat/auth";
 import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
 
-export const firebaseConfig = {
+const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
@@ -18,7 +18,7 @@ isSupported().then((result) => {
         analytics = getAnalytics(app);
     }
 })
-const app = initializeApp(firebaseConfig);
-const firebaseApp = getAuth(app);
+const firebaseApp = initializeApp(firebaseConfig);
+// const firebaseApp = getAuth(app);
 
 export default firebaseApp

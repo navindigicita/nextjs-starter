@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, lazy, Suspense } from 'react'
 import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from '../../firebase-config';
+import firebaseApp from '../../firebase-config';
 import Axios from "axios";
 import $ from 'jquery'
 import Image from 'next/image';
@@ -109,8 +108,7 @@ const Header = (props) => {
     const handleSignUpClick = () => {  //to switch path url and page UI, base of either login or signup
         isSupported().then((result) => {
             if (result) {
-                const app = initializeApp(firebaseConfig)
-                analytics = getAnalytics(app);
+                analytics = getAnalytics(firebaseApp);
                 logEvent(analytics, 'SIGN_UP_CLICK');
             }
         })
@@ -121,8 +119,7 @@ const Header = (props) => {
     const handleLoginClick = () => {  //to switch path url and page UI, base of either login or signup
         isSupported().then((result) => {
             if (result) {
-                const app = initializeApp(firebaseConfig)
-                analytics = getAnalytics(app);
+                analytics = getAnalytics(firebaseApp);
                 logEvent(analytics, 'LOGIN_CLICK');
             }
         })
@@ -151,8 +148,7 @@ const Header = (props) => {
                         setEmail(true)
                         isSupported().then((result) => {
                             if (result) {
-                                const app = initializeApp(firebaseConfig)
-                                analytics = getAnalytics(app);
+                                analytics = getAnalytics(firebaseApp);
                                 logEvent(analytics, 'MAIL_SEND_APP_LINK', { emailId: EmailInput })
                             }
                         })
@@ -177,8 +173,7 @@ const Header = (props) => {
     const handleLogout = (statusCount) => {  //onClick of logout it will clear all history and local&Session storage
         isSupported().then((result) => {
             if (result) {
-                const app = initializeApp(firebaseConfig)
-                analytics = getAnalytics(app);
+                analytics = getAnalytics(firebaseApp);
                 if (statusCount === 1) {
                     logEvent(analytics, 'SIGN_IN');
                 } else {
@@ -198,8 +193,7 @@ const Header = (props) => {
             window.open(`/${userPenName}`, '_blank')
             isSupported().then((result) => {
                 if (result) {
-                    const app = initializeApp(firebaseConfig)
-                    analytics = getAnalytics(app);
+                    analytics = getAnalytics(firebaseApp);
                     logEvent(analytics, 'PROFILE_PAGE_CLICK_HEADER', { penname: userPenName });
                 }
             })
@@ -223,8 +217,7 @@ const Header = (props) => {
         setshowShareUrlPopup(true)
         isSupported().then((result) => {
             if (result) {
-                const app = initializeApp(firebaseConfig)
-                analytics = getAnalytics(app);
+                analytics = getAnalytics(firebaseApp);
                 logEvent(analytics, 'SHARE_CLICK_HEADER', { penname: userPenName });
             }
         })
@@ -233,8 +226,7 @@ const Header = (props) => {
     const handleFollowButton = () => {
         isSupported().then((result) => {
             if (result) {
-                const app = initializeApp(firebaseConfig)
-                analytics = getAnalytics(app);
+                analytics = getAnalytics(firebaseApp);
                 logEvent(analytics, 'FOLLOW_CLICK', { penname: userPenName });
             }
         })
@@ -348,7 +340,7 @@ const Header = (props) => {
                                     {/* if not app user only created partial account through app  then don't show follow button else show */}
                                     {!isPartialUser && <Card className='float-right' style={{ borderRadius: '40px', paddingTop: '4px', paddingBottom: '4px', paddingLeft: '10px', paddingRight: '10px' }}>
                                         <button className="pointer bg-white border-radius-100 border-none" data-toggle="modal" data-target="#myModal" onClick={() => handleFollowButton()}>Follow</button>
-                                    </Card>} 
+                                    </Card>}
                                 </div>
                                 <div className='col-1' style={{ marginTop: '12px' }}>
                                     <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingLeft: '12px', paddingTop: '4px', paddingBottom: '4px' }}>
