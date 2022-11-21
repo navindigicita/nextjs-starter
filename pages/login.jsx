@@ -34,7 +34,7 @@ const Login = () => {
         <Header />
         <div className='container' style={{ marginTop: '8rem' }}>
             <div className='text-center' style={isMobile ? { marginTop: '100px', marginBottom: '135px' } : {}}>
-                <p className='fs-16 ff-roboto'> Welcome back to </p>
+                <p className='fs-16 ff-roboto'> Welcome back to prod </p>
                 <h2 className='ff-roboto fs-30 fw-bold'> THINKLY </h2> <br />
                 <p className='font-weight-bold fs-20 ff-roboto'>Existing User Login</p>
                 <button type='button' className='button-social-link mt-2 height-button fs-18 bg-white fc-black ff-roboto border-radius-4' onClick={() => handleGmailSignIn()}>
