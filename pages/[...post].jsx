@@ -23,7 +23,6 @@ const PostDetail = (props) => {
     useEffect(() => {
         if (props.response !== undefined && props.response.postData !== null) {
             const data = props.response
-            console.log("response of post@@@@@", data);
             setPostData(data)
             if (data.publicationData !== null && data.publicationData.publicationPayType === "Paid") {  //for disable scroll and background blurred on paid thinkly
                 document.getElementById('fadeIT').classList.add("blur-body");
@@ -75,8 +74,8 @@ const PostDetail = (props) => {
             }}
         />
         <Header />
-        {PostData !== undefined && PostData !== null ? <div id="fadeIT" className="container" style={{ marginTop: '5rem' }}>
-            <div className="row d-flex">
+        <div id="fadeIT" className="container" style={{ marginTop: '5rem' }}>
+            {PostData !== undefined && PostData !== null ? <div className="row d-flex">
                 <div className="col-md-7 mx-auto">
                     <div className="row body-img">
                         {getVedio === false ? <>
@@ -155,24 +154,24 @@ const PostDetail = (props) => {
                         <div className="row mt-4 body-content-align right-content-font"> {PostData.publicationData.description} </div>
                     </>}
                 </div>
-            </div>
-            {/* call to action bottom pannel for mobile view, using modal popup for desktop view(header) */}
-            {isMobile && <div className="row">
-                <section className="bottom-section-mob">
-                    <div className="top-hr-colored"></div>
-                    <div className="col-12 py-2">
-                        <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
-                            secondary={<span className='fs-12'>Read all Thinklies and more on the App</span>} />
-                        <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }}>
-                            <a href={process.env.NEXT_PUBLIC_DYNAMIC_OPEN_IN_APP + `https://thinkly.me/Thinkly/Post/Index/${PostData.postData.postID}`}></a>  OPEN IN APP
-                        </button>
-                    </div>
-                </section>
+            </div> : <div className='grid place-items-center h-screen'>
+                <CircularProgress aria-label="Loading..." />
             </div>}
-        </div> : <div className='grid place-items-center h-screen'>
-            <CircularProgress aria-label="Loading..." />
         </div>
-        }
+        {/* call to action bottom pannel for mobile view, using modal popup for desktop view(header) */}
+        {isMobile && <div className="row">
+            <section className="bottom-section-mob">
+                <div className="top-hr-colored"></div>
+                <div className="col-12 py-2">
+                    <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
+                        secondary={<span className='fs-12'>Read all Thinklies and more on the App</span>} />
+                    <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }}>
+                        <a href={process.env.NEXT_PUBLIC_DYNAMIC_OPEN_IN_APP + `https://thinkly.me/Thinkly/Post/Index/${PostData.postData.postID}`}></a>  OPEN IN APP
+                    </button>
+                </div>
+            </section>
+        </div>}
+
         <Footer />
     </>)
 }

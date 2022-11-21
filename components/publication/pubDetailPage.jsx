@@ -3,8 +3,6 @@ import { useForm } from "react-hook-form";
 import $ from 'jquery';
 import Axios from "axios";
 import { useRouter } from 'next/router'
-import Image from 'next/image';
-import { NextSeo } from 'next-seo';
 import { Avatar, Card, CardMedia, CircularProgress } from '@material-ui/core'
 import { KeyboardArrowDown } from '@material-ui/icons';
 import Carousel from "react-multi-carousel"
@@ -16,6 +14,8 @@ import { PublicationProfileEvent, PublicationSubscribeEvent } from '../../config
 import { baseUrl } from '../../pages/api/api';
 import { isMobile } from 'react-device-detect';
 import PublicationDetailMob from './pubMobDetail';
+import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
+import firebaseApp from '../../firebase-config';
 
 const responsive1 = {
     superLargeDesktop: {
@@ -118,9 +118,7 @@ const PublicationDetailPage = (props) => {
         if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
             PublicationProfileEvent()
         }
-        if (window.pen_name !== undefined && window.userStatus !== undefined) {
-            fetchPublicationDetail(window.pen_name)
-        } else if (props.publicationDetail !== undefined) {  //cause 1st user go to profile detail page if type publication then pass data here
+        if (props.publicationDetail !== undefined) {  //cause 1st user go to profile detail page if type publication then pass data here
             commonFunctionForDataSet(props.publicationDetail)
         } else {
             var pName = window.location.href
@@ -333,7 +331,9 @@ const PublicationDetailPage = (props) => {
                 if (res.data.responseCode === '00') {
                     const response = res.data.responseData.profileDetails
                     const url = response.profileUrl.charAt(0) === '@' ? response.profileUrl.substring(1) : response.profileUrl
-                    window.open(url, '_blank')
+                    if (typeof window !== "undefined") {
+                        window.open(url, '_blank')
+                    }
                 }
             })
             .catch((err) => {
@@ -382,7 +382,12 @@ const PublicationDetailPage = (props) => {
     }
 
     const subscribeHandle = (publicationPayType) => {
-        // logEvent(analytics, 'PUB_SUBSCIRBE_CLICK', { 'payType': publicationPayType })
+        isSupported().then((result) => {
+            if (result) {
+                const analytic = getAnalytics(firebaseApp)
+                logEvent(analytic, 'PUB_SUBSCIRBE_CLICK', { 'payType': publicationPayType })
+            }
+        })
         if (publicationPayType === 'Free') {
             $('#userContactInfo').modal('show')
         } else {
@@ -392,15 +397,24 @@ const PublicationDetailPage = (props) => {
 
     const viewpub = (penName) => {
         const name = penName.charAt(0) === '@' ? penName.substring(1) : penName;
-        // logEvent(analytics, 'PUB_AUTHOR_PUBLICATION_CLICK', { pubPenName: penName })  //google analytic log
-        var newWindow = window.open(`${name}`, '_blank')
-        newWindow.penName = name
+        isSupported().then((result) => {
+            if (result) {
+                const analytic = getAnalytics(firebaseApp)
+                logEvent(analytic, 'PUB_AUTHOR_PUBLICATION_CLICK', { pubPenName: penName })  //google analytic log
+                if (typeof window !== "undefined") {
+                    window.open(`${name}`, '_blank')
+                }
+            }
+        })
+
     }
 
     const handlePostView = (oldUrl, postID, postTitle) => {
         const title = postTitle.trimEnd()
         const thinkly_title = title.replaceAll(' ', '-')
-        window.open(`/${thinkly_title}/${postID}`, '_blank') // above commented codes are for new UI of thinkly detail page
+        if (typeof window !== "undefined") {
+            window.open(`/${thinkly_title}/${postID}`, '_blank') // above commented codes are for new UI of thinkly detail page
+        }
         // window.open(oldUrl)  //this one for old UI
     }
 
@@ -541,7 +555,7 @@ const PublicationDetailPage = (props) => {
                             {getUserPublication.map((obj, index) => {
                                 const imageUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
                                 return (<Card className="mb-4 morePub-card" key={index} onClick={() => viewpub(obj.penName)}>
-                                    <img src={imageUrl} className='morePub-cardmedia' style={{ height: '15rem', width: '100%'  }} />
+                                    <img src={imageUrl} className='morePub-cardmedia' style={{ height: '15rem', width: '100%' }} />
                                     <div className='px-2 pb-2'>
                                         <h6 className='fs-24 fw-bold'>{obj.publicationName.slice(0, 18) + (obj.publicationName.length > 18 ? "..." : "")}</h6>
                                         <p className='fs-14'> {obj.description.slice(0, 50) + (obj.description.length > 50 ? "..." : "")} </p>

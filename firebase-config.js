@@ -15,7 +15,7 @@ let analytics = null;
 
 isSupported().then((result) => {
     if (result) {
-        analytics = getAnalytics(app);
+        analytics = getAnalytics(firebaseApp);
     }
 })
 const firebaseApp = initializeApp(firebaseConfig);
