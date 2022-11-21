@@ -98,8 +98,8 @@ const Thinklies = (props) => {
                         var image_url = obj.postData.postImages[0].charAt(0) === '@' ? obj.postData.postImages[0].substring(1) : obj.postData.postImages[0]  //show once image only
                     }
                     var final_time = PostTimeAgo(obj.postData.postUpdatedDateTime)
-                    return (<Card className='my-4 px-3 pb-4 pt-2'>
-                        <div className="row" key={index}>
+                    return (<Card className='my-4 px-3 pb-4 pt-2' key={index}>
+                        <div className="row">
                             <div class="col-md-10">
                                 <ListItemText onClick={() => openThinkly(obj.postData.postTitle, obj.postData.postID, obj.postData.postURL)}
                                     primary={<span className="ff-lora fs-18 fw-bold">{obj.postData.postTitle}</span>}

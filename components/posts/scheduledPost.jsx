@@ -13,6 +13,8 @@ const ScheduledPost = (props) => {
     const [scheduleTime, setscheduleTime] = useState()
     const [startIndex, setstartIndex] = useState(0)
     const [endIndex, setendIndex] = useState(10)
+    const [NoRecord, setNoRecord] = useState(false)
+    const [isFetching, setIsFetching] = useState(false) // scroll more draft show loader
     const [Loader, setLoader] = useState(false)  //delete permanantly loader show on button
     const [draftLoader, setdraftLoader] = useState(false)  //move to draft loader show on button
 
@@ -33,9 +35,19 @@ const ScheduledPost = (props) => {
         Axios.get(`${BASE_URL_THINKLY}thinkly/GetSchedulePosts/${id}?startIndex=${startIndex}&endIndex=${endIndex}`, config)
             .then((res) => {
                 if (res.data.responseCode === '00') {
-                    setScheduledData(res.data.responseData)
+                    const newData = res.data.responseData
+                    console.log(newData);
+                    if (ScheduledData !== undefined && ScheduledData.length > 0) {
+                        setScheduledData(ScheduledData => [...ScheduledData, ...newData])
+                    } else {
+                        setScheduledData(newData)
+                    }
+                    setstartIndex(endIndex)
+                    setendIndex(endIndex + 10)
+                    setIsFetching(true)
                 } else if (res.data.responseCode === '03') {
-                    setScheduledData([])
+                    setNoRecord(true)
+                    setIsFetching(false)
                 }
             })
             .catch((err) => {
@@ -162,18 +174,25 @@ const ScheduledPost = (props) => {
     }
 
     return (<>
-        {ScheduledData !== undefined && ScheduledData.length > 0 ? <div className="container py-4">
-            {ScheduledData.map((obj, index) => {
-                return (<div className='row my-3' key={index}>
-                    <div className='col-11 fs-20'>{obj.schedulepostTitle}</div>
-                    <div className='col-1 pt-1' onClick={() => deleteSchedule(obj.scheduleID, obj.scheduleTime)}> <DeleteForever /> </div>
-                </div>)
-            })}
-        </div> : ScheduledData !== undefined && ScheduledData.length === 0 ? <div className='row'>
-            <p className='col-12 p-4 text-center fs-18'>No Record Found</p>
-        </div> : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
-            <CircularProgress aria-label="Loading..." />
-        </div>}
+        <div className="container py-4">
+            {ScheduledData !== undefined && ScheduledData.length > 0 ? <InfiniteScroll dataLength={ScheduledData.length}
+                next={fetchScheduledList(AuthorID)}
+                hasMore={isFetching}
+                loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
+                endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}
+            >
+                {ScheduledData.map((obj, index) => {
+                    return (<div className='row my-3' key={index}>
+                        <div className='col-11 fs-20'>{obj.schedulepostTitle}</div>
+                        <div className='col-1 pt-1' onClick={() => deleteSchedule(obj.scheduleID, obj.scheduleTime)}> <DeleteForever /> </div>
+                    </div>)
+                })}
+            </InfiniteScroll> : NoRecord ? <div className='row'>
+                <p className='col-12 p-4 text-center fs-18'>No Record Found</p>
+            </div> : <div className='grid place-items-center h-screen'>
+                <CircularProgress aria-label="Loading..." />
+            </div>}
+        </div>
 
         <div id="deleteSchedule" className="modal fade" role="dialog">
             <div className="modal-dialog modal-dialog-centered">

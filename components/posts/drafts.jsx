@@ -12,6 +12,7 @@ const Draft = (props) => {
     const [AuthorID, setAuthorID] = useState()
     const [StartIndex, setStartIndex] = useState(0)
     const [EndIndex, setEndIndex] = useState(10)
+    const [NoRecord, setNoRecord] = useState(false)
     const [isFetching, setIsFetching] = useState(false) // scroll more draft show loader
     const [DraftList, setDraftList] = useState()
     const [DraftId, setDraftId] = useState()
@@ -45,6 +46,7 @@ const Draft = (props) => {
                     setEndIndex(EndIndex + 10)
                     setIsFetching(true)
                 } else if (res.data.responseCode === '03') {
+                    setNoRecord(true)
                     setIsFetching(false)
                 }
             })
@@ -108,8 +110,10 @@ const Draft = (props) => {
                             <div className="col-1 pt-1" onClick={() => handleEditButton(obj.DraftID)}> <Edit /> </div>
                         </div>)
                     })}
-                </InfiniteScroll> : DraftList !== undefined && DraftList !== null && DraftList.length === 0 && <div className='row'>
+                </InfiniteScroll> : NoRecord === true ? <div className='row'>
                     <p className='col-12 p-4 text-center fs-18'>No Record Found</p>
+                </div> : <div className='grid place-items-center h-screen'>
+                    <CircularProgress aria-label="Loading..." />
                 </div>}
 
 
