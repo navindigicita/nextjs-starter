@@ -552,7 +552,7 @@ const NewPublication = (props) => {
                                 return (<>
                                     <div className='row pt-3' key={index} selected={PlanID === obj.publicationPlanID} onClick={() => handleSubscription(obj.publicationPlanID)}>
                                         <div className='col-1'>
-                                            <input type='radio' name='plan' value={obj.name} style={{ width: '20px', height: '20px' }} />
+                                            <input type='radio' name='plan' value={obj.name} style={{ width: '20px', height: '20px' }} disabled={publicationID > 0 && obj.name === 'Free' ? true : false} />
                                         </div>
                                         <div className='col-11'>
                                             <ListItemText style={{ marginTop: '-8px' }} primary={<h6 className='fs-15 fw-bold ff-lora'>{obj.name}</h6>}

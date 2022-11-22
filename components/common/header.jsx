@@ -361,11 +361,10 @@ const Header = (props) => {
                                     </Card>
                                 </div>
                                 <div className='col-1' style={{ marginTop: '12px' }}>
-                                    <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingLeft: '12px', paddingTop: '4px', paddingBottom: getPath === 'LoggedIn' ? '0px' : '4px' }}>
-                                        <Menu height={25} width={25} style={{ marginTop: getPath === 'LoggedIn' ? '-14px' : '0px' }} />
-                                        {getPath === 'LoggedIn' ?
-                                            <Image src={userProfileImage} alt="user profile" height={25} width={25} style={{ borderRadius: '50%' }} />
-                                            : <Avatar style={{ height: '25px', width: '25px', marginTop: "-24px", marginLeft: '25px' }} src={<AssignmentIndOutlined />} />}
+                                    <Card className='pointer' onClick={() => handleUserProfle()} style={{ borderRadius: '40px', paddingLeft: '12px', paddingTop: '4px', paddingBottom: '4px' }}>
+                                        <Menu height={25} width={25} style={{ marginTop: '0px' }} />
+                                        <Avatar src={(getPath === 'LoggedIn' && userProfileImage !== undefined) ? (userProfileImage.charAt(0) === '@' ? userProfileImage.substring(1) : userProfileImage) : <AssignmentIndOutlined />}
+                                            alt="user profile" style={{ width: '25px', height: '25px', objectFit: 'contain', marginTop: "-24px", marginLeft: '25px' }} />
                                         <div className="dropdown-user">
                                             {getPath === 'LoggedIn' ? <a onClick={() => handleLogout(2)}>Sign out</a> : <a onClick={() => handleLogout(1)}>Sign In</a>}
                                         </div>
