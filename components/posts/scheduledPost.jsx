@@ -4,6 +4,7 @@ import $ from 'jquery'
 import { CircularProgress } from '@material-ui/core';
 import { DeleteForever } from '@material-ui/icons'
 import { baseUrlThinkly } from '../../pages/api/api';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const ScheduledPost = (props) => {
     const BASE_URL_THINKLY = useContext(baseUrlThinkly)
