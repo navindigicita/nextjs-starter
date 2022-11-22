@@ -572,7 +572,7 @@ const PublicationDetailPage = (props) => {
                                 <div className='col-12 mx-auto' >
                                     <Card className="t-in-p">
                                         <div className='row mb-3'>
-                                            <img className='mx-auto pay-pub-profile' src={PublicationDetail.publicationImage.charAt(0) === '@' ? PublicationDetail.publicationImage.substring(1) : getPublicationDetail.publicationImage} alt="author profile" />
+                                            <img className='mx-auto pay-pub-profile' src={PublicationDetail.publicationImage.charAt(0) === '@' ? PublicationDetail.publicationImage.substring(1) : PublicationDetail.publicationImage} alt="author profile" />
                                         </div>
                                         <div className='text-center mb-4'>
                                             <span className='ff-lora fs-30 fw-bold'>{PublicationDetail.publicationName}</span>
