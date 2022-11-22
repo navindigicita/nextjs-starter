@@ -3,16 +3,14 @@ import { CircularProgress, ListItemText, Box } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { isMobile } from 'react-device-detect'
 // import "../css/myStar.css"
-// import { UserTransactionsConfiguration } from '../../../configs/remoteConfig'
-// import { RemoteConfiguration } from '../config/individualThinkly';
+import { UserTransactionsConfiguration } from '../../config/individualThinkly';
 import Axios from 'axios'
-import { baseUrl, baseUrlTest, baseUrlThinkly, baseUrlThinklyApi2 } from '../../pages/api/api'
-import $ from 'jquery' 
+import { baseUrlThinkly, baseUrlThinklyApi2 } from '../../pages/api/api'
+// import $ from 'jquery' 
 import { Card } from 'react-bootstrap'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
 import DateMomentUtils from '@date-io/moment'
 import moment from "moment";
-import Reward from '../../public/Rewards.svg'
 import { Star } from '@material-ui/icons'
 import RedeemModal from './redeemModal'
 
@@ -38,7 +36,6 @@ const MyStar = (props) => {
     const [StartIndex, setStartIndex] = useState(0)
     const [EndIndex, setEndIndex] = useState(10)
 
-
     useEffect(() => {
         document.getElementById("defaultOpen").click();
         if (props.authorID !== undefined && props.UserBalance !== undefined) {
@@ -48,16 +45,14 @@ const MyStar = (props) => {
         }
         const fetchfilterdata = async () => {
             const data = await UserTransactionsConfiguration()
-            if (data !== undefined && data !== null && data !== '') {
+            if (data !== undefined && data !== '') {
                 const TransConfigData = JSON.parse(data)
                 setFilterData(TransConfigData)  //remote config data store in state
                 GetMyTransactions(TransConfigData[0].filterType, TransConfigData[0].noOfDays)  //function call
-            } 
-            // else {
-            //     const jsonData = transactionFilterData;  //json hardcoded data
-            //     setFilterData(jsonData)
-            //     GetMyTransactions(jsonData[0].filterType, jsonData[0].noOfDays)   //function call
-            // }
+            }
+            else {
+                console.log("user transaction fetch filter data failed");
+            }
         }
         fetchfilterdata()
     }, [])
@@ -100,7 +95,7 @@ const MyStar = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                'DeviceID': '123456',
+                'DeviceID':process.env.NEXT_PUBLIC_DEVICE_ID,
                 'UserID': authorID
             },
             data: {
@@ -125,6 +120,7 @@ const MyStar = (props) => {
     }
 
     function scrollThinklies() {
+        console.log("inside scrollThinklies");
         setStartIndex(EndIndex)
         setEndIndex(EndIndex + 10)
     }
@@ -135,8 +131,8 @@ const MyStar = (props) => {
             method: 'POST',
             data: {
                 "touserID": authorID,
-                "startIndex": StartIndex,
-                "endIndex": EndIndex,
+                "startIndex": StartIndex,//StartIndex
+                "endIndex": EndIndex,//EndIndex
                 "ChannelID": process.env.REACT_APP_CHANNEL_ID
             }
         }
@@ -144,6 +140,7 @@ const MyStar = (props) => {
             .then((res) => {
                 if (res.data.responseCode === '00') {
                     const response = JSON.parse(res.data.responseData)
+                    console.log("inside StarAwards/MyRewards",response);
                     const rewardData = response.Table
                     if (myRewardsData !== undefined && myRewardsData.length > 0) {
                         setMyRewardsData(myRewardsData => [...myRewardsData, ...rewardData])
@@ -193,7 +190,7 @@ const MyStar = (props) => {
                     document.getElementById('error').innerHTML = "";
                     setEnableCustomDataButton(true)  //enable button
                 }
-            } 
+            }
             // else {
             //     document.getElementById('error').innerHTML = "Selected date should be less than start and today's date";
             //     setUserTransactionsData('custom')
@@ -216,13 +213,13 @@ const MyStar = (props) => {
         <div className='container'>
             <div className='col-12'>
                 <Card className='py-2' style={{ border: 'lightgray 1px solid', borderRadius: '10px' }}>
-                    <div className={`fw-bold text-center ${isMobile ? 'fs-18' : 'f2-20'}`}>My Stars Balance</div>
-                    <div className={isMobile ? 'fw-bold text-center fs-20' : 'fw-bold text-center fs-40'}>
-                        {UserBalance !== undefined ? UserBalance : '0'} <Star className='fc-primary' style={{ height: '42px', width: '42px', marginTop: '-7px' }} />
+                    <div className={`fw-bold text-center ${isMobile ? 'fs-16' : 'fs-18'}`}>My Stars Balance</div>
+                    <div className={isMobile ? 'fw-bold text-center fs-20' : 'fw-bold text-center fs-30'}>
+                        {UserBalance !== undefined ? UserBalance : '0'} <Star className='fc-primary' style={{ height: '40px', width: '40px', marginTop: '-7px' }} />
                     </div>
                     <div className={isMobile ? 'fw-mid text-center fs-18' : 'fw-mid text-center fs-20'}>
                         <div>
-                            <button data-toggle="modal" data-target="#redeemModal" className='border-none text-center fs-18 p-10 fc-link bg-white fw-mid-bold' onClick={() => handleShow()}>Redeem</button>
+                            <button data-toggle="modal" data-target="#redeemModal" className='border-none text-center fs-18 fc-link bg-white fw-mid-bold' onClick={() => handleShow()}>Redeem</button>
                         </div>
                     </div>
                 </Card>
@@ -321,25 +318,27 @@ const MyStar = (props) => {
 
                 {/* Redemption Tab */}
                 <div id="Redemptions" className="tabContent">
-                    <p className='mt-2 text-center fs-22 fw-bold'>You have {myRewardsData !== undefined ? myRewardsData.length : '0'} rewards</p>
+                    <p className='mt-3 text-center fs-22 fw-bold'>You have {myRewardsData !== undefined ? myRewardsData.length : '0'} rewards</p>
                     {myRewardsData !== undefined && myRewardsData.length > 0 ? myRewardsData.map((obj, index) => {
+                        console.log(myRewardsData.length);
                         const imageUrl = obj.CatalogueImage !== undefined && obj.CatalogueImage.charAt(0) === '@' ? obj.CatalogueImage.substring(1) : obj.CatalogueImage //img url format
                         var d = new Date(obj.ExpiryDate)
                         var expdate = d.toDateString() //expiry date format
                         return (<>
-                            <div className='row my-1' key={index}>
-                                <div className='col-12 px-3' style={{ backgroundImage: `url(${Reward})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "500px", width: "100%", padding: "70px" }}>
-                                    <div className='row d-flex'>
+                            <div className='row my-2' key={index}>
+                                <div className='col-12 ' style={{ backgroundImage: `url(${"/Rewards.svg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "510px", width: "100%", padding: "70px" }}>
+                                    <div className='row d-flex px-1'>
                                         <div className='col-8 mx-auto'>
-                                            <div className='row'>
+                                            <div className='row  ml-3'>
                                                 <ListItemText className='col-8' style={{ height: "110px" }} primary={<h2 className='fs-18'>{obj.CatalogueName}</h2>} secondary={<p className='fs-12'>{obj.Description}</p>} />
                                                 <div className='col-4'>
                                                     <img src={imageUrl} style={{ height: "80px", width: "80px" }} alt='image'></img>
                                                 </div>
                                             </div>
-                                            <hr style={{ borderTop: "1px dashed #8f8f8f" }} />
-                                            <p>Expires On {expdate}</p>
-                                            <Box component="span" style={{ background: "#ffefd0", color: "#8f8f8f", borderRadius: 1, fontSize: 15, padding: "15px" }}>{obj.Code}</Box>
+                                            <hr style={{ borderTop: "1px dashed #8f8f8f",width:"95%",marginLeft:"12px" }} />
+                                            <div className='py-2'>
+                                            <p className='text-center mt-2'>Expires On {expdate}</p>
+                                            <Box className='text-center fs-16 '  style={{ background: "#ffefd0", color: "#8f8f8f", borderRadius: 1}}>{obj.Code}</Box></div>
                                         </div>
 
                                     </div>

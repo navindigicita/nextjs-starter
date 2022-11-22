@@ -20,8 +20,9 @@ export const RemoteConfiguration = async () => {
 export const UserTransactionsConfiguration = async () => {
     const remoteConfig = getRemoteConfig();
     const isFetched = await fetchAndActivate(remoteConfig)
+    console.log("UserTransactionsFilterSettings remote config from firebase@@@@@", isFetched);
     if (!isFetched) {
-        let data = getValue(remoteConfig, "UserTransactionsFilterSettings1")
+        let data = getValue(remoteConfig, "UserTransactionsFilterSettings")
         return data._value;
     } else {
         console.log("user transaction configuration fetch failed");

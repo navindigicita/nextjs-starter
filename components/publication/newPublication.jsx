@@ -100,35 +100,23 @@ const NewPublication = (props) => {
     }
 
     const closeFunction = (e) => {
+        window.location.reload(false);
         if (publicationID !== 0) {
             props.onChangeCallback(false)
         } else if(e === e && descriptionSlide || subscriptionSlide || InterestSlide){
             $('#closeConfirmation').modal('show')       
         }
         else {
+        console.log("inside else closeFunction");
         $('#newPublication').modal('hide')
         clearAllState() //function call for clear all state
         setPageType(props.label)
-            if(successSlide){
-            window.location.reload(false);
-            }
-            setwelcomeSlide(true)
+        // window.location.reload(false);
+        setwelcomeSlide(true)
+            // if(successSlide){
+            // window.location.reload(false);
+            // }
         }
-        // if (publicationID !== 0) {
-        //     props.onChangeCallback(false)
-        // } else if (descriptionSlide || subscriptionSlide || InterestSlide) {
-        //     $('#closeConfirmation').modal('show')
-        // }
-        // else {
-        //     console.log("inside else closeFunction");
-        //     clearAllState() //function call for clear all state
-        //     // if (!descriptionSlide) {
-        //     $('#newPublication').modal('hide')
-        //     history.go(-1);
-        //     // window.location.reload(false);
-        //     // }
-        //     setwelcomeSlide(true)
-        // }
     }
 
     const clearAllState = () => {
@@ -154,7 +142,6 @@ const NewPublication = (props) => {
         clearAllState()
         $('#closeConfirmation').modal('hide')
         window.location.reload(false);
-
     }
 
     const hideWelcomeAndShowAbout = () => {

@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { CircularProgress, ListItemText } from '@material-ui/core'
 import { Star } from '@material-ui/icons'
-import Reward from '../../public/Rewards.svg'
-import PopupBg from "../../public/popup.png"
 import $ from 'jquery'
 import { baseUrlThinklyApi2 } from '../../pages/api/api'
 import Axios from 'axios'
@@ -123,14 +121,14 @@ const RedeemModal = (props) => {
                     <button type="button" className="close text-right pr-2" data-dismiss="modal" aria-hidden="true">×</button>
                     <div className="container">
                         <div className="modal-body" style={{ overflow: "scroll", height: "90vh" }}>
-                            <div className={`fw-bold text-center`}>My Stars Balance</div>
-                            <div className={'fw-bold text-center fs-40'}>
-                                {UserBalance !== undefined ? UserBalance : '0'} <Star className='fc-primary' style={{ height: '42px', width: '42px', marginTop: '-10px' }} />
+                            <div className={`fw-bold text-center fs-18`}>My Stars Balance</div>
+                            <div className={'fw-bold text-center fs-30'}>
+                                {UserBalance !== undefined ? UserBalance : '0'} <Star className='fc-primary' style={{ height: '40px', width: '40px', marginTop: '-10px' }} />
                             </div>
                             {myAllRewardsData !== undefined && myAllRewardsData.length > 0 ? myAllRewardsData.map((obj, index) => {
                                 const imageUrl = obj.CatalogueImage !== undefined && obj.CatalogueImage.charAt(0) === '@' ? obj.CatalogueImage.substring(1) : obj.CatalogueImage //img url format
                                 return (<div className='row' >
-                                    <div className='col-12 px-3' style={{ backgroundImage: `url(${Reward})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "420px", width: "100%", padding: "55px" }}>
+                                    <div className='col-12 px-3' style={{ backgroundImage: `url(${"/Rewards.svg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "420px", width: "100%", padding: "55px" }}>
                                         <div className='row d-flex' key={index}>
                                             <div className='col-6 mx-auto'>
                                                 <div className='row mb-4' >
@@ -169,7 +167,7 @@ const RedeemModal = (props) => {
         </div>
 
         {couponStarCount !== undefined && couponCatID !== undefined ? <div className="modal fade" id="redeemNowModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-            <div className="modal-dialog modal-dialog-centered" style={{ backgroundImage: `url(${PopupBg})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "500px 310px", width: "100%" }}>
+            <div className="modal-dialog modal-dialog-centered" style={{ backgroundImage: `url(${"/PopupBg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "500px 310px", width: "100%" }}>
                 <div className="modal-content" style={{ marginLeft: "25px", marginBottom: "55px", display: "block", width: "90%", maxWidth: "700px", border: "none" }}>
                     {redeemSuccessMsg ? <>
                         <div className="container-fluid"><div className='fs-16 fw-mid mb-2' style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>Congratulations! Your reward is redeemed successfully.</div>

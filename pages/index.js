@@ -129,13 +129,14 @@ const HomePage = (props) => {
                 : value === 'Publication' ? <Publication authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
                   : value === 'Thinkly' ? <PostCollection authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
                     : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
-          </> : <DashboardPage profileJson={profileData} supporterData={supporterData} />}
+          </> : <> <DashboardPage profileJson={profileData} supporterData={supporterData} />:
+          <MyStar authorID={AuthorID} UserBalance={UserBalance} onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)} /></>}
         </div>
         <div style={{ background: 'lightgray', height: 'auto', width: '1px', marginRight: '-40px', marginLeft: '38px' }}></div>
         {!isMobile && <>
           <div className='col-1'></div>
           <div className='col-3 card-fixed'>
-            <SideBar profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} supporterData={supporterData} UserBalance={UserBalance}/>
+            <SideBar profileDetail={(setValue) => profileDetail(setValue)} profileJson={profileData} supporterData={supporterData} UserBalance={UserBalance} />
           </div>
         </>}
       </div>
