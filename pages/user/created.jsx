@@ -3,6 +3,7 @@ import $ from 'jquery'
 import { useRouter } from 'next/router'
 import ShareLink from '../../components/common/shareLink';
 import Image from 'next/image';
+import { Avatar } from '@material-ui/core';
 
 const CreateProfileShare = (props) => {
     const router = useRouter();
@@ -29,7 +30,8 @@ const CreateProfileShare = (props) => {
                     <div className="modal-body text-center">
                         <h2 className='fs-30 fw-bold'>Your page is live!</h2>
                         <h3 className='fs-20'>Share it with the world.</h3>
-                        <Image className='mt-3 mb-5' src={profileImage} alt='profile' height={100} width={100} style={{ borderRadius: '50%' }} />
+                        <Avatar className='mt-3 mb-5' src={profileImage} alt='profile' style={{ height: '100px', width: '100px' }} />
+                        {/* <Image className='mt-3 mb-5' src={profileImage} alt='profile' height={100} width={100} style={{ borderRadius: '50%' }} /> */}
                         <h2 className='fs-20 fw-bold'>{userName}</h2>
                         <ShareLink linkUrl={userName} />
                     </div>

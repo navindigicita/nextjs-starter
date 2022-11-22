@@ -12,8 +12,8 @@ import DateMomentUtils from '@date-io/moment'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { baseUrl, baseUrlThinkly } from '../../pages/api/api';
 import 'react-quill/dist/quill.snow.css';
-// import('quill-paste-smart')
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+dynamic(() => import('quill-paste-smart'), { ssr: false });
 
 const NewThinkly = (props) => {
     const BASE_URL = useContext(baseUrl);
