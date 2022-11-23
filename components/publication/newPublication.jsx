@@ -105,7 +105,7 @@ const NewPublication = (props) => {
             clearAllState() //function call for clear all state
             // if (!descriptionSlide) {
             $('#newPublication').modal('hide')
-            window.location.reload(false);
+            window.location.reload();
             // }
             setwelcomeSlide(true)
         }

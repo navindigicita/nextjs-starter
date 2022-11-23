@@ -22,32 +22,33 @@ const Draft = (props) => {
     useEffect(() => {
         if (props.authorID !== undefined && props.thinklyConfigJSON !== undefined) {
             setAuthorID(props.authorID)
-            fetchDraftsByUserID(props.authorID)
+            fetchDraftsByUserID(props.authorID, StartIndex, EndIndex)
         }
     }, [])
 
-    const fetchDraftsByUserID = (authorID) => {
+    const fetchDraftsByUserID = (authorID, start, end) => {
+        console.log(authorID, start, end);
         var config = {
             headers: {
                 "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
                 "UserID": authorID
             },
         };
-        Axios.get(`${BASE_URL_THINKLY}Draft/GetDraftsForUser/${authorID}?StartIndex=${StartIndex}&EndIndex=${EndIndex}`, config)
+        Axios.get(`${BASE_URL_THINKLY}Draft/GetDraftsForUser/${authorID}?StartIndex=${start}&EndIndex=${end}`, config)
             .then((res) => {
                 if (res.data.responseCode === '00') {
                     const newData = res.data.responseData.Drafts
-                    if (DraftList !== undefined && DraftList.length > 0) {
-                        setDraftList(DraftList => [...DraftList, ...newData])
+                    if (newData !== undefined && newData.length > 0) {  //api mistake, even index update not returning any data fall into 00
+                        if (DraftList !== undefined && DraftList.length > 0 && start > 0) {
+                            setDraftList(DraftList => [...DraftList, ...newData])
+                        } else {
+                            setDraftList(newData)
+                        }
+                        setIsFetching(true)
                     } else {
-                        setDraftList(newData)
+                        setNoRecord(true)
+                        setIsFetching(false)
                     }
-                    setStartIndex(EndIndex)
-                    setEndIndex(EndIndex + 10)
-                    setIsFetching(true)
-                } else if (res.data.responseCode === '03') {
-                    setNoRecord(true)
-                    setIsFetching(false)
                 }
             })
             .catch((err) => { });
@@ -59,6 +60,7 @@ const Draft = (props) => {
     }
 
     const fetchDeleteDraft = () => {
+        setDraftList()
         setDraftDeleteLoader(true)
         var config = {
             method: 'POST',
@@ -75,7 +77,7 @@ const Draft = (props) => {
                 if (res.data.responseCode === '00') {
                     $('#deleteDraft').modal('hide')
                     setDraftDeleteLoader(false)
-                    fetchDraftsByUserID(AuthorID)  // api call to update list
+                    fetchDraftsByUserID(AuthorID, 0, 10)  // api call to update list
                 }
             })
             .catch((err) => { });
@@ -91,7 +93,7 @@ const Draft = (props) => {
         <div className="container py-4">
             {DraftList !== undefined && DraftList !== null && DraftList.length > 0 ?
                 <InfiniteScroll dataLength={DraftList.length}
-                    next={fetchDraftsByUserID(AuthorID)}
+                    next={fetchDraftsByUserID(AuthorID, EndIndex, EndIndex + 10)}
                     hasMore={isFetching}
                     loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
                     endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}
