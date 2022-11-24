@@ -65,7 +65,8 @@ const Thinklies = (props) => {
 
     const openThinkly = (data, ID, oldUrl) => {
         const title = data.trimEnd()
-        const thinkly_title = title.replaceAll(' ', '-')
+        const title1 = title.replaceAll('?', '')
+        const thinkly_title = title1.replaceAll(' ', '-')
         window.open(`/${thinkly_title}/${ID}`, '_blank') // above commented codes are for new UI of thinkly detail page
         // window.open(oldUrl)  //this one for old UI
     }

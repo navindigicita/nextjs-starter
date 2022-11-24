@@ -20,6 +20,7 @@ const PostDetail = (props) => {
     const [downloadPannel, setdownloadPannel] = useState(false)
 
     useEffect(() => {
+        console.log("inside post detail page", props.response);
         if (props.response !== undefined && props.response.postData !== null) {
             const data = props.response
             setPostData(data)
