@@ -17,14 +17,9 @@ body {
         /* margin-top: 7rem; */
     }
 
-    .body-img {
-        /* height: 330px; */
-        /* height: -moz-fit-content; */
-    }
-
     .body-img img {
         width: 40rem;
-        height: 350px;
+        height: 24rem;
         object-fit: cover;
     }
     
@@ -145,14 +140,14 @@ div .sticky-left-section {
         margin-right: 0rem !important;
         /* margin-top: 7rem; */
     }
-
+/* 
     .body-img {
         text-align: center;
-    }
+    } */
 
     .body-img img {
         width: 34rem;
-        height: 220px;
+        height: 22rem;
         object-fit: cover;
     }
 
@@ -261,9 +256,9 @@ div ::-webkit-scrollbar {
 }
 
 .carousel-indicators button {
-    background-color: darkgray;
-    border-radius: 50%;
-    height: 0px;
+    background-color: #FAA422;
+    /* border-radius: 50%; */
+    height: 2px;
     width: 20px;
     border: none;
     margin-left: 10px;

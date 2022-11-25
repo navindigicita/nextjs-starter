@@ -24,6 +24,7 @@ const PostDetail = (props) => {
         if (props.response !== undefined && props.response.postData !== null) {
             const data = props.response
             setPostData(data)
+            console.log(data);
             if (data.publicationData !== null && data.publicationData.publicationPayType === "Paid") {  //for disable scroll and background blurred on paid thinkly
                 document.getElementById('fadeIT').classList.add("blur-body");
                 document.body.classList.add("stop-scrolling");
@@ -95,21 +96,21 @@ const PostDetail = (props) => {
         <Header />
         <div id="fadeIT" className="container" style={{ marginTop: '5rem' }}>
             {PostData !== undefined && PostData !== null ? <div className="row d-flex">
-                <div className="col-md-7 mx-auto">
+                <div className={isMobile ? 'col-12' : 'col-md-7 mx-auto'}>
                     <div className="row body-img">
                         {getVedio === false ? <>
-                            {PostData.postData.postImages !== undefined && PostData.postData.postImages.length === 0 ? ''
-                                : PostData.postData.postImages !== undefined && PostData.postData.videoURL === "" && PostData.postData.postImages.length === 1 ?
-                                    <img src={PostData.postData.postImages[0].charAt(0) === '@' ? PostData.postData.postImages[0].substring(1) : PostData.postData.postImages[0]} alt="detailed poster" />
-                                    : PostData.postData.postImages !== undefined && PostData.postData.postImages.length > 1 &&
-                                    <Carousel controls={false} interval={2000}>
-                                        {PostData.postData.postImages.map((obj) => (
-                                            <Carousel.Item>
-                                                <img src={obj.charAt(0) === '@' ? obj.substring(1) : obj} alt="slider" />
-                                            </Carousel.Item>
-                                        ))}
-                                    </Carousel>
+                            {PostData.postData.postImages !== undefined && PostData.postData.postImages.length === 1 ?
+                                <img src={PostData.postData.postImages[0].charAt(0) === '@' ? PostData.postData.postImages[0].substring(1) : PostData.postData.postImages[0]} alt="detailed poster" />
+                                : PostData.postData.postImages !== undefined && PostData.postData.postImages.length > 1 &&
+                                <Carousel controls={false}>
+                                    {PostData.postData.postImages.map((obj) => (
+                                        <Carousel.Item>
+                                            <img src={obj.charAt(0) === '@' ? obj.substring(1) : obj} alt="slider" />
+                                        </Carousel.Item>
+                                    ))}
+                                </Carousel>
                             }
+                            {/* if mobile then auto play on page load else show play button on  */}
                             {PostData.postData.videoURL !== undefined && PostData.postData.videoURL !== null && PostData.postData.videoURL !== "" && <>
                                 {isMobile ? <div className='row'>
                                     <iframe width="640" height="350" src={PostData.postData.videoURL.replace('https://youtu.be/', 'https://www.youtube.com/embed/') + '?autoplay=1&mute=1'} ></iframe>
@@ -127,7 +128,7 @@ const PostDetail = (props) => {
                     }
 
                     <div className={PostData.postData.postImages.length > 0 ? `row body-content-align mt-5` : `row body-content-align`}>
-                        <span className="fw-bold fs-20 ff-lora"> {PostData.postData.postTitle} </span>
+                        <span className="fw-bold fs-30 ff-lora"> {PostData.postData.postTitle} </span>
                     </div>
                     <div className="row body-content-align" style={{ marginTop: '-2px' }}>
                         <span className="fw-mid fc-link fs-12"> {PostData.postData.subcategoryname.replaceAll(',', ' | ')} </span>
@@ -151,12 +152,11 @@ const PostDetail = (props) => {
                     <div className="row my-4 body-content-align fs-15" dangerouslySetInnerHTML={{ __html: PostData.postData.postDescription }} />
                     <hr />
                     {PostData.publicationData !== null && <>
-                        <div className="row body-content-align font-weight-bold header-font fs-22 mt-4">About the Publication</div>
+                        <div className="row body-content-align font-weight-bold header-font fs-22 mt-4">Published In</div>
                         <div className="row mt-4 body-content-align" >
-                            {PostData.publicationData.publicationImage !== undefined && PostData.publicationData.publicationImage !== null ?
-                                <img onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)} src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage} alt="" style={{ width: '40px', height: '40px', borderRadius: '50%', cursor: 'pointer' }} />
-                                : <Avatar src={<AssignmentIndOutlinedIcon />} />
-                            }
+                            {PostData.publicationData.publicationImage !== undefined && PostData.publicationData.publicationImage !== null &&
+                                <img onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)} src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage}
+                                    alt="profile" style={{ width: '40px', height: '40px', cursor: 'pointer', objectFit: 'cover' }} />}
                             <ListItemText style={{ marginTop: '6px', marginLeft: '10px' }}
                                 primary={<div style={{ lineHeight: '10px' }} >
                                     <span className="header-font" onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)} style={{ cursor: 'pointer' }}>
@@ -195,12 +195,12 @@ const PostDetail = (props) => {
             <form name="paymentGatewayrazorpay" onSubmit={handleSubmit(onSubmit)}>
                 {isMobile ? <div className="row">
                     <div className="col-2 pt-4 px-4">
-                        <img src={'/paidThinkly.png'} alt="paid thinkly" style={{ width: '60px', height: '60px' }} />
+                        <img src={'/paidthinkly.png'} alt="paid thinkly" style={{ width: '60px', height: '60px' }} />
                     </div>
                     <div className="col-10 px-4">
-                        <ListItemText primary={<p className="fs-20 fw-bold fc-white"> This is a Premium Thinkly </p>}
+                        <ListItemText primary={<p className="fs-20 fw-bold fc-white"> This is a premium post </p>}
                             secondary={<p className="fs-15 fc-white">
-                                This Thinkly is a part of paid Publication. Pay on the app to get unlimited access to this publication.
+                                This post is published in {PostData.publicationData.publicationName}. Subscribe to {PostData.publicationData.publicationName} for unlimited access.
                             </p>}
                         />
                         <button className="subscribe-button" type='submit'> Subscribe </button>
@@ -210,8 +210,8 @@ const PostDetail = (props) => {
                         <img src={'/paidthinkly.png'} alt="paid thinkly" style={{ width: '80px', height: '80px' }} />
                     </div>
                     <div className="col-11">
-                        <ListItemText primary={<p className="header-font fs-28 fw-bold fc-white"> This is a Premium Post </p>}
-                            secondary={<p className="fs-20 fc-white"> This Post is a part of paid Publication. Pay to get access to all thinklies in this publication. </p>} />
+                        <ListItemText primary={<p className="header-font fs-28 fw-bold fc-white"> This is a premium post </p>}
+                            secondary={<p className="fs-20 fc-white"> This post is published in {PostData.publicationData.publicationName}. Subscribe to {PostData.publicationData.publicationName} for unlimited access. </p>} />
                         <button className="subscribe-button" type='submit'> Subscribe </button>
                     </div>
                 </div>}
