@@ -207,7 +207,7 @@ const PostDetail = (props) => {
                     </div>
                 </div> : <div className="row d-flex pt-2 pb-4 px-3">
                     <div className="col-1 my-auto">
-                        <img src={'/paidThinkly.png'} alt="paid thinkly" style={{ width: '80px', height: '80px' }} />
+                        <img src={'/paidthinkly.png'} alt="paid thinkly" style={{ width: '80px', height: '80px' }} />
                     </div>
                     <div className="col-11">
                         <ListItemText primary={<p className="header-font fs-28 fw-bold fc-white"> This is a Premium Post </p>}
