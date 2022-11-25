@@ -963,7 +963,7 @@ const NewThinkly = (props) => {
                         {/* end of image, video and audio setup and starting of post name */}
                         <div className='row d-flex'>
                             <div className='col-11 mb-2'>
-                                <input type='text' placeholder='Enter Title' value={thinklyName} onChange={(e) => setthinklyName(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
+                                <input type='text' placeholder='Enter Title' maxLength={50} value={thinklyName} onChange={(e) => setthinklyName(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
                             </div>
                         </div>
                         {thinklyName === '' && <label id='thinklyNameError' className='error-msg'></label>}

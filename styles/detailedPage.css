@@ -306,9 +306,9 @@ a.connect {
 
 .shell-container {
     overflow-y: hidden;
-    position: fixed;
-    z-index: 2 !important;
-    bottom: 0;
+    position: absolute;
+    z-index: 12 !important;
+    bottom: 0px;
     transform: translateY(100%);
     left: 0;
     width: 100%;

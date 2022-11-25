@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
+import { useForm } from "react-hook-form";
 import { NextSeo } from 'next-seo';
 import Axios from "axios";
 import { useRouter } from 'next/router'
@@ -10,10 +11,12 @@ import { baseUrl } from "./api/api";
 import Header from "../components/common/header";
 import Footer from "../components/common/footer";
 import PostTimeAgo from "../components/common/postTime";
+import ParaByNameFromUrl from '../components/common/paraByNameFromUrl'
 
 const PostDetail = (props) => {
     const router = useRouter()
     const BASE_URL = useContext(baseUrl)
+    const { handleSubmit, formState } = useForm(); //for form submit
     const [PostData, setPostData] = useState()
     const [getVedio, setVedio] = useState(false);
     const [getDateTime, setDateTime] = useState(0)
@@ -24,6 +27,7 @@ const PostDetail = (props) => {
         if (props.response !== undefined && props.response.postData !== null) {
             const data = props.response
             setPostData(data)
+            console.log(data);
             if (data.publicationData !== null && data.publicationData.publicationPayType === "Paid") {  //for disable scroll and background blurred on paid thinkly
                 document.getElementById('fadeIT').classList.add("blur-body");
                 document.body.classList.add("stop-scrolling");
@@ -52,6 +56,44 @@ const PostDetail = (props) => {
                 window.location = "https://apps.apple.com/in/app/thinkly/id1329943323"
             )
         }
+    }
+
+    const onSubmit = () => {  //razor pay use for paid pub subscription
+        return new Promise(resolve => {
+            if (PostData !== undefined && PostData !== null) {
+                const price = parseFloat(PostData.publicationData.publicationPrice).toFixed(2); //if free then 0 price 
+                const PublicationPenName = PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName
+                const refName = ParaByNameFromUrl('referrer')
+                const form = document.createElement('form');
+                form.method = 'post'
+                form.action = process.env.NEXT_PUBLIC_PAYMENT_GATEWAY_RAZORPAY
+                const data = [
+                    { name: 'qty', value: "1" }, //pass hardcoded 1 only
+                    { name: 'receiver', value: PostData.authorData.authorID },
+                    { name: 'subscribedby', value: '0' },  //pass 0 cause not matter if logged in or not
+                    { name: 'remarks', value: "subscribe to publication" },
+                    { name: 'channel', value: "WEBAPP" },
+                    { name: 'amount', value: price },
+                    { name: 'producttype', value: "PUBLICATIONSUBSCRIPTION" },
+                    { name: 'publicationid', value: PostData.publicationData.publicationID },
+                    { name: 'subscriptiontype', value: "PAID" }, //free or paid
+                    { name: 'publicationpenname', value: PublicationPenName },
+                    { name: 'emailid', value: '' }, //for free only
+                    { name: 'referrer', value: refName !== undefined ? refName : '' }
+                ]
+                for (let x = 0; x < data.length; x++) {
+                    const hiddenField = document.createElement('input');
+                    hiddenField.type = 'text';
+                    hiddenField.name = data[x].name;
+                    hiddenField.value = data[x].value;
+                    hiddenField.style.display = 'none'
+                    form.appendChild(hiddenField);
+                }
+                document.body.appendChild(form);
+                form.submit();
+                resolve();
+            }
+        });
     }
 
     return (<>
@@ -144,7 +186,7 @@ const PostDetail = (props) => {
                                         <b> {PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}. </b>
                                     </span> &nbsp;
                                     {isMobile ? <a className="connect subheader-font" href="#Subscribe" onClick={() => activeDownloadPannel()}> Subscribe</a>
-                                        : <a className="connect header-font" href="#Subscribe" data-toggle="modal" data-target="#myModal" onClick={() => setShowModal(true)}> Subscribe</a>}
+                                        : <a className="connect header-font" href="#Subscribe" data-toggle="modal" data-target="#myModal"> Subscribe</a>}
                                 </div>}
                                 secondary={<div className="row" style={{ marginLeft: '0px', lineHeight: '22px', cursor: 'pointer' }}>
                                     <span className="subheader-font" onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)}>Author</span>
@@ -154,8 +196,8 @@ const PostDetail = (props) => {
                         <div className="row mt-4 body-content-align right-content-font"> {PostData.publicationData.description} </div>
                     </>}
                 </div>
-                {/* call to action bottom pannel for mobile view, using modal popup for desktop view(header) */}
-                {isMobile && <div className="row">
+                {/* call to action bottom pannel for mobile view and free thinkly only, using modal popup for desktop view(header) */}
+                {isMobile && PostData.postData.postPayType !== 'Paid' && <div className="row">
                     <section className="bottom-section-mob">
                         <div className="top-hr-colored"></div>
                         <div className="col-12 py-2">
@@ -167,11 +209,38 @@ const PostDetail = (props) => {
                         </div>
                     </section>
                 </div>}
+
             </div> : <div className='grid place-items-center h-screen'>
                 <CircularProgress aria-label="Loading..." />
             </div>}
         </div>
-        <Footer />
+        {/* paid thinkly bottomsheet */}
+        {PostData !== undefined && PostData !== null && PostData.postData.postPayType === "Paid" ? <div className="shell-container show">
+            <form name="paymentGatewayrazorpay" onSubmit={handleSubmit(onSubmit)}>
+                {isMobile ? <div className="row">
+                    <div className="col-2 pt-4 px-4">
+                        <img src={'/paidThinkly.png'} alt="paid thinkly" style={{ width: '60px', height: '60px' }} />
+                    </div>
+                    <div className="col-10 px-4">
+                        <ListItemText primary={<p className="fs-20 fw-bold fc-white"> This is a Premium Thinkly </p>}
+                            secondary={<p className="fs-15 fc-white">
+                                This Thinkly is a part of paid Publication. Pay on the app to get unlimited access to this publication.
+                            </p>}
+                        />
+                        <button className="subscribe-button" type='submit'> Subscribe </button>
+                    </div>
+                </div> : <div className="row d-flex pt-2 pb-4 px-3">
+                    <div className="col-1 my-auto">
+                        <img src={'/paidThinkly.png'} alt="paid thinkly" style={{ width: '80px', height: '80px' }} />
+                    </div>
+                    <div className="col-11">
+                        <ListItemText primary={<p className="header-font fs-28 fw-bold fc-white"> This is a Premium Post </p>}
+                            secondary={<p className="fs-20 fc-white"> This Post is a part of paid Publication. Pay to get access to all thinklies in this publication. </p>} />
+                        <button className="subscribe-button" type='submit'> Subscribe </button>
+                    </div>
+                </div>}
+            </form>
+        </div> : <Footer />}
     </>)
 }
 
