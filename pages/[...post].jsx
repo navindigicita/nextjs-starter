@@ -204,7 +204,7 @@ const PostDetail = (props) => {
                             <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
                                 secondary={<span className='fs-12'>Read all Thinklies and more on the App</span>} />
                             <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }}>
-                                <a href={process.env.NEXT_PUBLIC_DYNAMIC_OPEN_IN_APP + `https://thinkly.me/Thinkly/Post/Index/${PostData.postData.postID}`}></a>  OPEN IN APP
+                                <a className="fc-white" href={process.env.NEXT_PUBLIC_DYNAMIC_OPEN_IN_APP + `https://thinkly.me/Thinkly/Post/Index/${PostData.postData.postID}`}>OPEN IN APP</a>
                             </button>
                         </div>
                     </section>
