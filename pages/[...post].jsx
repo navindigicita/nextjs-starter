@@ -15,19 +15,15 @@ import ParaByNameFromUrl from '../components/common/paraByNameFromUrl'
 
 const PostDetail = (props) => {
     const router = useRouter()
-    const BASE_URL = useContext(baseUrl)
     const { handleSubmit, formState } = useForm(); //for form submit
     const [PostData, setPostData] = useState()
     const [getVedio, setVedio] = useState(false);
     const [getDateTime, setDateTime] = useState(0)
-    const [downloadPannel, setdownloadPannel] = useState(false)
 
     useEffect(() => {
-        console.log("inside post detail page", props.response);
         if (props.response !== undefined && props.response.postData !== null) {
             const data = props.response
             setPostData(data)
-            console.log(data);
             if (data.publicationData !== null && data.publicationData.publicationPayType === "Paid") {  //for disable scroll and background blurred on paid thinkly
                 document.getElementById('fadeIT').classList.add("blur-body");
                 document.body.classList.add("stop-scrolling");
@@ -38,25 +34,6 @@ const PostDetail = (props) => {
             router.push('/login')
         }
     }, [])
-
-    const activeDownloadPannel = () => {  //for bottom static pannel(download link) on call to action
-        setdownloadPannel(true);
-    }
-
-    const handleOpenAppButtonClick = () => {
-        setdownloadPannel(false);
-        var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-        if (/android/i.test(userAgent)) {
-            return (
-                window.location = "https://play.google.com/store/apps/details?id=com.me.digicita.thinkly"
-            )
-        }
-        if (/iPad|iPhone|iPod/.test(userAgent)) {
-            return (
-                window.location = "https://apps.apple.com/in/app/thinkly/id1329943323"
-            )
-        }
-    }
 
     const onSubmit = () => {  //razor pay use for paid pub subscription
         return new Promise(resolve => {
@@ -185,8 +162,7 @@ const PostDetail = (props) => {
                                     <span className="header-font" onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)} style={{ cursor: 'pointer' }}>
                                         <b> {PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}. </b>
                                     </span> &nbsp;
-                                    {isMobile ? <a className="connect subheader-font" href="#Subscribe" onClick={() => activeDownloadPannel()}> Subscribe</a>
-                                        : <a className="connect header-font" href="#Subscribe" data-toggle="modal" data-target="#myModal"> Subscribe</a>}
+                                    <a className="connect header-font" href="#Subscribe" data-toggle="modal" data-target="#myModal"> Subscribe</a>
                                 </div>}
                                 secondary={<div className="row" style={{ marginLeft: '0px', lineHeight: '22px', cursor: 'pointer' }}>
                                     <span className="subheader-font" onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)}>Author</span>
