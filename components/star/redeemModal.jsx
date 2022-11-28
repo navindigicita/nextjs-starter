@@ -83,7 +83,6 @@ const RedeemModal = (props) => {
             }
         }
         Axios(`${BASE_URL_THINKLY_API2}StarAwards/RedeemVoucher`, config)
-
             .then((res) => {
                 if (res.data.responseCode === '00') {
                     setRedemption(true)
@@ -139,7 +138,7 @@ const RedeemModal = (props) => {
                                                 </div>
                                                 <hr style={{ borderTop: "1px dashed #8f8f8f", width: "100%" }} />
                                                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                    <button data-toggle="modal" data-target="#redeemNowModal" className='text-center w-96 border-none height-button' onClick={() => handleRedeemNowModal(obj.Stars, obj.CatalogueID, index, obj.CatalogueName)} style={UserBalance < obj.Stars ? { background: "#8f8f8f" } : { background: "#ffefd0" }} >
+                                                    <button data-toggle="modal" data-target="#redeemNowModal" className='text-center w-96 border-none height-button mt-3' onClick={() => handleRedeemNowModal(obj.Stars, obj.CatalogueID, index, obj.CatalogueName)} style={UserBalance < obj.Stars ? { background: "#8f8f8f" } : { background: "#ffefd0" }} >
                                                         {UserBalance < obj.Stars ? <>
                                                             <Star className='fc-primary' style={{ height: '35px', width: '35px' }} />
                                                             <span className='fw-mid-bold'>{obj.Stars} Stars </span>
@@ -167,7 +166,7 @@ const RedeemModal = (props) => {
         </div>
 
         {couponStarCount !== undefined && couponCatID !== undefined ? <div className="modal fade" id="redeemNowModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
-            <div className="modal-dialog modal-dialog-centered" style={{ backgroundImage: `url(${"/PopupBg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "500px 310px", width: "100%" }}>
+            <div className="modal-dialog modal-dialog-centered" style={{ backgroundImage: `url(${"/popup.png"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "500px 310px", width: "100%" }}>
                 <div className="modal-content" style={{ marginLeft: "25px", marginBottom: "55px", display: "block", width: "90%", maxWidth: "700px", border: "none" }}>
                     {redeemSuccessMsg ? <>
                         <div className="container-fluid"><div className='fs-16 fw-mid mb-2' style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>Congratulations! Your reward is redeemed successfully.</div>

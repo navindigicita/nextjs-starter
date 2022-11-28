@@ -35,6 +35,7 @@ const MyStar = (props) => {
     const [UserBalance, setUserBalance] = useState(props.UserBalance)
     const [StartIndex, setStartIndex] = useState(0)
     const [EndIndex, setEndIndex] = useState(10)
+    const [CouponsCount, setCouponsCount] = useState()
 
     useEffect(() => {
         document.getElementById("defaultOpen").click();
@@ -95,7 +96,7 @@ const MyStar = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                'DeviceID':process.env.NEXT_PUBLIC_DEVICE_ID,
+                'DeviceID': process.env.NEXT_PUBLIC_DEVICE_ID,
                 'UserID': authorID
             },
             data: {
@@ -120,7 +121,6 @@ const MyStar = (props) => {
     }
 
     function scrollThinklies() {
-        console.log("inside scrollThinklies");
         setStartIndex(EndIndex)
         setEndIndex(EndIndex + 10)
     }
@@ -140,7 +140,10 @@ const MyStar = (props) => {
             .then((res) => {
                 if (res.data.responseCode === '00') {
                     const response = JSON.parse(res.data.responseData)
-                    console.log("inside StarAwards/MyRewards",response);
+                    console.log("inside StarAwards/MyRewards", response);
+                    // const CouponsCountHandle = response.Table.map((obj) => { return obj.CouponsCount })
+                    // setCouponsCount(CouponsCountHandle)
+                    setCouponsCount(response.Table[0].CouponsCount)
                     const rewardData = response.Table
                     if (myRewardsData !== undefined && myRewardsData.length > 0) {
                         setMyRewardsData(myRewardsData => [...myRewardsData, ...rewardData])
@@ -271,7 +274,7 @@ const MyStar = (props) => {
                     </div>}
 
                     {userTransactionsData === 'custom' ? '' : <>
-                        {userTransactionsData === null ? <div className='text-center'>No Transactions Found</div> : <>
+                        {userTransactionsData === null ? <div className='text-center mt-2'>No Transactions Found</div> : <>
                             {userTransactionsData !== undefined && userTransactionsData.length > 0 ? userTransactionsData.map((obj) => {
                                 const countIcon = obj.trnStarImage !== undefined && obj.trnStarImage.charAt(0) === '@' ? obj.trnStarImage.substring(1) : obj.trnStarImage //img url format
                                 const transcationIcon = obj.trnImage !== undefined && obj.trnImage.charAt(0) === '@' ? obj.trnImage.substring(1) : obj.trnImage //img url format
@@ -298,47 +301,46 @@ const MyStar = (props) => {
                                             <div className='col-3'>
                                                 <ListItemText className='float-right'
                                                     primary={<Box component="span" className='float-right border-radius-4 bg-lightgray fs-12 px-2'>{obj.trnSource}</Box>}
-                                                    secondary={<div className={`${trnColor === 'negative' ? 'fc-red' : 'fc-green'} fs-20 float-right fw-mid-bold`} >
-                                                        <span>{obj.trnSign}</span>
-                                                        <span>{obj.trnNoOfStars}</span>
-                                                        <span> <img style={{ width: "20px", marginTop: '-5px' }} src={countIcon} alt="transcation star Icon" /></span>
-                                                    </div>}
+                                                    secondary={<span className={`${trnColor === 'negative' ? 'fc-red' : 'fc-green'} fs-20 float-right fw-mid-bold`} >
+                                                        {obj.trnSign}{obj.trnNoOfStars} <img style={{ width: "20px", marginTop: '-25px', marginLeft: '38px' }} src={countIcon} alt="transcation star Icon" />
+                                                    </span>}
                                                 />
                                             </div>
                                         </div>
                                     </Card>
                                     <hr />
                                 </>)
-                            }) : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
+                            }) : <>{userTransactionsData === undefined && <div style={{ padding: '150px 0px', textAlign: 'center' }}>
                                 <CircularProgress aria-label="Loading..." />
-                            </div>}
+                            </div>}</>}
                         </>}
                     </>}
                 </div>
 
                 {/* Redemption Tab */}
                 <div id="Redemptions" className="tabContent">
-                    <p className='mt-3 text-center fs-22 fw-bold'>You have {myRewardsData !== undefined ? myRewardsData.length : '0'} rewards</p>
+                    {/* <p className='mt-3 text-center fs-22 fw-bold'>You have {myRewardsData !== undefined ? myRewardsData.length : '0'} rewards</p> */}
+                    <p className='mt-3 text-center fs-22 fw-bold'>You have {CouponsCount} rewards</p>
                     {myRewardsData !== undefined && myRewardsData.length > 0 ? myRewardsData.map((obj, index) => {
-                        console.log(myRewardsData.length);
                         const imageUrl = obj.CatalogueImage !== undefined && obj.CatalogueImage.charAt(0) === '@' ? obj.CatalogueImage.substring(1) : obj.CatalogueImage //img url format
                         var d = new Date(obj.ExpiryDate)
                         var expdate = d.toDateString() //expiry date format
                         return (<>
-                            <div className='row my-2' key={index}>
-                                <div className='col-12 ' style={{ backgroundImage: `url(${"/Rewards.svg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "510px", width: "100%", padding: "70px" }}>
-                                    <div className='row d-flex px-1'>
-                                        <div className='col-8 mx-auto'>
-                                            <div className='row  ml-3'>
-                                                <ListItemText className='col-8' style={{ height: "110px" }} primary={<h2 className='fs-18'>{obj.CatalogueName}</h2>} secondary={<p className='fs-12'>{obj.Description}</p>} />
+                            <div className='row' key={index}>
+                                <div className='col-12 px-3' style={{ backgroundImage: `url(${"/Rewards.svg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "470px", width: "100%", padding: "55px" }}>
+                                    <div className='row d-flex'>
+                                        <div className='col-6 mx-auto'>
+                                            <div className='row mb-4'>
+                                                <ListItemText className='col-8' style={{ height: "100px", textAlign: "left" }} primary={<h2 className='fs-18'>{obj.CatalogueName}</h2>} secondary={<p className='fs-12'>{obj.Description}</p>} />
                                                 <div className='col-4'>
                                                     <img src={imageUrl} style={{ height: "80px", width: "80px" }} alt='image'></img>
                                                 </div>
                                             </div>
-                                            <hr style={{ borderTop: "1px dashed #8f8f8f",width:"95%",marginLeft:"12px" }} />
-                                            <div className='py-2'>
-                                            <p className='text-center mt-2'>Expires On {expdate}</p>
-                                            <Box className='text-center fs-16 '  style={{ background: "#ffefd0", color: "#8f8f8f", borderRadius: 1}}>{obj.Code}</Box></div>
+                                            <hr style={{ borderTop: "1px dashed #8f8f8f", width: "100%", marginTop: "40px" }} />
+                                            <div className=''>
+                                                <p className='text-center mt-2'>Expires On {expdate}</p>
+                                                <Box className='text-center fs-16 mt-1' style={{ background: "#ffefd0", color: "#8f8f8f", borderRadius: 1 }}>{obj.Code}</Box>
+                                            </div>
                                         </div>
 
                                     </div>

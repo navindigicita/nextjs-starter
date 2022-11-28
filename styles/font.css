@@ -106,7 +106,15 @@
     color: #0a0a0a;
 }
 
-/*  */
+.fc-red {
+    color: red;
+}
+
+.fc-green {
+    color: green;
+}
+
+/* width */
 .w-100 {
     width: 100%;
 }
