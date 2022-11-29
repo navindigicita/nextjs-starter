@@ -247,7 +247,6 @@ const NewPublication = (props) => {
     };
 
     const hidePlanAndShowInterest = () => {
-        console.log(ImageNames);
         if (PlanID !== undefined && PlanID !== null && PlanID !== '') {
             if (PlanID == 22) {
                 setsubscriptionSlide(false)

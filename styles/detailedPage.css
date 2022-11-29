@@ -22,7 +22,7 @@ body {
         height: 24rem;
         object-fit: cover;
     }
-    
+
     .body-left-content-align {
         margin-top: 10px;
         margin-left: 3rem !important;
@@ -140,7 +140,8 @@ div .sticky-left-section {
         margin-right: 0rem !important;
         /* margin-top: 7rem; */
     }
-/* 
+
+    /* 
     .body-img {
         text-align: center;
     } */
@@ -175,7 +176,7 @@ div .sticky-left-section {
         padding: 0 20px;
     }
 
-    div > button > a {
+    div>button>a {
         color: #fff;
     }
 
@@ -252,16 +253,23 @@ div ::-webkit-scrollbar {
 
 /* to customize carousal indicator */
 .carousel-indicators {
-    bottom: 5px !important;
+    bottom: -8px !important;
 }
 
 .carousel-indicators button {
-    background-color: #FAA422;
+    background-color: gray;
     /* border-radius: 50%; */
-    height: 2px;
-    width: 20px;
+    height: 4px;
+    width: 4px;
     border: none;
-    margin-left: 10px;
+    margin-left: 15px;
+    border-radius: 50%;
+}
+
+.carousel-indicators .active {
+    background: black;
+    height: 6px;
+    width: 6px;
 }
 
 .carousel-indicators button:focus {
@@ -319,8 +327,9 @@ a.connect {
 }
 
 .stop-scrolling {
-    /* height: 100%; */
-    overflow: hidden !important;
+    margin: 0;
+    height: 100%;
+    overflow: hidden
 }
 
 .blur-body {
