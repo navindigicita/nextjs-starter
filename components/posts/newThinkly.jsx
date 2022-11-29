@@ -291,7 +291,7 @@ const NewThinkly = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                DeviceID: '123456',
+                DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,
                 UserID: author_id
             },
             data: {
@@ -400,7 +400,7 @@ const NewThinkly = (props) => {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "DeviceID": "1234523434654523466",
+                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
                 "UserID": LoggedInID
             },
             data: {
@@ -487,7 +487,7 @@ const NewThinkly = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                DeviceID: "123456",
+                DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,
                 UserID: LoggedInID,
                 contentType: 'application/json'
             },
@@ -674,7 +674,7 @@ const NewThinkly = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                DeviceID: "123456",
+                DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,//"123456"
                 UserID: LoggedInID,
                 contentType: 'application/json'
             },
@@ -725,7 +725,7 @@ const NewThinkly = (props) => {
             var config = {
                 method: 'POST',
                 headers: {
-                    DeviceID: "123456",
+                    DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,
                     UserID: LoggedInID,
                     contentType: 'application/json'
                 },
@@ -842,15 +842,16 @@ const NewThinkly = (props) => {
         setInputValue(value) //selected date and time also show on picker
 
         var todaysDateTime = new Date()  //current datetime
+        todaysDateTime.setMinutes(todaysDateTime.getMinutes() + 5); //H*
         // todaysDateTime.setTime(todaysDateTime.getTime() + 1 * 60 * 60 * 1000);  // Now Add 1 hours to todaysDateTime and set estimated time for comparision
-        todaysDateTime.setTime(todaysDateTime.getMinutes() + 5)
-        todaysDateTime.setTime(todaysDateTime.getTime() * 60 * 60 * 1000);  // Now Add 1 hours to todaysDateTime and set estimated time for comparision
+        // todaysDateTime.setTime(todaysDateTime.getMinutes() + 5)
+        // todaysDateTime.setTime(todaysDateTime.getTime() * 60 * 60 * 1000);  // Now Add 1 hours to todaysDateTime and set estimated time for comparision
         var selectedDateTime = date._d //selected dateTime
         // If the selectedDateTime is greater than or equal to estimatedDateTime then OK else show an error
-        if (selectedDateTime >= todaysDateTime) {
+        if (selectedDateTime > todaysDateTime) {
             setEnableScheduleButton(true)  //enable button
         } else {
-            alert("Time should be 1 hr greater than current time")
+            alert("Time should be 1 hr greater than the current time")
             setEnableScheduleButton(false) //disable button
         }
     }

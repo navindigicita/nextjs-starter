@@ -71,6 +71,7 @@ const Libraries = (props) => {
                     setSubscriptionEndIndex(SubscriptionEndIndex + 10)
                     setIsSubscribedFetching(true)
                 } else if (res.data.responseCode === '03') {
+                    console.log("inside else if 03");
                     setNoRecord(true)
                     setIsSubscribedFetching(false)
                 }

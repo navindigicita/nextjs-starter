@@ -13,6 +13,7 @@ import DateMomentUtils from '@date-io/moment'
 import moment from "moment";
 import { Star } from '@material-ui/icons'
 import RedeemModal from './redeemModal'
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const MyStar = (props) => {
     const BASE_URL_THINKLY = useContext(baseUrlThinkly)
@@ -132,7 +133,7 @@ const MyStar = (props) => {
             data: {
                 "touserID": authorID,
                 "startIndex": StartIndex,
-                "endIndex": EndIndex,//EndIndex
+                "endIndex": EndIndex,
                 "ChannelID": process.env.REACT_APP_CHANNEL_ID
             }
         }
@@ -304,7 +305,7 @@ const MyStar = (props) => {
                                                 <ListItemText className='float-right'
                                                     primary={<Box component="span" className='float-right border-radius-4 bg-lightgray fs-12 px-2'>{obj.trnSource}</Box>}
                                                     secondary={<span className={`${trnColor === 'negative' ? 'fc-red' : 'fc-green'} fs-20 float-right fw-mid-bold`} >
-                                                        {obj.trnSign}{obj.trnNoOfStars} <img style={{ width: "20px", marginTop: '-25px', marginLeft: '38px' }} src={countIcon} alt="transcation star Icon" />
+                                                        {obj.trnSign}{obj.trnNoOfStars} <img style={{ width: "20px", marginTop: '-25px', marginLeft: obj.trnNoOfStars >= 10 ? "40px" : "28px" }} src={countIcon} alt="transcation star Icon" />
                                                     </span>}
                                                 />
                                             </div>
@@ -322,7 +323,12 @@ const MyStar = (props) => {
                 {/* Redemption Tab */}
                 <div id="Redemptions" className="tabContent">
                     <p className='mt-3 text-center fs-22 fw-bold'>You have {CouponsCount} rewards</p>
-                    {myRewardsData !== undefined && myRewardsData.length > 0 ? myRewardsData.map((obj, index) => {
+                    {myRewardsData !== undefined && myRewardsData.length > 0 ?<>
+                    {/* <InfiniteScroll dataLength={myRewardsData.length} next={MyRewards()}
+                    // hasMore={isFetching}
+                    loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
+                    endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}> */}
+                     {myRewardsData.map((obj, index) => {
                         const imageUrl = obj.CatalogueImage !== undefined && obj.CatalogueImage.charAt(0) === '@' ? obj.CatalogueImage.substring(1) : obj.CatalogueImage //img url format
                         var d = new Date(obj.ExpiryDate)
                         var expdate = d.toDateString() //expiry date format
@@ -348,7 +354,9 @@ const MyStar = (props) => {
                                 </div>
                             </div>
                         </>)
-                    }) : <> {myRewardsData !== undefined && myRewardsData.length === 0 ? '' : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
+                    })} 
+                    {/* </InfiniteScroll> */}
+                    </> : <> {myRewardsData !== undefined && myRewardsData.length === 0 ? '' : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
                         <CircularProgress aria-label="Loading..." />
                     </div>}
                     </>}
