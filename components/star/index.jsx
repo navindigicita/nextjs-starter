@@ -35,7 +35,7 @@ const MyStar = (props) => {
     const [UserBalance, setUserBalance] = useState(props.UserBalance)
     const [StartIndex, setStartIndex] = useState(0)
     const [EndIndex, setEndIndex] = useState(10)
-    const [CouponsCount, setCouponsCount] = useState()
+    const [CouponsCount, setCouponsCount] = useState(0)//for reward coupon count
 
     useEffect(() => {
         document.getElementById("defaultOpen").click();
@@ -131,7 +131,7 @@ const MyStar = (props) => {
             method: 'POST',
             data: {
                 "touserID": authorID,
-                "startIndex": StartIndex,//StartIndex
+                "startIndex": StartIndex,
                 "endIndex": EndIndex,//EndIndex
                 "ChannelID": process.env.REACT_APP_CHANNEL_ID
             }
@@ -159,15 +159,18 @@ const MyStar = (props) => {
     }
 
     const startDate = (date, value) => {
-        var todaysDate = new Date()
-        if (Date.parse(todaysDate) > Date.parse(date._d)) {
-            document.getElementById('error').innerHTML = "";
-            setFromDate(value);
-            setInputValueFrom(value)
-            setStartDate(date._d)
-        } else {
-            document.getElementById('error').innerHTML = "Selected date should be less than today's date";
-        }
+        // var todaysDate = new Date()
+        // if (Date.parse(todaysDate) > Date.parse(date._d)) {
+        //     document.getElementById('error').innerHTML = "";
+        //     setFromDate(value);
+        //     setInputValueFrom(value)
+        //     setStartDate(date._d)
+        // } else {
+        //     document.getElementById('error').innerHTML = "Selected date should be less than today's date";
+        // }
+        setFromDate(value);
+        setInputValueFrom(value)
+        setStartDate(date._d)
     };
 
     const endDate = (date, value) => {
@@ -175,16 +178,14 @@ const MyStar = (props) => {
         var formattedSelectedDate = date._d //selected date
         if (StartDate !== undefined) {
             document.getElementById('error').innerHTML = "";
-            if (Date.parse(formattedSelectedDate) < Date.parse(todaysDate) && Date.parse(formattedSelectedDate) > Date.parse(StartDate)) {
+            if (Date.parse(formattedSelectedDate) < Date.parse(todaysDate) && Date.parse(formattedSelectedDate) >= Date.parse(StartDate)) {
                 document.getElementById('error').innerHTML = "";
                 setToDate(value)
                 setInputValueToDate(value)
                 setEndDate(date._d)
                 var Difference_In_Time = formattedSelectedDate.getTime() - StartDate.getTime();  //substraction of end date to start date
                 var Final_Days = Difference_In_Time / (1000 * 3600 * 24);  // number of days in long float
-
                 var days_limit = FilterData.filter(obj => obj.filterType === 'OTHER')
-
                 if (Final_Days >= days_limit[0].noOfDays) {
                     document.getElementById('error').innerHTML = "Oops! days limit exceeds";
                     setUserTransactionsData('custom')
@@ -243,6 +244,7 @@ const MyStar = (props) => {
                         <MuiPickersUtilsProvider utils={DateMomentUtils} libInstance={moment} >
                             <span className='col-1'></span>
                             <KeyboardDatePicker className='col-3'
+                                disableFuture
                                 label='Start Date'
                                 autoOk={true}
                                 showTodayButton={true}
@@ -274,7 +276,7 @@ const MyStar = (props) => {
                     </div>}
 
                     {userTransactionsData === 'custom' ? '' : <>
-                        {userTransactionsData === null ? <div className='text-center mt-2'>No Transactions Found</div> : <>
+                        {userTransactionsData === null ? <div className='text-center mt-4 fw-mid-bold'>No Transactions Found</div> : <>
                             {userTransactionsData !== undefined && userTransactionsData.length > 0 ? userTransactionsData.map((obj) => {
                                 const countIcon = obj.trnStarImage !== undefined && obj.trnStarImage.charAt(0) === '@' ? obj.trnStarImage.substring(1) : obj.trnStarImage //img url format
                                 const transcationIcon = obj.trnImage !== undefined && obj.trnImage.charAt(0) === '@' ? obj.trnImage.substring(1) : obj.trnImage //img url format
@@ -310,16 +312,15 @@ const MyStar = (props) => {
                                     </Card>
                                     <hr />
                                 </>)
-                            }) : <>{userTransactionsData === undefined && <div style={{ padding: '150px 0px', textAlign: 'center' }}>
+                            }) : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
                                 <CircularProgress aria-label="Loading..." />
-                            </div>}</>}
+                            </div>}
                         </>}
                     </>}
                 </div>
 
                 {/* Redemption Tab */}
                 <div id="Redemptions" className="tabContent">
-                    {/* <p className='mt-3 text-center fs-22 fw-bold'>You have {myRewardsData !== undefined ? myRewardsData.length : '0'} rewards</p> */}
                     <p className='mt-3 text-center fs-22 fw-bold'>You have {CouponsCount} rewards</p>
                     {myRewardsData !== undefined && myRewardsData.length > 0 ? myRewardsData.map((obj, index) => {
                         const imageUrl = obj.CatalogueImage !== undefined && obj.CatalogueImage.charAt(0) === '@' ? obj.CatalogueImage.substring(1) : obj.CatalogueImage //img url format
@@ -355,7 +356,7 @@ const MyStar = (props) => {
             </div>
         </div>
         {/* on redeem click */}
-        <RedeemModal authorID={authorID} UserBalance={UserBalance} showModal={show} onChangeCallback={props.onChangeCallback} onChangeCallback1={props.onChangeCallback1} />
+        {show && <RedeemModal authorID={authorID} UserBalance={UserBalance} showModal={show} onChangeCallback={props.onChangeCallback} onChangeCallback1={props.onChangeCallback1} />}
     </>)
 
 }

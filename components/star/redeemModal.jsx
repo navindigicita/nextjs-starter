@@ -23,6 +23,7 @@ const RedeemModal = (props) => {
 
     useEffect(() => {
         if (props.showModal !== undefined && props.UserBalance !== undefined && props.authorID !== undefined) {
+            console.log("welcome to redeemModel page");
             setAuthorID(props.authorID)
             setUserBalance(props.UserBalance)  //state
             if (props.showModal === true) {
@@ -193,7 +194,9 @@ const RedeemModal = (props) => {
                         </div>}
                 </div>
             </div>
-        </div> : <div style={{ padding: '150px 0px', textAlign: 'center' }}><CircularProgress aria-label="Loading..." /></div>}
+        </div> : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
+            <CircularProgress aria-label="Loading..." />
+            </div>}
     </>)
 }
 
