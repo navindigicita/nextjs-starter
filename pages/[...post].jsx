@@ -26,7 +26,8 @@ const PostDetail = (props) => {
             const data = props.response
             setPostData(data)
             console.log(data);
-            if (data.publicationData !== null && data.publicationData.publicationPayType === "Paid") {  //for disable scroll and background blurred on paid thinkly
+            //for disable scroll and background blurred on paid thinkly
+            if (data.publicationData !== undefined && data.publicationData !== null && data.publicationData.publicationPayType === "Paid" && data.postData.postPayType === "Paid") {
                 // document.getElementById('fadeIT').classList.add("blur-body");
                 document.body.classList.add("stop-scrolling");
             }
@@ -186,25 +187,25 @@ const PostDetail = (props) => {
         {/* paid thinkly bottomsheet */}
         {PostData !== undefined && PostData !== null && PostData.publicationData !== null && PostData.postData.postPayType === "Paid" ? <div className="shell-container show">
             <form name="paymentGatewayrazorpay" onSubmit={handleSubmit(onSubmit)}>
-                {isMobile ? <div className="row d-flex">
-                    {/* pt-2 pb-4 px-3 */}
-                </div> : <div className="row d-flex">
-                    <div className="col-10 mx-auto">
-                        <img src={'/paidthinkly.png'} alt="paid thinkly" className="" style={{ width: '80px', height: '80px' }} />
+                <div className="row d-flex">
+                    <div className={isMobile ? 'col-12 px-4' : 'col-md-11 mx-auto pt-2'}>
                         <p className="fs-28 fw-bold fc-white mb-2 text-center"> This is a premium post </p>
                         <div className="row mt-2">
                             <div className="col-1" onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)}>
                                 <img src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage}
-                                    alt="profile" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} />
+                                    alt="profile" style={isMobile ? { width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' } : { width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} />
                             </div>
-                            <div className="col-10 ml-4">
-                                <ListItemText className="my-auto" primary={<span className="fc-white fs-15" style={{ lineHeight: '0.6' }}>PUBLISHED IN </span>}
-                                    secondary={<span className="fc-white fw-mid-bold fs-20">{PostData.publicationData.publicationName}</span>} />
-                                <button className="subscribe-button mt-3" type='submit'> Subscribe </button>
+                            <div className={isMobile ? "col-8 pl-5 mt-2" : "col-8 pl-4"}>
+                                <ListItemText className="my-auto" primary={<span className={isMobile ? "fc-white fs-12" : "fc-white fs-15"}>PUBLISHED IN </span>}
+                                    secondary={<span className={isMobile ? "fc-white fw-mid-bold fs-16" : "fc-white fw-mid-bold fs-20"}>{PostData.publicationData.publicationName}</span>} />
+                                <button className={isMobile ? "subscribe-button mt-2" : "subscribe-button"} type='submit'> Subscribe </button>
+                            </div>
+                            <div className="col-3">
+                                <img src={'/paidthinkly.png'} alt="paid thinkly" className="float-right" style={isMobile ? { width: '60px', height: '60px' } : { width: '80px', height: '80px' }} />
                             </div>
                         </div>
                     </div>
-                </div>}
+                </div>
             </form>
         </div> : <Footer />}
     </>)

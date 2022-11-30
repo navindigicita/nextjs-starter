@@ -12,7 +12,7 @@ module.exports = {
       ]
     }
   },
-  trailingSlash: true,
+  trailingSlash: false,
   // distDir: 'out',
   // reactStrictMode: false,
   eslint: {

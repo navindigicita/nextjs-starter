@@ -15,8 +15,9 @@ const PaymentSuccess = () => {
     const [starCount, setstarCount] = useState(0)
 
     useEffect(() => {
-        const data = ParaByNameFromUrl('penname')
-        const star = ParaByNameFromUrl('stars')
+        console.log(router.asPath);
+        const data = ParaByNameFromUrl('penname', router.asPath)
+        const star = ParaByNameFromUrl('stars', router.asPath)
         console.log(data, star);
         setpenName(data)
         setstarCount(star)

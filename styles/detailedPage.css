@@ -332,6 +332,10 @@ a.connect {
     overflow: hidden
 }
 
+.MuiTypography-body1 {
+    line-height: 0.8;
+}
+
 .blur-body {
     transition-delay: 3s;
     filter: blur(1px);
