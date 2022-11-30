@@ -38,8 +38,8 @@ const HomePage = (props) => {
         const data = localStorage.getItem('UserID')
         setAuthorID(data) //state
         fetchUserProfileData(data)   //function
-        fetchSupporterData(data) //function
-        GetMyStarBalance(data)  //function call for user balance
+        fetchSupporterData(data) //function call
+        GetMyStarBalance(data)  //function call
       } else {
         router.push('/login')
       }
@@ -84,7 +84,6 @@ const HomePage = (props) => {
   }
 
   const GetMyStarBalance = (userID) => {
-    ("inside GetMyStarBalance")
     var config = {
       headers: {
         "Content-Type": "application/json",
@@ -128,9 +127,12 @@ const HomePage = (props) => {
               : value === 'Stars' ? <MyStar authorID={AuthorID} UserBalance={UserBalance} onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)} />
                 : value === 'Publication' ? <Publication authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
                   : value === 'Thinkly' ? <PostCollection authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
-                    : value === 'Dashboard' ? <DashboardPage profileJson={profileData} supporterData={supporterData} /> : ''}
-          </> : <> <DashboardPage profileJson={profileData} supporterData={supporterData} />:
-          <MyStar authorID={AuthorID} UserBalance={UserBalance} onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)} /></>}
+                    : value === 'Dashboard' ? <DashboardPage authorID={AuthorID} UserBalance={UserBalance} profileJson={profileData} supporterData={supporterData} /> : ''}
+          </> : <>
+            {/* <DashboardPage profileJson={profileData} supporterData={supporterData} /> */}
+            {profileData.profileDetails.isPartialProfile === false && profileData.profileDetails.isSupportEnabled === false ? <MyStar authorID={AuthorID} UserBalance={UserBalance} onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)} /> :
+              profileData.profileDetails.isPartialProfile === false && profileData.profileDetails.isSupportEnabled === true && <DashboardPage profileJson={profileData} supporterData={supporterData} authorID={AuthorID} UserBalance={UserBalance} onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)} />}
+          </>}
         </div>
         <div style={{ background: 'lightgray', height: 'auto', width: '1px', marginRight: '-40px', marginLeft: '38px' }}></div>
         {!isMobile && <>

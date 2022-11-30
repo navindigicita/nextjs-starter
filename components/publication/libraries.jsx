@@ -69,7 +69,7 @@ const Libraries = (props) => {
                     setSubscriptionCount(res.data.responseData.otherDetails.totalSubscriptionCount)
                     setSubscriptionStartIndex(SubscriptionEndIndex)
                     setSubscriptionEndIndex(SubscriptionEndIndex + 10)
-                    setIsSubscribedFetching(true)
+                    setIsSubscribedFetching(true) 
                 } else if (res.data.responseCode === '03') {
                     console.log("inside else if 03");
                     setNoRecord(true)

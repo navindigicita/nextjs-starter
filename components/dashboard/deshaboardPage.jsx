@@ -7,25 +7,32 @@ import { isMobile } from 'react-device-detect'
 import { baseUrlThinkly } from '../../pages/api/api';
 import ShareLink from '../common/shareLink';
 import Faq from '../common/faq';
+import RedeemModal from '../star/redeemModal'
 
 const DashboardPage = (props) => {
     const emailValidate = (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
     const BASE_URL = useContext(baseUrlThinkly);
     const [penName, setpenName] = useState()
     const [supporterData, setsupporterData] = useState()
+    const [show, setShow] = useState(false); //for reedem modal
     const [getEmail, setEmail] = useState(false)
     const [EmailInput, setEmailInput] = useState()
     const [ErrorMsg, setErrorMsg] = useState('')
     const [openInAppUrl, setopenInAppUrl] = useState(null)  //dynamic link for mob
+    const [authorID, setAuthorID] = useState(props.authorID)
+    const [UserBalance, setUserBalance] = useState(props.UserBalance)
 
     useEffect(() => {
-        console.log("@@@@@@@@@@@", props.profileJson);
         if (props.profileJson !== undefined && props.profileJson !== null && props.supporterData !== undefined) {
             console.log(props.profileJson.profileDetails.penName);
             const name = props.profileJson.profileDetails.penName
             const data = name.charAt('@') ? name.substring(1) : name
             setpenName(data)
             setsupporterData(props.supporterData)
+        } else if (props.authorID !== undefined && props.UserBalance !== undefined) {
+        console.log("@@@@@@@@@@@",props.authorID,props.UserBalance);
+            setAuthorID(props.authorID)
+            setUserBalance(props.UserBalance)
         }
     }, [])
 
@@ -67,9 +74,14 @@ const DashboardPage = (props) => {
         }
     }
 
+    const modalShow = () => {
+        console.log("inside show modal");
+        setShow(true); //on click show redeem modal
+    }
+
     return (<>
         <div className='container'>
-            <span className={isMobile ? 'fs-18 fw-mid' : 'fs-20 fw-mid'}>My True-fans</span> <hr /> 
+            <span className={isMobile ? 'fs-18 fw-mid' : 'fs-20 fw-mid'}>My True-fans</span> <hr />
             <div className='row mt-5'>
                 <div className='col-6 mb-3'>
                     <Card className='py-2' style={{ border: 'lightgray 1px solid', borderRadius: '10px' }}>
@@ -80,7 +92,9 @@ const DashboardPage = (props) => {
                 <div className='col-6'>
                     <Card className='py-2' style={{ border: 'lightgray 1px solid', borderRadius: '10px' }}>
                         <div className={isMobile ? 'fw-mid text-center fs-18' : 'fw-mid text-center fs-20'}>
-                            {isMobile ? 'Earnings' : 'Gross Income'} <span className='fs-15 fc-link pointer' data-toggle="modal" data-target="#redeemModal">Redeem</span>
+                            {/* {isMobile ? 'Earnings' : 'Gross Income'} <span className='fs-15 fc-link pointer' data-toggle="modal" data-target="#redeemModal">Redeem</span> */}
+                            {isMobile ? 'Earnings' : 'Gross Income'}
+                            <button data-toggle="modal" data-target="#redeemModal" className='border-none text-center fs-18 fc-link bg-white fw-mid-bold ml-1' onClick={() => modalShow()}>Redeem</button>
                         </div>
                         <div className={isMobile ? 'fw-bold text-center fs-20' : 'fw-bold text-center fs-24'}> <Star style={{ marginTop: '-6px' }} />{supporterData !== undefined && supporterData.UserBalance} </div>
                         {/* <div className={isMobile ? 'fw-bold text-center fs-20' : 'fw-bold text-center fs-24'}> <Star style={{ marginTop: '-6px' }} />0 | <span>&#8377;</span>{supporterData !== undefined && supporterData.UserBalance}</div> */}
@@ -107,7 +121,7 @@ const DashboardPage = (props) => {
         </div>
 
         {/* modal for redeem */}
-        <div id="redeemModal" className="modal fade in" tabIndex="-1" role="dialog" data-backdrop="static">
+        <div id="myredeemModal" className="modal fade in" tabIndex="-1" role="dialog" data-backdrop="static">
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content modal-background">
                     <button type="button" className="close text-right pr-2" data-dismiss="modal" onClick={() => setEmail(false)}>&times;</button>
@@ -146,6 +160,7 @@ const DashboardPage = (props) => {
                 </div>
             </div>
         </div>
+        <RedeemModal authorID={authorID} UserBalance={UserBalance} showModal={show} onChangeCallback={props.onChangeCallback} onChangeCallback1={props.onChangeCallback1}/>
     </>)
 }
 

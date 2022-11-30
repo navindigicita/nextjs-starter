@@ -11,7 +11,7 @@ import { Card } from 'react-bootstrap'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
 import DateMomentUtils from '@date-io/moment'
 import moment from "moment";
-import { Star } from '@material-ui/icons'
+import { RepeatOneSharp, Star } from '@material-ui/icons'
 import RedeemModal from './redeemModal'
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -20,6 +20,8 @@ const MyStar = (props) => {
     const BASE_URL_THINKLY_API2 = useContext(baseUrlThinklyApi2)
     const [userTransactionsData, setUserTransactionsData] = useState([])  //api data store, sorted according to filter
     const [myRewardsData, setMyRewardsData] = useState() //for StarAwards/MyRewards api
+    const [isFetching, setIsFetching] = useState(false) //fetch more data on scroll
+
     const [FilterData, setFilterData] = useState([])  //store config return data in it for button binding
     const [TransactionsFilterType, setTransactionsFilterType] = useState() //set filterType
     const [TransactionsNoOfDays, setTransactionsNoOfDays] = useState(0) //set noOfDays
@@ -42,7 +44,7 @@ const MyStar = (props) => {
         document.getElementById("defaultOpen").click();
         if (props.authorID !== undefined && props.UserBalance !== undefined) {
             setAuthorID(props.authorID)  //state
-            MyRewards()  //function
+            fetchMyRewards(props.authorID)  //function
             setUserBalance(props.UserBalance)  //state
         }
         const fetchfilterdata = async () => {
@@ -121,13 +123,9 @@ const MyStar = (props) => {
 
     }
 
-    function scrollThinklies() {
-        setStartIndex(EndIndex)
-        setEndIndex(EndIndex + 10)
-    }
-
     //function for My Redemptions 
-    const MyRewards = () => {
+    const fetchMyRewards = (authorID) => {
+        console.log(authorID, StartIndex, EndIndex);
         var config = {
             method: 'POST',
             data: {
@@ -141,16 +139,19 @@ const MyStar = (props) => {
             .then((res) => {
                 if (res.data.responseCode === '00') {
                     const response = JSON.parse(res.data.responseData)
-                    console.log("inside StarAwards/MyRewards", response);
-                    // const CouponsCountHandle = response.Table.map((obj) => { return obj.CouponsCount })
-                    // setCouponsCount(CouponsCountHandle)
-                    setCouponsCount(response.Table[0].CouponsCount)
-                    const rewardData = response.Table
-                    if (myRewardsData !== undefined && myRewardsData.length > 0) {
-                        setMyRewardsData(myRewardsData => [...myRewardsData, ...rewardData])
-                        scrollThinklies()
+                    setCouponsCount(response.Table[0].CouponsCount)  //count for reward data
+                    if (response.Table !== undefined && response.Table.length === 0) {
+                        setIsFetching(false)
                     } else {
-                        setMyRewardsData(rewardData)
+                        const rewardData = response.Table
+                        if (myRewardsData !== undefined && myRewardsData.length > 0) {
+                            setMyRewardsData(myRewardsData => [...myRewardsData, ...rewardData])
+                        } else {
+                            setMyRewardsData(rewardData)
+                        }
+                        setStartIndex(EndIndex)
+                        setEndIndex(EndIndex + 10)
+                        setIsFetching(true)
                     }
                 }
             })
@@ -323,42 +324,43 @@ const MyStar = (props) => {
                 {/* Redemption Tab */}
                 <div id="Redemptions" className="tabContent">
                     <p className='mt-3 text-center fs-22 fw-bold'>You have {CouponsCount} rewards</p>
-                    {myRewardsData !== undefined && myRewardsData.length > 0 ?<>
-                    {/* <InfiniteScroll dataLength={myRewardsData.length} next={MyRewards()}
-                    // hasMore={isFetching}
-                    loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
-                    endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}> */}
-                     {myRewardsData.map((obj, index) => {
-                        const imageUrl = obj.CatalogueImage !== undefined && obj.CatalogueImage.charAt(0) === '@' ? obj.CatalogueImage.substring(1) : obj.CatalogueImage //img url format
-                        var d = new Date(obj.ExpiryDate)
-                        var expdate = d.toDateString() //expiry date format
-                        return (<>
-                            <div className='row' key={index}>
-                                <div className='col-12 px-3' style={{ backgroundImage: `url(${"/Rewards.svg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "470px", width: "100%", padding: "55px" }}>
-                                    <div className='row d-flex'>
-                                        <div className='col-6 mx-auto'>
-                                            <div className='row mb-4'>
-                                                <ListItemText className='col-8' style={{ height: "100px", textAlign: "left" }} primary={<h2 className='fs-18'>{obj.CatalogueName}</h2>} secondary={<p className='fs-12'>{obj.Description}</p>} />
-                                                <div className='col-4'>
-                                                    <img src={imageUrl} style={{ height: "80px", width: "80px" }} alt='image'></img>
+                    {myRewardsData !== undefined && myRewardsData.length > 0 ? <>
+                        <InfiniteScroll dataLength={myRewardsData.length}
+                            next={fetchMyRewards(authorID)}
+                            hasMore={isFetching}
+                            loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
+                            endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}>
+                            {myRewardsData.map((obj, index) => {
+                                const imageUrl = obj.CatalogueImage !== undefined && obj.CatalogueImage.charAt(0) === '@' ? obj.CatalogueImage.substring(1) : obj.CatalogueImage //img url format
+                                var d = new Date(obj.ExpiryDate)
+                                var expdate = d.toDateString() //expiry date format
+                                return (<>
+                                    <div className='row' key={index}>
+                                        <div className='col-12 px-3' style={{ backgroundImage: `url(${"/Rewards.svg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "470px", width: "100%", padding: "55px" }}>
+                                            <div className='row d-flex'>
+                                                <div className='col-6 mx-auto'>
+                                                    <div className='row mb-4'>
+                                                        <ListItemText className='col-8' style={{ height: "100px", textAlign: "left" }} primary={<h2 className='fs-18'>{obj.CatalogueName}</h2>} secondary={<p className='fs-12'>{obj.Description}</p>} />
+                                                        <div className='col-4'>
+                                                            <img src={imageUrl} style={{ height: "80px", width: "80px" }} alt='image'></img>
+                                                        </div>
+                                                    </div>
+                                                    <hr style={{ borderTop: "1px dashed #8f8f8f", width: "100%", marginTop: "40px" }} />
+                                                    <div className=''>
+                                                        <p className='text-center mt-2'>Expires On {expdate}</p>
+                                                        <Box className='text-center fs-16 mt-1' style={{ background: "#ffefd0", color: "#8f8f8f", borderRadius: 1 }}>{obj.Code}</Box>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <hr style={{ borderTop: "1px dashed #8f8f8f", width: "100%", marginTop: "40px" }} />
-                                            <div className=''>
-                                                <p className='text-center mt-2'>Expires On {expdate}</p>
-                                                <Box className='text-center fs-16 mt-1' style={{ background: "#ffefd0", color: "#8f8f8f", borderRadius: 1 }}>{obj.Code}</Box>
-                                            </div>
                                         </div>
-
                                     </div>
-                                </div>
-                            </div>
-                        </>)
-                    })} 
-                    {/* </InfiniteScroll> */}
-                    </> : <> {myRewardsData !== undefined && myRewardsData.length === 0 ? '' : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
-                        <CircularProgress aria-label="Loading..." />
-                    </div>}
+                                </>)
+                            })}
+                        </InfiniteScroll>
+                    </> : <> {myRewardsData !== undefined && myRewardsData.length === 0 ? 'No Record found'
+                        : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
+                            <CircularProgress aria-label="Loading..." />
+                        </div>}
                     </>}
                 </div>
             </div>
