@@ -94,7 +94,7 @@ const HomePage = (props) => {
     Axios.get(`${BASE_URL}User/GetMyBalance`, config)
       .then((res) => {
         if (res.data.responseCode === '00') {
-          console.log("inside User/GetMyBalance", res.data.responseData.UserBalance);
+          console.log("inside User/GetMyBalance on index", res.data.responseData.UserBalance);
           setUserBalance(res.data.responseData.UserBalance)
         }
       })
@@ -124,10 +124,10 @@ const HomePage = (props) => {
         <div className={isMobile ? 'col-12 py-4' : 'col-8 pr-5 card-fixed'}>
           {getIsValue ? <>
             {value === 'Libraries' ? <Libraries authorID={AuthorID} />
-              : value === 'Stars' ? <MyStar authorID={AuthorID} UserBalance={UserBalance} onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)} />
+              : value === 'Stars' ? <MyStar authorID={AuthorID} UserBalance={UserBalance}  onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)}/>
                 : value === 'Publication' ? <Publication authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
                   : value === 'Thinkly' ? <PostCollection authorID={AuthorID} thinklyConfigJSON={thinklyConfigData} />
-                    : value === 'Dashboard' ? <DashboardPage authorID={AuthorID} UserBalance={UserBalance} profileJson={profileData} supporterData={supporterData} /> : ''}
+                    : value === 'Dashboard' ? <DashboardPage authorID={AuthorID} UserBalance={UserBalance} profileJson={profileData} supporterData={supporterData} onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)}/> : ''}
           </> : <>
             {/* <DashboardPage profileJson={profileData} supporterData={supporterData} /> */}
             {profileData.profileDetails.isPartialProfile === false && profileData.profileDetails.isSupportEnabled === false ? <MyStar authorID={AuthorID} UserBalance={UserBalance} onChangeCallback={(id) => GetMyStarBalance(id)} onChangeCallback1={(id) => fetchUserProfileData(id)} /> :

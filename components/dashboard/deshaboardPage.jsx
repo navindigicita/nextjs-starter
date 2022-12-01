@@ -24,13 +24,11 @@ const DashboardPage = (props) => {
 
     useEffect(() => {
         if (props.profileJson !== undefined && props.profileJson !== null && props.supporterData !== undefined) {
-            console.log(props.profileJson.profileDetails.penName);
             const name = props.profileJson.profileDetails.penName
             const data = name.charAt('@') ? name.substring(1) : name
             setpenName(data)
             setsupporterData(props.supporterData)
         } else if (props.authorID !== undefined && props.UserBalance !== undefined) {
-        console.log("@@@@@@@@@@@",props.authorID,props.UserBalance);
             setAuthorID(props.authorID)
             setUserBalance(props.UserBalance)
         }
@@ -160,7 +158,7 @@ const DashboardPage = (props) => {
                 </div>
             </div>
         </div>
-        <RedeemModal authorID={authorID} UserBalance={UserBalance} showModal={show} onChangeCallback={props.onChangeCallback} onChangeCallback1={props.onChangeCallback1}/>
+        {show && <RedeemModal authorID={authorID} UserBalance={UserBalance} showModal={show} onChangeCallback={props.onChangeCallback} onChangeCallback1={props.onChangeCallback1}/>}
     </>)
 }
 

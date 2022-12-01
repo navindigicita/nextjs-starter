@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react'
 import { CircularProgress, ListItemText, Box } from '@material-ui/core'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { isMobile } from 'react-device-detect'
-// import "../css/myStar.css"
 import { UserTransactionsConfiguration } from '../../config/individualThinkly';
 import Axios from 'axios'
 import { baseUrlThinkly, baseUrlThinklyApi2 } from '../../pages/api/api'
@@ -11,7 +10,7 @@ import { Card } from 'react-bootstrap'
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
 import DateMomentUtils from '@date-io/moment'
 import moment from "moment";
-import { RepeatOneSharp, Star } from '@material-ui/icons'
+import { Star } from '@material-ui/icons'
 import RedeemModal from './redeemModal'
 import InfiniteScroll from "react-infinite-scroll-component";
 
@@ -20,8 +19,7 @@ const MyStar = (props) => {
     const BASE_URL_THINKLY_API2 = useContext(baseUrlThinklyApi2)
     const [userTransactionsData, setUserTransactionsData] = useState([])  //api data store, sorted according to filter
     const [myRewardsData, setMyRewardsData] = useState() //for StarAwards/MyRewards api
-    const [isFetching, setIsFetching] = useState(false) //fetch more data on scroll
-
+    const [isFetching, setIsFetching] = useState(false) //fetch more data on scroll (redemption tab)
     const [FilterData, setFilterData] = useState([])  //store config return data in it for button binding
     const [TransactionsFilterType, setTransactionsFilterType] = useState() //set filterType
     const [TransactionsNoOfDays, setTransactionsNoOfDays] = useState(0) //set noOfDays
@@ -125,7 +123,6 @@ const MyStar = (props) => {
 
     //function for My Redemptions 
     const fetchMyRewards = (authorID) => {
-        console.log(authorID, StartIndex, EndIndex);
         var config = {
             method: 'POST',
             data: {

@@ -6,11 +6,11 @@ import { baseUrlThinklyApi2 } from '../../pages/api/api'
 import Axios from 'axios'
 
 const RedeemModal = (props) => {
+    const BASE_URL_THINKLY_API2 = useContext(baseUrlThinklyApi2)
     const [UserBalance, setUserBalance] = useState(props.UserBalance)
     const [authorID, setAuthorID] = useState(props.authorID)
     const [myAllRewardsData, setMyAllRewardsData] = useState() //for StarAwards/Allrewards api
     const [redeemVoucherData, setRedeemVoucherData] = useState() //for StarAwards/RedeemVoucher api
-    const BASE_URL_THINKLY_API2 = useContext(baseUrlThinklyApi2)
     const [StartIndex, setStartIndex] = useState(0)
     const [EndIndex, setEndIndex] = useState(10)
     const [couponStarCount, setCouponStarCount] = useState() //store Stars
@@ -24,7 +24,7 @@ const RedeemModal = (props) => {
     useEffect(() => {
         if (props.showModal !== undefined && props.UserBalance !== undefined && props.authorID !== undefined) {
             console.log("welcome to redeemModel page");
-            setAuthorID(props.authorID)
+            setAuthorID(props.authorID) //state
             setUserBalance(props.UserBalance)  //state
             if (props.showModal === true) {
                 $('#redeemModal').modal('show')
@@ -32,7 +32,7 @@ const RedeemModal = (props) => {
                 $('#redeemModal').modal('hide')
             }
         }
-        MyAllrewards() //function
+        MyAllrewards(props.authorID) //function
     }, [])
 
     function scrollThinklies() {
@@ -40,7 +40,7 @@ const RedeemModal = (props) => {
         setEndIndex(EndIndex + 10)
     }
 
-    const MyAllrewards = () => {
+    const MyAllrewards = (authorID) => {
         var config = {
             method: 'POST',
             data: {
@@ -61,7 +61,6 @@ const RedeemModal = (props) => {
                     } else {
                         setMyAllRewardsData(rewardData)
                     }
-
                 }
             })
             .catch((err) => {
@@ -108,14 +107,16 @@ const RedeemModal = (props) => {
     }
 
     const RedeemSuccessMsgOk = () => {
+        console.log("inside RedeemSuccessMsgOk function", props.onChangeCallback(authorID), props.onChangeCallback1(authorID));
         $('#redeemNowModal').modal('hide')
         props.onChangeCallback(authorID)//recall for bal reflection
         props.onChangeCallback1(authorID)
+        window.location.reload(false);
     }
 
 
     return (<>
-        <div className="modal fade" id="redeemModal" role="dialog">
+        <div className="modal alpha" id="redeemModal" role="dialog">
             <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                     <button type="button" className="close text-right pr-2" data-dismiss="modal" aria-hidden="true">×</button>
@@ -125,40 +126,41 @@ const RedeemModal = (props) => {
                             <div className={'fw-bold text-center fs-30'}>
                                 {UserBalance !== undefined ? UserBalance : '0'} <Star className='fc-primary' style={{ height: '40px', width: '40px', marginTop: '-10px' }} />
                             </div>
-                            {myAllRewardsData !== undefined && myAllRewardsData.length > 0 ? myAllRewardsData.map((obj, index) => {
-                                const imageUrl = obj.CatalogueImage !== undefined && obj.CatalogueImage.charAt(0) === '@' ? obj.CatalogueImage.substring(1) : obj.CatalogueImage //img url format
-                                return (<div className='row' >
-                                    <div className='col-12 px-3' style={{ backgroundImage: `url(${"/Rewards.svg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "420px", width: "100%", padding: "55px" }}>
-                                        <div className='row d-flex' key={index}>
-                                            <div className='col-6 mx-auto'>
-                                                <div className='row mb-4' >
-                                                    <ListItemText className='col-8' style={{ height: "100px", textAlign: "left" }} primary={<h2 className='fs-18'>{obj.CatalogueName}</h2>} secondary={<p className='fs-12'>{obj.Description}</p>} />
-                                                    <div className='col-4'>
-                                                        <img src={imageUrl} style={{ height: "80px", width: "80px" }} alt='image' />
+                            {myAllRewardsData !== undefined && myAllRewardsData.length > 0 ? <>
+                                    {myAllRewardsData.map((obj, index) => {
+                                        const imageUrl = obj.CatalogueImage !== undefined && obj.CatalogueImage.charAt(0) === '@' ? obj.CatalogueImage.substring(1) : obj.CatalogueImage //img url format
+                                        return (<div className='row' >
+                                            <div className='col-12 px-3' style={{ backgroundImage: `url(${"/Rewards.svg"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "420px", width: "100%", padding: "55px" }}>
+                                                <div className='row d-flex' key={index}>
+                                                    <div className='col-6 mx-auto'>
+                                                        <div className='row mb-4' >
+                                                            <ListItemText className='col-8' style={{ height: "100px", textAlign: "left" }} primary={<h2 className='fs-18'>{obj.CatalogueName}</h2>} secondary={<p className='fs-12'>{obj.Description}</p>} />
+                                                            <div className='col-4'>
+                                                                <img src={imageUrl} style={{ height: "80px", width: "80px" }} alt='image' />
+                                                            </div>
+                                                        </div>
+                                                        <hr style={{ borderTop: "1px dashed #8f8f8f", width: "100%" }} />
+                                                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                                            <button data-toggle="modal" data-target="#redeemNowModal" className='text-center w-96 border-none height-button mt-3' onClick={() => handleRedeemNowModal(obj.Stars, obj.CatalogueID, index, obj.CatalogueName)} style={UserBalance < obj.Stars ? { background: "#8f8f8f" } : { background: "#ffefd0" }} >
+                                                                {UserBalance < obj.Stars ? <>
+                                                                    <Star className='fc-primary' style={{ height: '35px', width: '35px' }} />
+                                                                    <span className='fw-mid-bold'>{obj.Stars} Stars </span>
+                                                                    <span className='fw-mid'>TO UNLOCK</span>
+                                                                </> : <>
+                                                                    {redemption && couponIndex !== undefined && couponIndex === index ? <span>Voucher Redeem Done!!</span> : <>
+                                                                        <Star className='fc-primary' style={{ height: '35px', width: '35px' }} />
+                                                                        <span className='fw-mid-bold'>TAP TO </span>
+                                                                        <span className='fw-mid'>UNLOCK</span></>}
+                                                                </>}
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <hr style={{ borderTop: "1px dashed #8f8f8f", width: "100%" }} />
-                                                <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                                                    <button data-toggle="modal" data-target="#redeemNowModal" className='text-center w-96 border-none height-button mt-3' onClick={() => handleRedeemNowModal(obj.Stars, obj.CatalogueID, index, obj.CatalogueName)} style={UserBalance < obj.Stars ? { background: "#8f8f8f" } : { background: "#ffefd0" }} >
-                                                        {UserBalance < obj.Stars ? <>
-                                                            <Star className='fc-primary' style={{ height: '35px', width: '35px' }} />
-                                                            <span className='fw-mid-bold'>{obj.Stars} Stars </span>
-                                                            <span className='fw-mid'>TO UNLOCK</span>
-                                                        </> : <>
-                                                            {redemption && couponIndex !== undefined && couponIndex === index ? <span>Voucher Redeem Done!!</span> : <>
-                                                                <Star className='fc-primary' style={{ height: '35px', width: '35px' }} />
-                                                                <span className='fw-mid-bold'>TAP TO </span>
-                                                                <span className='fw-mid'>UNLOCK</span></>}
-                                                        </>}
-                                                    </button>
-                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>)
-                            }) : <> {myAllRewardsData !== undefined && myAllRewardsData.length === 0 ? '' : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
-                                <CircularProgress aria-label="Loading..." />
-                            </div>}
+                                        </div>)
+                                    })}</> : <> {myAllRewardsData !== undefined && myAllRewardsData.length === 0 ? '' : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
+                                        <CircularProgress aria-label="Loading..." />
+                                    </div>}
                             </>}
                         </div>
                     </div>
@@ -166,7 +168,7 @@ const RedeemModal = (props) => {
             </div>
         </div>
 
-        {couponStarCount !== undefined && couponCatID !== undefined ? <div className="modal fade" id="redeemNowModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+        {couponStarCount !== undefined && couponCatID !== undefined ? <div className="modal alpha" id="redeemNowModal" data-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
             <div className="modal-dialog modal-dialog-centered" style={{ backgroundImage: `url(${"/popup.png"})`, backgroundRepeat: "no-repeat", backgroundPosition: 'center', backgroundSize: "500px 310px", width: "100%" }}>
                 <div className="modal-content" style={{ marginLeft: "25px", marginBottom: "55px", display: "block", width: "90%", maxWidth: "700px", border: "none" }}>
                     {redeemSuccessMsg ? <>
@@ -196,7 +198,7 @@ const RedeemModal = (props) => {
             </div>
         </div> : <div style={{ padding: '150px 0px', textAlign: 'center' }}>
             <CircularProgress aria-label="Loading..." />
-            </div>}
+        </div>}
     </>)
 }
 
