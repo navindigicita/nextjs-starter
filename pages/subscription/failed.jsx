@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import ParaByNameFromUrl from '../../components/common/paraByNameFromUrl';
 import { useRouter } from 'next/router'
+import Header from '../../components/common/header';
+import Footer from '../../components/common/footer';
 
-const PaymentFailed = () => {
+const PublicationPaymentFailed = () => {
     const router = useRouter();
     const [getpenName, setpenName] = useState()
 
@@ -11,16 +13,18 @@ const PaymentFailed = () => {
         setpenName(data)
     }, [])
 
-    const handleWindowClose = () => {
+    const okWindowClose = () => {
         router.push(`/${getpenName}`)
     }
 
     return (<>
-        <p className='text-center fs-20 fw-mid'>Payment Cancelled or Failed</p>
-        <div className='row d-flex'>
-            <input className='mx-auto mt-4 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 primary-bg-color px-4' type='button' value='OK' onClick={() => handleWindowClose()} />
+        <Header />
+        <div class="container text-center" style={{ marginTop: '5rem' }}>
+            <p className='fs-28 fw-bold py-3 '>Payment Cancelled or Failed !!!</p>
+            <button className='mx-auto mt-4 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 primary-bg-color px-4' onClick={() => okWindowClose()}>OK</button>
         </div>
+        <Footer />
     </>)
 }
 
-export default PaymentFailed
+export default PublicationPaymentFailed  

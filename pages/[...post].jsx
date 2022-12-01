@@ -20,6 +20,7 @@ const PostDetail = (props) => {
     const [PostData, setPostData] = useState()
     const [getVedio, setVedio] = useState(false);
     const [getDateTime, setDateTime] = useState(0)
+    const [submitLoader, setSubmitLoader] = useState(false) //loader hide and show on payment btn
 
     useEffect(() => {
         if (props.response !== undefined && props.response.postData !== null) {
@@ -39,6 +40,7 @@ const PostDetail = (props) => {
     }, [])
 
     const onSubmit = () => {  //razor pay use for paid pub subscription
+        setSubmitLoader(true)
         return new Promise(resolve => {
             if (PostData !== undefined && PostData !== null) {
                 const price = parseFloat(PostData.publicationData.publicationPrice).toFixed(2); //if free then 0 price 
@@ -117,7 +119,7 @@ const PostDetail = (props) => {
                             {/* if mobile then auto play on page load else show play button on  */}
                             {PostData.postData.videoURL !== undefined && PostData.postData.videoURL !== null && PostData.postData.videoURL !== "" && <>
                                 {isMobile ? <div className='row'>
-                                    <iframe width="640" height="350" src={PostData.postData.videoURL.replace('https://youtu.be/', 'https://www.youtube.com/embed/') + '?autoplay=1&mute=1'} ></iframe>
+                                    <iframe width="400" height="250" src={PostData.postData.videoURL.replace('https://youtu.be/', 'https://www.youtube.com/embed/') + '?autoplay=1&mute=1'} ></iframe>
                                 </div> : <div className="video-icon-align" onClick={() => setVedio(true)}>
                                     <img src={'/play-video.svg'} className="video-icon" style={{ width: '60px', height: '60px' }} />
                                 </div>}
@@ -187,25 +189,42 @@ const PostDetail = (props) => {
         {/* paid thinkly bottomsheet */}
         {PostData !== undefined && PostData !== null && PostData.publicationData !== null && PostData.postData.postPayType === "Paid" ? <div className="shell-container show">
             <form name="paymentGatewayrazorpay" onSubmit={handleSubmit(onSubmit)}>
-                <div className="row d-flex">
-                    <div className={isMobile ? 'col-12 px-4' : 'col-md-11 mx-auto pt-2'}>
-                        <p className="fs-28 fw-bold fc-white mb-2 text-center"> This is a premium post </p>
-                        <div className="row mt-2">
-                            <div className="col-1" onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)}>
-                                <img src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage}
-                                    alt="profile" style={isMobile ? { width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px' } : { width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} />
-                            </div>
-                            <div className={isMobile ? "col-8 pl-5 mt-2" : "col-8 pl-4"}>
-                                <ListItemText className="my-auto" primary={<span className={isMobile ? "fc-white fs-12" : "fc-white fs-15"}>PUBLISHED IN </span>}
-                                    secondary={<span className={isMobile ? "fc-white fw-mid-bold fs-16" : "fc-white fw-mid-bold fs-20"}>{PostData.publicationData.publicationName}</span>} />
-                                <button className={isMobile ? "subscribe-button mt-2" : "subscribe-button"} type='submit'> Subscribe </button>
-                            </div>
-                            <div className="col-3">
-                                <img src={'/paidthinkly.png'} alt="paid thinkly" className="float-right" style={isMobile ? { width: '60px', height: '60px' } : { width: '80px', height: '80px' }} />
-                            </div>
+                {isMobile ? <div className="row d-flex pt-3 px-7">
+                    <img src={'/paidthinkly.png'} alt="paid thinkly" style={{ width: '40px', height: '40px' }} />
+                    <p className="fs-24 fw-bold fc-white ml-2"> This is a premium post </p>
+                    <div className="row d-flex pt-3 pl-3">
+                        <img src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage}
+                            alt="profile" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '5px' }} />
+                        <ListItemText className="ml-3" style={{ marginTop: '-5px' }} primary={<span className="fc-white fs-12">PUBLISHED IN </span>}
+                            secondary={<div>
+                                <p className="fc-white fw-mid-bold fs-20">{PostData.publicationData.publicationName}</p>
+                                <p className="fc-white fs-15">{PostData.publicationData.about}</p>
+                            </div>} />
+                    </div>
+                    <button className="subscribe-button mx-auto mt-3 px-2 fs-15" style={{ width: '100%' }} type='submit'>
+                        {submitLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#ffa51d' }} /> : <>Subscribe @ &#x20b9;{PostData.publicationData.publicationPrice} {PostData.publicationData.publicationPlan[0].planName}</>}
+                    </button>
+                </div> : <div className="row d-flex pt-3 px-20">
+                    <div className="col-12">
+                        <div className="row">
+                            <img src={'/paidthinkly.png'} alt="paid thinkly" style={{ width: '40px', height: '40px' }} />
+                            <p className="fs-30 fw-bold fc-white ml-2"> This is a premium post </p>
+                        </div>
+                        <div className="row d-flex pt-3">
+                            <img src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage}
+                                alt="profile" style={{ width: '130px', height: '130px', objectFit: 'cover', borderRadius: '5px' }} />
+                            <ListItemText className="my-auto ml-3" primary={<span className="fc-white fs-12">PUBLISHED IN </span>}
+                                secondary={<div>
+                                    <p className="fc-white fw-mid-bold fs-20">{PostData.publicationData.publicationName}</p>
+                                    <p className="fc-white fs-18">{PostData.publicationData.about}</p>
+                                    <button className="subscribe-button mt-2 px-2" style={{ width: '30%' }} type='submit'>
+                                        {submitLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#ffa51d' }} /> : <>Subscribe @ &#x20b9;{PostData.publicationData.publicationPrice} {PostData.publicationData.publicationPlan[0].planName}</>}
+                                    </button>
+                                </div>}
+                            />
                         </div>
                     </div>
-                </div>
+                </div>}
             </form>
         </div> : <Footer />}
     </>)

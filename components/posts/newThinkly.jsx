@@ -354,7 +354,8 @@ const NewThinkly = (props) => {
         const files = event.target.files;
         for (let i = 0; i < files.length; i++) {
             const element = files[i]
-            const name = `${LoggedInID}_${element.lastModified}`
+            const extension = element.name.split(".").pop();
+            const name = `${LoggedInID}_${element.lastModified}.${extension}`
             const myRenamedFile = new File([element], name)
             setImageNames(oldData => [...oldData, name])
             var data = new FormData(); // api call for upload Image in azure
@@ -942,7 +943,7 @@ const NewThinkly = (props) => {
                             })}
                             <div className='col-2'>
                                 <Card className='mx-auto card-border' style={{ width: '100px', height: '100px' }}>
-                                    <input type='file' multiple name='choose-file' accept="image/*" id='choose-file' style={{ display: 'none' }} onChange={(e) => uploadImage(e)} />
+                                    <input type='file' multiple name='choose-file' accept="image/jpeg, image/png, image/jpg" id='choose-file' style={{ display: 'none' }} onChange={(e) => uploadImage(e)} />
                                     {thinklyImage !== undefined && thinklyImage.length > 0 ?
                                         <label htmlFor='choose-file' className="text-center my-auto"> <Add style={{ color: '#e98c37' }} /> </label>
                                         : <label htmlFor='choose-file' className="text-center my-auto"> <AddPhotoAlternate style={{ color: '#e98c37' }} /> </label>

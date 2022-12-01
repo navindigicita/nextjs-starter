@@ -1,74 +1,46 @@
-import { Avatar } from '@material-ui/core'
-import { AssignmentIndOutlined } from '@material-ui/icons'
-import React, { useContext, useEffect, useState } from 'react'
-import ParaByNameFromUrl from '../../components/common/paraByNameFromUrl'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Axios from "axios";
-import { baseUrl } from '../api/api'
-import ShareLink from '../../components/common/shareLink'
+import { Check } from '@material-ui/icons';
+import { isMobile } from 'react-device-detect';
+import ParaByNameFromUrl from '../../components/common/paraByNameFromUrl'
+import Header from '../../components/common/header';
+import Footer from '../../components/common/footer';
 
-const PaymentSuccess = () => {
-    const BASE_URL = useContext(baseUrl)
-    const router = useRouter();
-    const [getProfileDetail, setprofileDetail] = useState()
+const PublicationPaymentSuccess = () => {
+    const router = useRouter()
     const [getpenName, setpenName] = useState()
-    const [starCount, setstarCount] = useState(0)
 
     useEffect(() => {
-        console.log(router.asPath);
         const data = ParaByNameFromUrl('penname', router.asPath)
-        const star = ParaByNameFromUrl('stars', router.asPath)
-        console.log(data, star);
         setpenName(data)
-        setstarCount(star)
-        if (data !== undefined && data !== null) {
-            UserData(data)
-        } else {
-            router.push('/error')
-        }
     }, [])
 
-    const UserData = (penName) => {
-        var config = {
-            headers: {
-                "Content-Type": "application/json",
-                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,
-                "UserID": 0
-            },
-        };
-        Axios.get(`${BASE_URL}User/GetDetailsByPenName/${penName}`, config)
-            .then((res) => {
-                console.log("Get user Details By PenName@@@@@", res.data);
-                if (res.data.responseCode === '00') {
-                    console.log("inside Get User Profile details@@@@@@@@", res.data.responseData.Details);
-                    setprofileDetail(res.data.responseData.Details)
-                }
-            })
-            .catch((err) => {
-                console.log("getUserProfileDateils error in catch", err);
-            });
-    }
-
-    const handleBackToProfile = () => {
-        router.push(`/${getpenName}`)
-    }
-
     return (<>
-        {getProfileDetail !== undefined && <div class="container text-center">
-            <p className='fs-20 fw-bold'>Thank you! <br /> You've made {getpenName}'s day.</p>
-            <p className='px-3 fs-15'>We  will let {getpenName} know that you have gifted them <b>{starCount} {starCount > 1 ? 'stars' : 'star'}.</b></p>
-            <p className='fs-15'>Share this with the world.</p>
-            <div className='row d-flex'>
-                {getProfileDetail.profileDetails.profileImage !== undefined ?
-                    <img className='mx-auto mt-2 mb-3' src={getProfileDetail.profileDetails.profileImage.charAt(0) === '@' ? getProfileDetail.profileDetails.profileImage.substring(1) : getProfileDetail.profileDetails.profileImage}
-                        alt='profile' style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'none' }} />
-                    : <Avatar src={<AssignmentIndOutlined />} className="mx-auto mt-2 mb-4" style={{ width: '120px', height: '120px' }} />
-                }
+        <Header />
+        <div class="container" style={{ marginTop: '5rem' }}>
+            <div className='fs-30 fw-bold mb-5 text-center'>Congratulations on your subscription purchase!</div>
+            <div className='fs-18'>You have successfully purchased a voucher for <b>{getpenName}</b>. <br /> Great choice there! <br /><br /> We have sent you a voucher code on your email.</div>
+            <div className='fs-18 mt-5'> Here's how you can access your subscription.
+                <ol>
+                    <li>Download Thinkly App</li>
+                    <li>Create your account</li>
+                    <li>Click your profile image/dp on the top left corner</li>
+                    <li>Go to My Vouchers</li>
+                    <li>Enter voucher code and Redeem</li>
+                    <img src='https://thinklymedia.blob.core.windows.net/catalogueimages/RedeemVoucher.png' alt='steps' className='my-4' style={!isMobile ? { height: '35rem', width: '65rem' } : { height: '10rem', width: '20rem' }} /> <br />
+                    …and done <Check style={{ color: 'green' }} />
+                </ol> <br />
+                <p>If you need any help, email us at <a href="https://mail.google.com/mail/?view=cm&fs=1&to=help@thinkly.me&su=SUBJECT&body=BODY&bcc=">help@thinkly.me</a>.</p>
+                <div className='row mt-4 mb-5'>
+                    <a href={process.env.NEXT_PUBLIC_DYNAMIC_LINK_HOME_FOR_APP} className='mx-auto'>
+                        <button className='mt-4 pointer fw-mid border-radius-4 fc-white border-none height-button fs-18 primary-bg-color px-4'>Redeem Voucher on App</button>
+                    </a>
+                </div>
             </div>
-            <ShareLink linkUrl={getpenName} />
-            <a className='fs-16 fc-link pointer fw-mid' onClick={() => handleBackToProfile()}>Back to {getpenName}'s profile</a>
-        </div>}
-    </>)
+        </div>
+        <Footer />
+    </>
+    )
 }
 
-export default PaymentSuccess
+export default PublicationPaymentSuccess

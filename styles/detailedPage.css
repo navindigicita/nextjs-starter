@@ -308,12 +308,14 @@ a.connect {
 }
 
 .shell-container {
+    width: 100%;
     overflow-y: hidden;
-    position: absolute;
-    z-index: 12 !important;
+    position: fixed;
+    z-index: 1200 !important;
     bottom: 0px;
     transform: translateY(100%);
     left: 0;
+    right: 0;
     width: 100%;
     background-color: #ffa51d;
     box-shadow: 0px -40px 40px #fff0d9;
