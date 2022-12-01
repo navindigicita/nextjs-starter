@@ -147,7 +147,8 @@ const NewPublication = (props) => {
         setpubImage(ImagesArray[0])
         const files = event.target.files;
         const element = files[0]
-        const name = `${AuthorID}_${element.lastModified}`
+        const extension = element.name.split(".").pop();
+        const name = `${AuthorID}_${element.lastModified}.${extension}`
         setImageNames(name)
         const myRenamedFile = new File([element], name)
         var data = new FormData(); // api call for upload Image in azure
