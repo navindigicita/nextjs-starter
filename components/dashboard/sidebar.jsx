@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Avatar, ListItemText, Card, CircularProgress } from "@material-ui/core"
 import { AssignmentIndOutlined } from "@material-ui/icons"
-import Image from 'next/image';
 
 const SideBar = (props) => {
     const [profileData, setProfileData] = useState();
@@ -95,10 +94,7 @@ const SideBar = (props) => {
         {profileData !== undefined && profileData !== null ? <>
             {/* profile Image and user name show and onclick of it will take user to new tab with user profile url */}
             <div className='row cursor-pointer' onClick={() => handleUserProfile()}>
-                {profileData.profileDetails.profileImage !== undefined && profileData.profileDetails.profileImage !== null ?
-                    <Image src={profileData.profileDetails.profileImage.charAt(0) === '@' ? profileData.profileDetails.profileImage.substring(1) : profileData.profileDetails.profileImage} alt="user profile" height={50} width={50} style={{ borderRadius: '50%' }} />
-                    : <Avatar style={{ width: '50px', height: '50px' }} src={<AssignmentIndOutlined />} />
-                }
+                <Avatar src={profileData.profileDetails.profileImage !== undefined ? profileData.profileDetails.profileImage.charAt(0) === '@' ? profileData.profileDetails.profileImage.substring(1) : profileData.profileDetails.profileImage : <AssignmentIndOutlined />} alt="user profile" style={{ width: '50px', height: '50px', objectFit: 'contain' }} />
                 <ListItemText style={{ marginTop: '7px', marginLeft: '15px' }} //onClick={() => props.profileDetail('ProfileDetail')}
                     primary={<div className='fs-18' style={{ lineHeight: '1' }}>
                         <span className="header-font">
@@ -110,7 +106,7 @@ const SideBar = (props) => {
             </div>
             <div className='row mt-4'>
                 <div className='col-1 p-0'>
-                    <Image src={'/bio-link.svg'} alt='Bio_link' height={25} width={25} />
+                    <img src={'/bio-link.svg'} alt='Bio_link' style={{ height: '25px', width: '25px' }} />
                 </div>
                 <div className='col-11' style={{ lineHeight: '1' }}>
                     <h6 className='fs-12 fc-link break-words' id="userShareUrl">{UserUrl}</h6>

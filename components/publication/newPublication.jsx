@@ -85,8 +85,8 @@ const NewPublication = (props) => {
                     const image_name = image.substring(image.lastIndexOf('/') + 1)
                     console.log(image_name);
                     setImageNames(image_name)
-                    setshortDescription(response.description)  //short description of publication(api issue reverse)
-                    setdescription(response.about)  //long description of publication(api issue reverse)
+                    setshortDescription(response.about)  //short description of publication
+                    setdescription(response.description)  //long description of publication
                     const penName_pub = response.publicationProfileUrl.substring(response.publicationProfileUrl.lastIndexOf('/') + 1)
                     setDisabled(true);
                     setwebUrl(penName_pub)  //pename of publication
@@ -107,6 +107,7 @@ const NewPublication = (props) => {
             $('#closeConfirmation').modal('show')       
         }
         else {
+<<<<<<< HEAD
         console.log("inside else closeFunction");
         $('#newPublication').modal('hide')
         clearAllState() //function call for clear all state
@@ -115,6 +116,12 @@ const NewPublication = (props) => {
         setwelcomeSlide(true)
             // if(successSlide){
             // window.location.reload(false);
+=======
+            clearAllState() //function call for clear all state
+            // if (!descriptionSlide) {
+            $('#newPublication').modal('hide')
+            window.location.reload();
+>>>>>>> 806d187b4b79b1f5beca2fdb03f5da10ef49737b
             // }
         }
     }
@@ -154,7 +161,8 @@ const NewPublication = (props) => {
         setpubImage(ImagesArray[0])
         const files = event.target.files;
         const element = files[0]
-        const name = `${AuthorID}_${element.lastModified}`
+        const extension = element.name.split(".").pop();
+        const name = `${AuthorID}_${element.lastModified}.${extension}`
         setImageNames(name)
         const myRenamedFile = new File([element], name)
         var data = new FormData(); // api call for upload Image in azure
@@ -163,9 +171,7 @@ const NewPublication = (props) => {
             headers: { "Content-type": "multipart/form-data" }
         }
         Axios.post(`${BASE_URL_THINKLY}Image/PostUploadFile/${myRenamedFile.name}`, data, config)
-            .then((res) => {
-                console.log("image uploaded", res.data);
-            }).catch((err) => {
+            .then((res) => { }).catch((err) => {
                 document.getElementById('pubImageUploadError').innerHTML = 'Oops! Something went wrong. Try again'
             });
     }
@@ -255,7 +261,6 @@ const NewPublication = (props) => {
     };
 
     const hidePlanAndShowInterest = () => {
-        console.log(ImageNames);
         if (PlanID !== undefined && PlanID !== null && PlanID !== '') {
             if (PlanID == 22) {
                 setsubscriptionSlide(false)
@@ -330,7 +335,7 @@ const NewPublication = (props) => {
             document.getElementById('InterestError').innerHTML = 'Please select at least 3 interest'
         } else {
             setLoader(true)
-            { publicationID ? editPublicationCourse() : createPublicationCourse() }
+            { publicationID > 0 ? editPublicationCourse() : createPublicationCourse() }
         }
     }
 
@@ -404,10 +409,10 @@ const NewPublication = (props) => {
                 UserID: parseInt(AuthorID),
                 PublicationID: publicationID,
                 Name: pubName,
-                About: shortDescription,
+                About: description,
                 Image: ImageNames,
                 CreatedBy: parseInt(AuthorID),
-                ShortDes: description,
+                ShortDes: shortDescription,
                 Category: CategoryList,
                 AuthorsID: "",
                 PayType: PlanID == 22 ? 'Free' : 'Paid',
@@ -483,7 +488,7 @@ const NewPublication = (props) => {
                         <div className='text-center fs-18 fw-bold mb-3'> About {pageType !== undefined && pageType.charAt(0).toUpperCase() + pageType.slice(1)}  </div>
                         <div className='row d-flex mb-4'>
                             <div className='col-12 mx-auto'>
-                                <input type="text" minLength='2' maxLength='30' className='bottomline-textbox' id='publication_title'
+                                <input type="text" maxLength='30' className='bottomline-textbox' id='publication_title'
                                     placeholder={pageType === 'course' ? 'E.g. "Yoga at home"' : 'Choose a catchy title (max 30 characters)'}
                                     value={pubName} onChange={(e) => setpubName(e.target.value)} />
                                 {pubName === '' && <div id="pubNameError" className='error-msg'></div>}
@@ -514,7 +519,7 @@ const NewPublication = (props) => {
                         <div className='text-center fs-18 fw-bold mb-3'> {pageType !== undefined && pageType.charAt(0).toUpperCase() + pageType.slice(1)} Description </div>
                         <div className='row mt-2'>
                             <h6 className='fs-15 fw-mid-bold mb-1'>What's it about?*</h6>
-                            <input type="text" id='pub-about' className='interest-textbox' minLength='2' maxLength='50' placeholder={pageType === 'course' ? 'E.g. "Flexibility,Fitness,Strenght,Weight-loss" (max 50 characters)' : 'E.g. "Fitness is forever" (max 50 characters)'}
+                            <input type="text" id='pub-about' className='interest-textbox' maxLength='50' placeholder={pageType === 'course' ? 'E.g. "Flexibility,Fitness,Strenght,Weight-loss" (max 50 characters)' : 'E.g. "Fitness is forever" (max 50 characters)'}
                                 value={shortDescription} onChange={(e) => setshortDescription(e.target.value)} />
                             {shortDescription === '' && <div id="shortDescriptionError" className='error-msg'></div>}
                         </div>
@@ -531,7 +536,11 @@ const NewPublication = (props) => {
                             <ListItemText primary={<h6 className='fs-15 fw-bold'>{pageType === 'course' ? 'Unique Web Link*' : 'Web Link*'}</h6>}
                                 secondary={<h6 className='fs-12'>Unique url for your {pageType}. Choose wisely! This cannot be changed after the {pageType} is created.</h6>} />
 
+<<<<<<< HEAD
                             <input type="text" className='interest-textbox' maxLength={15} value={webUrl} disabled={disabled} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px', cursor: disabled ? 'not-allowed' : 'pointer' }} />
+=======
+                            <input type="text" className='interest-textbox' maxLength={15} value={webUrl} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px' }} disabled={publicationID > 0 ? true : false} />
+>>>>>>> 806d187b4b79b1f5beca2fdb03f5da10ef49737b
                             <span className='fixed-text-input'>www.thinkly.me/</span>
 
                             {(webUrl === '' || webUrl.length === 0) && <div id="UrlError" className='error-msg'></div>}
@@ -560,7 +569,7 @@ const NewPublication = (props) => {
                                 return (<>
                                     <div className='row pt-3' key={index} selected={PlanID === obj.publicationPlanID} onClick={() => handleSubscription(obj.publicationPlanID)}>
                                         <div className='col-1'>
-                                            <input type='radio' name='plan' value={obj.name} style={{ width: '20px', height: '20px' }} />
+                                            <input type='radio' name='plan' value={obj.name} style={{ width: '20px', height: '20px' }} disabled={publicationID > 0 && obj.name === 'Free' ? true : false} />
                                         </div>
                                         <div className='col-11'>
                                             <ListItemText style={{ marginTop: '-8px' }} primary={<h6 className='fs-15 fw-bold ff-lora'>{obj.name}</h6>}

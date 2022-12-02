@@ -109,80 +109,78 @@ const Libraries = (props) => {
             .catch((err) => { console.log(err); });
     }
 
-    return (<div className='row'>
-        <div className='col-12'>
-            <p className='fs-28 fw-mid'>My Library</p> <hr />
-            <div className="tab mt-4">
-                <button className='col-6 tablinks fw-bold fc-gray active' onClick={(event) => openTab(event, 'Subscribed')} id="defaultOpen" >Subscriptions ({SubscriptionCount})</button>
-                <button className='col-6 tablinks fw-bold fc-gray' onClick={(event) => openTab(event, 'bookmarks')} >Bookmarks ({BookMarkList.length})</button>
-            </div>
-            <div id="Subscribed" className="tabContent">
-                {SubscribedList.length > 0 ? <InfiniteScroll dataLength={SubscribedList.length}
-                    next={fetchSubscribedPublication(AuthorID)}
-                    hasMore={IsSubscribedFetching}
-                    loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
-                    endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}
-                >
-                    {SubscribedList.map((obj, index) => {
-                        const imgUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
-                        return (<Card className='mt-4' key={index}>
-                            <div className='row cursor'>
-                                <div className='col-2'>
-                                    {obj.publicationImage !== undefined && <img src={imgUrl} alt="publication Image" style={{ objectFit: 'contain', height: '36px', width: '36px' }} />}
-                                </div>
-                                <div className='col-8'>
-                                    <ListItemText className='my-auto' primary={<span className='ff-lora fs-18'>{obj.publicationName}</span>}
-                                        secondary={<text className='fs-15'>{obj.about}</text>} />
-                                </div>
+    return (<div className='container'>
+        <p className='fs-28 fw-mid'>My Library</p> <hr />
+        <div className="tab mt-4">
+            <button className='col-6 tablinks fw-bold fc-gray active' onClick={(event) => openTab(event, 'Subscribed')} id="defaultOpen" >Subscriptions ({SubscriptionCount})</button>
+            <button className='col-6 tablinks fw-bold fc-gray' onClick={(event) => openTab(event, 'bookmarks')} >Bookmarks ({BookMarkList.length})</button>
+        </div>
+        <div id="Subscribed" className="tabContent">
+            {SubscribedList.length > 0 ? <InfiniteScroll dataLength={SubscribedList.length}
+                next={fetchSubscribedPublication(AuthorID)}
+                hasMore={IsSubscribedFetching}
+                loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
+                endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}
+            >
+                {SubscribedList.map((obj, index) => {
+                    const imgUrl = obj.publicationImage.charAt(0) === '@' ? obj.publicationImage.substring(1) : obj.publicationImage
+                    return (<Card className='mt-4' key={index}>
+                        <div className='row cursor'>
+                            <div className='col-1'>
+                                {obj.publicationImage !== undefined && <img src={imgUrl} alt="publication Image" style={{ objectFit: 'cover', objectPosition: 'center', height: '60px', width: '60px' }} />}
                             </div>
-                        </Card>)
-                    })}
-                </InfiniteScroll> : NoRecord === true ? <div className='grid place-items-center'>
-                    <p className='fs-22 fw-mid-bold mt-5'>No Subscribed Publication Found</p>
-                </div> : <div className='grid place-items-center h-screen'>
-                    <CircularProgress aria-label="Loading..." />
-                </div>}
-            </div>
-            <div id="bookmarks" className="tabContent">
-                {BookMarkList.length > 0 ? <InfiniteScroll dataLength={BookMarkList.length}
-                    next={fetchBookmarks(AuthorID)}
-                    hasMore={IsBookmarkFetching}
-                    loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
-                    endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}
-                >
-                    {BookMarkList.map((obj, index) => {
-                        if (obj.postData.postImages.length > 0) {
-                            var image_url = obj.postData.postImages[0].charAt(0) === '@' ? obj.postData.postImages[0].substring(1) : obj.postData.postImages[0]  //show once image only
-                        }
-                        var final_time = PostTimeAgo(obj.postData.postUpdatedDateTime)
-                        return (<Card className='p-2'>
-                            <div className="row my-3" key={index}>
-                                <div class="col-md-10">
-                                    <ListItemText primary={<span className="ff-lora fs-18 fw-bold">{obj.postData.postTitle}</span>}
-                                        secondary={<div>
-                                            <span className="fs-12 fc-link">{obj.postData.subcategoryname.replaceAll(',', ' | ')}</span> <br />
-                                            <p className="fs-10">{final_time}</p>
-                                        </div>} />
-                                </div>
-                                <div className="col-md-2">
-                                    {obj.postData.postImages !== undefined && obj.postData.postImages.length > 0 &&
-                                        <img alt="thinkly Image" src={image_url}
-                                            style={{ objectFit: 'cover', objectPosition: 'center', borderRadius: '4px', float: 'right', height: '60px', width: '60px' }} />
-                                    }
-                                </div>
-                                <div className="col-md-12">
-                                    <p className="fs-15 cursor-pointer mt-3" id="thinkly-content" dangerouslySetInnerHTML={{ __html: obj.postData.postDescription.slice(0, 370) + (obj.postData.postDescription.length > 370 ? '<b> ...read more</b>' : "") }} />
-                                </div>
+                            <div className='col-8 ml-4'>
+                                <ListItemText className='my-auto' primary={<span className='ff-lora fs-18'>{obj.publicationName}</span>}
+                                    secondary={<text className='fs-15'>{obj.about}</text>} />
                             </div>
-                            <hr />
-                        </Card>)
-                    })}
-                </InfiniteScroll> : NoBookMarkRecord === true ? <div className='grid place-items-center'>
-                    <p className='fs-22 fw-mid-bold mt-5'>No Bookmarks Found</p>
-                </div> : <div className='grid place-items-center h-screen'>
-                    <CircularProgress aria-label="Loading..." />
-                </div>}
-            </div>
+                        </div>
+                    </Card>)
+                })}
+            </InfiniteScroll> : NoRecord === true ? <div className='grid place-items-center'>
+                <p className='fs-22 fw-mid-bold mt-5'>No Subscribed Publication Found</p>
+            </div> : <div className='grid place-items-center h-screen'>
+                <CircularProgress aria-label="Loading..." />
+            </div>}
+        </div>
+        <div id="bookmarks" className="tabContent">
+            {BookMarkList.length > 0 ? <InfiniteScroll dataLength={BookMarkList.length}
+                next={fetchBookmarks(AuthorID)}
+                hasMore={IsBookmarkFetching}
+                loader={<div className='grid place-items-center h-screen'> <CircularProgress aria-label="Loading..." /> </div>}
+                endMessage={<p className='fs-20 fw-bold text-center mt-4'> Yay! You have seen it all </p>}
+            >
+                {BookMarkList.map((obj, index) => {
+                    if (obj.postData.postImages.length > 0) {
+                        var image_url = obj.postData.postImages[0].charAt(0) === '@' ? obj.postData.postImages[0].substring(1) : obj.postData.postImages[0]  //show once image only
+                    }
+                    var final_time = PostTimeAgo(obj.postData.postUpdatedDateTime)
+                    return (<Card className='p-2'>
+                        <div className="row my-3" key={index}>
+                            <div class="col-md-10">
+                                <ListItemText primary={<span className="ff-lora fs-18 fw-bold">{obj.postData.postTitle}</span>}
+                                    secondary={<div>
+                                        <span className="fs-12 fc-link">{obj.postData.subcategoryname.replaceAll(',', ' | ')}</span> <br />
+                                        <p className="fs-10">{final_time}</p>
+                                    </div>} />
+                            </div>
+                            <div className="col-md-2">
+                                {obj.postData.postImages !== undefined && obj.postData.postImages.length > 0 &&
+                                    <img alt="thinkly Image" src={image_url}
+                                        style={{ objectFit: 'cover', objectPosition: 'center', borderRadius: '4px', float: 'right', height: '60px', width: '60px' }} />
+                                }
+                            </div>
+                            <div className="col-md-12">
+                                <p className="fs-15 cursor-pointer mt-3" id="thinkly-content" dangerouslySetInnerHTML={{ __html: obj.postData.postDescription.slice(0, 370) + (obj.postData.postDescription.length > 370 ? '<b> ...read more</b>' : "") }} />
+                            </div>
+                        </div>
+                        <hr />
+                    </Card>)
+                })}
+            </InfiniteScroll> : NoBookMarkRecord === true ? <div className='grid place-items-center'>
+                <p className='fs-22 fw-mid-bold mt-5'>No Bookmarks Found</p>
+            </div> : <div className='grid place-items-center h-screen'>
+                <CircularProgress aria-label="Loading..." />
+            </div>}
         </div>
     </div>)
 }

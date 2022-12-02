@@ -12,17 +12,22 @@ import DateMomentUtils from '@date-io/moment'
 import InfiniteScroll from "react-infinite-scroll-component";
 import { baseUrl, baseUrlThinkly } from '../../pages/api/api';
 import 'react-quill/dist/quill.snow.css';
-// import('quill-paste-smart')
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+// dynamic(() => import('quill-paste-smart'), { ssr: false });
 
 const NewThinkly = (props) => {
     const BASE_URL = useContext(baseUrl);
     const BASE_URL_THINKLY = useContext(baseUrlThinkly);
     const modules = {
         toolbar: [
-            ["bold", "italic"],
-            [{ list: "ordered" }, { list: "bullet" }]
+            ["bold", "italic", 'underline', 'blockquote'],
+            [{ list: "ordered" }, { list: "bullet" }],
+            ['clean'],
         ],
+        clipboard: {
+            matchers: [],
+            matchVisual: true,  //if false then it will add extra line after paste
+        }
     }; //text editing tools for editor
     const [LoggedInID, setLoggedInID] = useState()  //store props data of user ID
     const [selectTypeSlide, setselectTypeSlide] = useState(false) //thinkly type slide hide and show
@@ -232,7 +237,7 @@ const NewThinkly = (props) => {
                 window.location.reload(false);
             }
         }
-        if ((newThinklyID === 0) && (tContentSlide || settingSlide || InterestSlide) && (thinklyName !== '' || blogContent !== '' || (thinklyImage !== undefined && thinklyImage.length > 0))) {
+        if ((tContentSlide || settingSlide || InterestSlide) && (thinklyName !== '' || blogContent !== '' || (thinklyImage !== undefined && thinklyImage.length > 0))) {
             $('#draftModal').modal('show')// modal call for draft confirmation
         } else {
             clearAllSlideCatch() //catch clear function call(state clearance)
@@ -349,7 +354,8 @@ const NewThinkly = (props) => {
         const files = event.target.files;
         for (let i = 0; i < files.length; i++) {
             const element = files[i]
-            const name = `${LoggedInID}_${element.lastModified}`
+            const extension = element.name.split(".").pop();
+            const name = `${LoggedInID}_${element.lastModified}.${extension}`
             const myRenamedFile = new File([element], name)
             setImageNames(oldData => [...oldData, name])
             var data = new FormData(); // api call for upload Image in azure
@@ -445,7 +451,7 @@ const NewThinkly = (props) => {
         }
     }
 
-    const handlePaste = () => {
+    const handlePaste = () => {  //for smart paste into editor
         const editor = document.querySelector('.ql-editor')
         editor.addEventListener("paste", (e) => {
             console.log("inside quill page event");
@@ -938,7 +944,7 @@ const NewThinkly = (props) => {
                             })}
                             <div className='col-2'>
                                 <Card className='mx-auto card-border' style={{ width: '100px', height: '100px' }}>
-                                    <input type='file' multiple name='choose-file' accept="image/*" id='choose-file' style={{ display: 'none' }} onChange={(e) => uploadImage(e)} />
+                                    <input type='file' multiple name='choose-file' accept="image/jpeg, image/png, image/jpg" id='choose-file' style={{ display: 'none' }} onChange={(e) => uploadImage(e)} />
                                     {thinklyImage !== undefined && thinklyImage.length > 0 ?
                                         <label htmlFor='choose-file' className="text-center my-auto"> <Add style={{ color: '#e98c37' }} /> </label>
                                         : <label htmlFor='choose-file' className="text-center my-auto"> <AddPhotoAlternate style={{ color: '#e98c37' }} /> </label>
@@ -959,7 +965,7 @@ const NewThinkly = (props) => {
                         {/* end of image, video and audio setup and starting of post name */}
                         <div className='row d-flex'>
                             <div className='col-11 mb-2'>
-                                <input type='text' placeholder='Enter Title' value={thinklyName} onChange={(e) => setthinklyName(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
+                                <input type='text' placeholder='Enter Title' maxLength={50} value={thinklyName} onChange={(e) => setthinklyName(e.target.value)} style={{ fontSize: '20px', border: 'none', outline: 'none', width: '100%' }} />
                             </div>
                         </div>
                         {thinklyName === '' && <label id='thinklyNameError' className='error-msg'></label>}
@@ -978,9 +984,9 @@ const NewThinkly = (props) => {
                         <label id='spotifyUrlError' className='error-msg'></label>
 
                         {/* end of video & audio input and starting of text editor */}
-                        <ReactQuill type="textarea" modules={modules} theme="snow" id="blogFromQuill" placeholder="Write your content here..." value={blogContent} onChange={(e) => handleReactQuillData(e)} onFocus={() => handlePaste()} />
+                        {/* onFocus={() => handlePaste()} add this if want to add smart paste for editor(remove all styling) */}
+                        <ReactQuill type="textarea" modules={modules} theme="snow" id="blogFromQuill" placeholder="Write your content here..." value={blogContent} onChange={(e) => handleReactQuillData(e)} />
                         {blogContent === '' && <div id="blogError" className='error-msg'></div>}
-
                         {/* {publicationPayType === 'Paid' && <> */}
                         {getSelectedPubDetail !== undefined && getSelectedPubDetail.publicationPayType === 'Paid' && <>
                             <div className='row'>

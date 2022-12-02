@@ -17,9 +17,8 @@ import Faq from '../components/common/faq';
 import PublicationProfile from '../components/publication/pubDetailPage';
 import UserProfileMob from '../components/userProfileMob';
 import { UserProfileEvent, UserSupportStarEvent } from '../config/facebookPixelEvent';
-import { initializeApp } from "firebase/app";
 import { getAnalytics, logEvent, isSupported } from "firebase/analytics";
-import { firebaseConfig } from '../firebase-config';
+import firebaseApp from '../firebase-config';
 
 export async function getServerSideProps(context) {
     const userName = context.params.username
@@ -161,13 +160,12 @@ const UserProfile = (props) => {
         if (props.userData !== undefined) {
             const res = props.userData
             if (res.responseCode === '00') {
-                if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {  //google pixel event
-                    UserProfileEvent()
-                }
+                // if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {  //google pixel event
+                //     UserProfileEvent()
+                // }
                 isSupported().then((result) => {
                     if (result) {
-                        const app = initializeApp(firebaseConfig)
-                        analytics = getAnalytics(app);
+                        analytics = getAnalytics(firebaseApp);
                         logEvent(analytics, 'USER_DETAIL_PAGE', { penname: props.userPenName })  //firebase analytic logEvent
                     }
                 })
@@ -222,9 +220,9 @@ const UserProfile = (props) => {
                     if (res.data.responseData.Type === 'Publication') {
                         setshowPublication(true)
                     } else { //for user
-                        if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
-                            UserProfileEvent()
-                        }
+                        // if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+                        //     UserProfileEvent()
+                        // }
                         const response = res.data.responseData.Details.profileDetails
                         const storedUserID = localStorage.getItem('UserID')
                         if (parseInt(storedUserID) === response.userID) {
@@ -390,13 +388,12 @@ const UserProfile = (props) => {
                         document.body.appendChild(form);
                         form.submit();
                         $('#userContactInfo').modal('hide');
-                        if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
-                            UserSupportStarEvent()  //google pixel event
-                        }
+                        // if (process.env.NEXT_PUBLIC_GOOGLE_PIXEL_EVENT === 'YES') {
+                        //     UserSupportStarEvent()  //google pixel event
+                        // }
                         isSupported().then((result) => {
                             if (result) {
-                                const app = initializeApp(firebaseConfig)
-                                analytics = getAnalytics(app);
+                                analytics = getAnalytics(firebaseApp);
                                 logEvent(analytics, 'USER_SUPPORT_BUTTON_CLICK', { penname: getpenName })  //firebase analytic logEvent
                             }
                         })
@@ -415,8 +412,7 @@ const UserProfile = (props) => {
     const handleViewFullProfileClick = () => {
         isSupported().then((result) => {
             if (result) {
-                const app = initializeApp(firebaseConfig)
-                analytics = getAnalytics(app);
+                analytics = getAnalytics(firebaseApp);
                 logEvent(analytics, 'VIEW_FULL_PROFILE_USER', { penname: getpenName })
             }
         })

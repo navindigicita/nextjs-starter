@@ -65,14 +65,14 @@ const Thinklies = (props) => {
 
     const openThinkly = (data, ID, oldUrl) => {
         const title = data.trimEnd()
-        const thinkly_title = title.replaceAll(' ', '-')
+        const title1 = title.replaceAll('?', '')
+        const thinkly_title = title1.replaceAll(' ', '-')
         window.open(`/${thinkly_title}/${ID}`, '_blank') // above commented codes are for new UI of thinkly detail page
         // window.open(oldUrl)  //this one for old UI
     }
 
     const handlePostEdit = (thinklyPostId) => {
-        $(".dropdown-post").css('display', 'none') //once click on edit dropdown should hide
-        $(`.${thinklyPostId}`).removeClass("dropdown-post") //after on edit click class should get remove for that index
+        $(`.${thinklyPostId}`).css('display', 'none') //once click on edit dropdown should hide
         setthinklyID(thinklyPostId)
         setEditPost(true)
     }
@@ -99,8 +99,8 @@ const Thinklies = (props) => {
                         var image_url = obj.postData.postImages[0].charAt(0) === '@' ? obj.postData.postImages[0].substring(1) : obj.postData.postImages[0]  //show once image only
                     }
                     var final_time = PostTimeAgo(obj.postData.postUpdatedDateTime)
-                    return (<Card className='my-4 px-3 pb-4 pt-2'>
-                        <div className="row" key={index}>
+                    return (<Card className='my-4 px-3 pb-4 pt-2' key={index}>
+                        <div className="row">
                             <div class="col-md-10">
                                 <ListItemText onClick={() => openThinkly(obj.postData.postTitle, obj.postData.postID, obj.postData.postURL)}
                                     primary={<span className="ff-lora fs-18 fw-bold">{obj.postData.postTitle}</span>}
@@ -110,8 +110,8 @@ const Thinklies = (props) => {
                                     </div>} />
                             </div>
                             <div className="col-md-2" id="editdiv" >
-                                <span className="pointer fs-30" style={{ marginLeft: '69px' }} onClick={() => handlePostAction(index)}>...</span>
-                                <div className={`${index}`} style={{ display: 'none' }}>
+                                <span className="pointer fs-30" style={{ marginLeft: '69px' }} onClick={() => handlePostAction(obj.postData.postID)}>...</span>
+                                <div className={`${obj.postData.postID}`} style={{ display: 'none' }}>
                                     <a className="cursor-pointer font-bold" onClick={() => handlePostEdit(obj.postData.postID)}>Edit</a>
                                     {/* <a onClick={() => handlePostDelete()}>Delete</a> */}
                                 </div>
@@ -128,7 +128,7 @@ const Thinklies = (props) => {
             <CircularProgress aria-label="Loading..." />
         </div>}
 
-        {EditPost && <NewThinkly authorID={AuthorID} thinklyRemoteConfigData={RemoteConfigJson} thinklyID={thinklyID} onChangeCallback={() => setEditPost(false)} /> }
+        {EditPost && <NewThinkly authorID={AuthorID} thinklyRemoteConfigData={RemoteConfigJson} thinklyID={thinklyID} onChangeCallback={() => setEditPost(false)} />}
     </>);
 }
 

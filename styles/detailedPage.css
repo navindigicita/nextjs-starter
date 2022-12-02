@@ -17,17 +17,12 @@ body {
         /* margin-top: 7rem; */
     }
 
-    .body-img {
-        /* height: 330px; */
-        /* height: -moz-fit-content; */
-    }
-
     .body-img img {
         width: 40rem;
-        height: 350px;
+        height: 24rem;
         object-fit: cover;
     }
-    
+
     .body-left-content-align {
         margin-top: 10px;
         margin-left: 3rem !important;
@@ -146,13 +141,14 @@ div .sticky-left-section {
         /* margin-top: 7rem; */
     }
 
+    /* 
     .body-img {
         text-align: center;
-    }
+    } */
 
     .body-img img {
-        width: 34rem;
-        height: 220px;
+        width: 100%;
+        height: 22rem;
         object-fit: cover;
     }
 
@@ -180,7 +176,7 @@ div .sticky-left-section {
         padding: 0 20px;
     }
 
-    div > button > a {
+    div>button>a {
         color: #fff;
     }
 
@@ -257,16 +253,23 @@ div ::-webkit-scrollbar {
 
 /* to customize carousal indicator */
 .carousel-indicators {
-    bottom: 5px !important;
+    bottom: -8px !important;
 }
 
 .carousel-indicators button {
-    background-color: darkgray;
-    border-radius: 50%;
-    height: 0px;
-    width: 20px;
+    background-color: gray;
+    /* border-radius: 50%; */
+    height: 4px;
+    width: 4px;
     border: none;
-    margin-left: 10px;
+    margin-left: 15px;
+    border-radius: 50%;
+}
+
+.carousel-indicators .active {
+    background: black;
+    height: 6px;
+    width: 6px;
 }
 
 .carousel-indicators button:focus {
@@ -305,12 +308,14 @@ a.connect {
 }
 
 .shell-container {
+    width: 100%;
     overflow-y: hidden;
     position: fixed;
-    z-index: 2 !important;
-    bottom: 0;
+    z-index: 1200 !important;
+    bottom: 0px;
     transform: translateY(100%);
     left: 0;
+    right: 0;
     width: 100%;
     background-color: #ffa51d;
     box-shadow: 0px -40px 40px #fff0d9;
@@ -324,8 +329,13 @@ a.connect {
 }
 
 .stop-scrolling {
-    /* height: 100%; */
-    overflow: hidden !important;
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}
+
+.MuiTypography-body1 {
+    line-height: 0.8;
 }
 
 .blur-body {
