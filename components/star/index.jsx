@@ -40,6 +40,7 @@ const MyStar = (props) => {
 
     useEffect(() => {
         document.getElementById("defaultOpen").click();
+        console.log(props.onChangeCallback,props.onChangeCallback1);
         if (props.authorID !== undefined && props.UserBalance !== undefined) {
             setAuthorID(props.authorID)  //state
             fetchMyRewards(props.authorID)  //function
@@ -209,6 +210,7 @@ const MyStar = (props) => {
     }
 
     const handleShow = () => {
+        console.log(props.onChangeCallback,props.onChangeCallback1);
         setShow(true); //on click show redeem modal
     }
 
@@ -364,6 +366,8 @@ const MyStar = (props) => {
         </div>
         {/* on redeem click */}
         {show && <RedeemModal authorID={authorID} UserBalance={UserBalance} showModal={show} onChangeCallback={props.onChangeCallback} onChangeCallback1={props.onChangeCallback1} />}
+        {/* <RedeemModal authorID={authorID} UserBalance={UserBalance} showModal={show} onChangeCallback={props.onChangeCallback} onChangeCallback1={props.onChangeCallback1} /> */}
+
     </>)
 
 }

@@ -74,6 +74,7 @@ const DashboardPage = (props) => {
 
     const modalShow = () => {
         console.log("inside show modal");
+        console.log(props.onChangeCallback,props.onChangeCallback1);
         setShow(true); //on click show redeem modal
     }
 

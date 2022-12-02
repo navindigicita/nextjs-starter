@@ -20,12 +20,13 @@ const RedeemModal = (props) => {
     const [redemption, setRedemption] = useState(false); //for redemption msg show
     const [loading, setLoading] = useState(false);
     const [redeemSuccessMsg, setRedeemSuccessMsg] = useState(false) //for redeem successful msg
-
+    // const [, forceUpdate] = useReducer(x => x + 1, 0);
+    
     useEffect(() => {
         if (props.showModal !== undefined && props.UserBalance !== undefined && props.authorID !== undefined) {
-            console.log("welcome to redeemModel page");
+            console.log("welcome to redeemModel page",props.onChangeCallback,props.onChangeCallback1);
             setAuthorID(props.authorID) //state
-            setUserBalance(props.UserBalance)  //state
+            setUserBalance(props.UserBalance) //state
             if (props.showModal === true) {
                 $('#redeemModal').modal('show')
             } else {
@@ -107,13 +108,13 @@ const RedeemModal = (props) => {
     }
 
     const RedeemSuccessMsgOk = () => {
-        console.log("inside RedeemSuccessMsgOk function", props.onChangeCallback(authorID), props.onChangeCallback1(authorID));
         $('#redeemNowModal').modal('hide')
+        $('#redeemModal').modal('hide')
+        // forceUpdate();
         props.onChangeCallback(authorID)//recall for bal reflection
         props.onChangeCallback1(authorID)
         window.location.reload(false);
     }
-
 
     return (<>
         <div className="modal alpha" id="redeemModal" role="dialog">
