@@ -131,10 +131,10 @@ const PostDetail = (props) => {
                         <iframe src={PostData.postData.postOembedUrl} style={{ marginBottom: '-50px' }} width="100%" height="200" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                     </div>}
                     {/* data from here */}
-                    <div className={isMobile ? `row ml-2` : `row`}>
+                    <div className='{isMobile ? `row ml-1` : `row`}'>
                         <span className='fw-bold ff-lora fs-30 mt-4' style={{ lineHeight: '1' }}> {PostData.postData.postTitle} </span>
                     </div>
-                    <div className={isMobile ? "row d-flex mt-4 cursor-pointer ml-2" : "row d-flex mt-3 cursor-pointer"} onClick={() => router.push(`/${PostData.authorData.authorPenName.charAt(0) === '@' ? PostData.authorData.authorPenName.substring(1) : PostData.authorData.authorPenName}`)}>
+                    <div className={isMobile ? "row d-flex mt-4 cursor-pointer ml-1" : "row d-flex mt-3 cursor-pointer"} onClick={() => router.push(`/${PostData.authorData.authorPenName.charAt(0) === '@' ? PostData.authorData.authorPenName.substring(1) : PostData.authorData.authorPenName}`)}>
                         <div className="my-auto">
                             {PostData.authorData.authorProfileImage !== undefined ?
                                 <Avatar src={PostData.authorData.authorProfileImage.charAt(0) === '@' ? PostData.authorData.authorProfileImage.substring(1) : PostData.authorData.authorProfileImage} alt="profile" style={{ width: '40px', height: '40px' }} />
@@ -144,12 +144,12 @@ const PostDetail = (props) => {
                             {PostData.authorData.authorPenName.charAt(0) === '@' ? PostData.authorData.authorPenName.substring(1) : PostData.authorData.authorPenName}
                         </span>} secondary={<span className='fs-15'>{getDateTime}</span>} />
                     </div>
-                    <div className={isMobile ? `row fs-18 mt-4 ml-2 mr-1 text-justify` : `row mt-4 fs-18 text-justify`} dangerouslySetInnerHTML={{ __html: PostData.postData.postDescription }} />
-                    <div className={isMobile ? `row fw-mid fc-link fs-15 ml-2 my-4` : `row fw-mid fc-link fs-15 my-4`}> {PostData.postData.subcategoryname.replaceAll(',', ' | ')} </div>
+                    <div className={isMobile ? `row fs-18 mt-4 ml-1 mr-1 text-justify` : `row mt-4 fs-18 text-justify`} dangerouslySetInnerHTML={{ __html: PostData.postData.postDescription }} />
+                    <div className={isMobile ? `row fw-mid fc-link fs-15 ml-1 my-4` : `row fw-mid fc-link fs-15 my-4`}> {PostData.postData.subcategoryname.replaceAll(',', ' | ')} </div>
                     <hr />
                     {/* publication information */}
                     {PostData.publicationData !== null && <>
-                        <div className={isMobile ? `row fs-28 ff-lora fw-bold mt-4 ml-2` : `row fs-24 mt-4 fw-bold ff-lora`}>Published In</div>
+                        <div className={isMobile ? `row fs-28 ff-lora fw-bold mt-4 ml-1` : `row fs-24 mt-4 fw-bold ff-lora`}>Published In</div>
                         <div className={isMobile ? 'row mx-2 mt-4' : 'row mt-4'}>
                             {PostData.publicationData.publicationImage !== undefined && PostData.publicationData.publicationImage !== null &&
                                 <img className="my-auto cursor-pointer" onClick={() => router.push(`${PostData.publicationData.penName.charAt(0) === '@' ? PostData.publicationData.penName.substring(1) : PostData.publicationData.penName}`)}
@@ -165,7 +165,7 @@ const PostDetail = (props) => {
                                 </div>}
                             />
                         </div>
-                        <div className={isMobile ? `row fs-18 mt-4 ml-2 mr-1 text-justify` : `row mt-4 fs-18 text-justify`}> {PostData.publicationData.description} </div>
+                        <div className={isMobile ? `row fs-18 mt-4 mx-1 text-justify` : `row mt-4 fs-18 text-justify`}> {PostData.publicationData.description} </div>
                     </>}
                 </div>
                 {/* call to action bottom pannel for mobile view and free thinkly only, using modal popup for desktop view(header) */}
@@ -192,14 +192,18 @@ const PostDetail = (props) => {
                 {isMobile ? <div className="row d-flex pt-3 px-7">
                     <img src={'/paidthinkly.png'} alt="paid thinkly" style={{ width: '40px', height: '40px' }} />
                     <p className="fs-24 fw-bold fc-white ml-2"> This is a premium post </p>
-                    <div className="row d-flex pt-3 pl-3">
-                        <img src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage}
-                            alt="profile" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '5px' }} />
-                        <ListItemText className="ml-3" style={{ marginTop: '-5px' }} primary={<span className="fc-white fs-12">PUBLISHED IN </span>}
-                            secondary={<div>
-                                <p className="fc-white fw-mid-bold fs-20">{PostData.publicationData.publicationName}</p>
-                                <p className="fc-white fs-15">{PostData.publicationData.about}</p>
-                            </div>} />
+                    <div className="row d-flex pt-3">
+                        <div className="col-3">
+                            <img src={PostData.publicationData.publicationImage.charAt(0) === '@' ? PostData.publicationData.publicationImage.substring(1) : PostData.publicationData.publicationImage}
+                                alt="profile" style={{ width: '90px', height: '90px', objectFit: 'cover', borderRadius: '5px' }} />
+                        </div>
+                        <div className="col-9">
+                            <ListItemText style={{ marginTop: '-5px' }} primary={<span className="fc-white fs-12">PUBLISHED IN </span>}
+                                secondary={<div>
+                                    <p className="fc-white fw-mid-bold fs-20">{PostData.publicationData.publicationName}</p>
+                                    <p className="fc-white fs-15">{PostData.publicationData.about}</p>
+                                </div>} />
+                        </div>
                     </div>
                     <button className="subscribe-button mx-auto mt-3 px-2 fs-15" style={{ width: '100%' }} type='submit'>
                         {submitLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#ffa51d' }} /> : <>Subscribe @ &#x20b9;{PostData.publicationData.publicationPrice} {PostData.publicationData.publicationPlan[0].planName}</>}
@@ -215,8 +219,8 @@ const PostDetail = (props) => {
                                 alt="profile" style={{ width: '130px', height: '130px', objectFit: 'cover', borderRadius: '5px' }} />
                             <ListItemText className="my-auto ml-3" primary={<span className="fc-white fs-12">PUBLISHED IN </span>}
                                 secondary={<div>
-                                    <p className="fc-white fw-mid-bold fs-20">{PostData.publicationData.publicationName}</p>
-                                    <p className="fc-white fs-18">{PostData.publicationData.about}</p>
+                                    <p className="fc-white fw-mid-bold fs-18">{PostData.publicationData.publicationName}</p>
+                                    <p className="fc-white fs-15">{PostData.publicationData.about}</p>
                                     <button className="subscribe-button mt-2 px-2" style={{ width: '30%' }} type='submit'>
                                         {submitLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#ffa51d' }} /> : <>Subscribe @ &#x20b9;{PostData.publicationData.publicationPrice} {PostData.publicationData.publicationPlan[0].planName}</>}
                                     </button>

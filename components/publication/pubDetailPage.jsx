@@ -411,7 +411,8 @@ const PublicationDetailPage = (props) => {
 
     const handlePostView = (oldUrl, postID, postTitle) => {
         const title = postTitle.trimEnd()
-        const thinkly_title = title.replaceAll(' ', '-')
+        const title1 = title.replaceAll('?', '')
+        const thinkly_title = title1.replaceAll(' ', '-')
         if (typeof window !== "undefined") {
             window.open(`/${thinkly_title}/${postID}`, '_blank') // above commented codes are for new UI of thinkly detail page
         }

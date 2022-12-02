@@ -475,7 +475,7 @@ const NewPublication = (props) => {
                         <div className='text-center fs-18 fw-bold mb-3'> About {pageType !== undefined && pageType.charAt(0).toUpperCase() + pageType.slice(1)}  </div>
                         <div className='row d-flex mb-4'>
                             <div className='col-12 mx-auto'>
-                                <input type="text" minLength='2' maxLength='30' className='bottomline-textbox' id='publication_title'
+                                <input type="text" maxLength='30' className='bottomline-textbox' id='publication_title'
                                     placeholder={pageType === 'course' ? 'E.g. "Yoga at home"' : 'Choose a catchy title (max 30 characters)'}
                                     value={pubName} onChange={(e) => setpubName(e.target.value)} />
                                 {pubName === '' && <div id="pubNameError" className='error-msg'></div>}
@@ -506,7 +506,7 @@ const NewPublication = (props) => {
                         <div className='text-center fs-18 fw-bold mb-3'> {pageType !== undefined && pageType.charAt(0).toUpperCase() + pageType.slice(1)} Description </div>
                         <div className='row mt-2'>
                             <h6 className='fs-15 fw-mid-bold mb-1'>What's it about?*</h6>
-                            <input type="text" id='pub-about' className='interest-textbox' minLength='2' maxLength='50' placeholder={pageType === 'course' ? 'E.g. "Flexibility,Fitness,Strenght,Weight-loss" (max 50 characters)' : 'E.g. "Fitness is forever" (max 50 characters)'}
+                            <input type="text" id='pub-about' className='interest-textbox' maxLength='50' placeholder={pageType === 'course' ? 'E.g. "Flexibility,Fitness,Strenght,Weight-loss" (max 50 characters)' : 'E.g. "Fitness is forever" (max 50 characters)'}
                                 value={shortDescription} onChange={(e) => setshortDescription(e.target.value)} />
                             {shortDescription === '' && <div id="shortDescriptionError" className='error-msg'></div>}
                         </div>
