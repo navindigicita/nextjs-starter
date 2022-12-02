@@ -170,7 +170,7 @@ const PublicationDetailPage = (props) => {
         arr.splice(0, 0, element);
         setAuthorList(arr)  //main author index switch last to start end here
         fetchSectionDetail(data.publicationID, data.createdBy) //function call
-        // fetchPublicationThinklies(data.publicationID, data.createdBy)  //function call
+        fetchPublicationThinklies(data.publicationID, data.createdBy)  //function call
         // fetchMorePubByAuthor(data.publicationID, data.createdBy)   //function call
         // const interestArray = [];
         // data.interestData.filter((obj) => {

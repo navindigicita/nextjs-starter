@@ -111,7 +111,7 @@ const PostDetail = (props) => {
                             {/* mulitple image slide show */}
                             {PostData.postData.postImages !== undefined && PostData.postData.postImages.length > 1 && <Carousel controls={false} interval={null}>
                                 {PostData.postData.postImages.map((obj) => (
-                                    <Carousel.Item>
+                                    <Carousel.Item className="mb-2">
                                         <img src={obj.charAt(0) === '@' ? obj.substring(1) : obj} alt="slider" />
                                     </Carousel.Item>
                                 ))}
@@ -132,7 +132,7 @@ const PostDetail = (props) => {
                     </div>}
                     {/* data from here */}
                     <div className={isMobile ? `row ml-2` : `row`}>
-                        <span className={isMobile ? `fw-bold ff-lora fs-30` : `fw-bold ff-lora fs-30 mt-4`} style={{ lineHeight: '1' }}> {PostData.postData.postTitle} </span>
+                        <span className='fw-bold ff-lora fs-30 mt-4' style={{ lineHeight: '1' }}> {PostData.postData.postTitle} </span>
                     </div>
                     <div className={isMobile ? "row d-flex mt-4 cursor-pointer ml-2" : "row d-flex mt-3 cursor-pointer"} onClick={() => router.push(`/${PostData.authorData.authorPenName.charAt(0) === '@' ? PostData.authorData.authorPenName.substring(1) : PostData.authorData.authorPenName}`)}>
                         <div className="my-auto">
@@ -174,9 +174,9 @@ const PostDetail = (props) => {
                         <div className="top-hr-colored"></div>
                         <div className="col-12 py-2">
                             <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
-                                secondary={<span className='fs-12'>Read all Thinklies and more on the App</span>} />
+                                secondary={<span className='fs-12'>Read this and more on the App</span>} />
                             <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }}>
-                                <a className="fc-white" href={process.env.NEXT_PUBLIC_DYNAMIC_OPEN_IN_APP + `https://thinkly.me/Thinkly/Post/Index/${PostData.postData.postID}`}>OPEN IN APP</a>
+                                <a className="fc-white" href={process.env.NEXT_PUBLIC_DYNAMIC_OPEN_IN_APP + `https://thinkly.me/Thinkly/Post/Index/${PostData.postData.postID}`}>Open In App</a>
                             </button>
                         </div>
                     </section>

@@ -59,7 +59,7 @@ const PublicationDetailMob = (props) => {
             arr.splice(0, 0, element);
             setAuthorList(arr)  //main author index switch last to start end here
             fetchSectionDetail(data.publicationID, data.createdBy) //function call
-            // fetchPublicationThinklies(data.publicationID, data.createdBy)  //function call
+            fetchPublicationThinklies(data.publicationID, data.createdBy)  //function call
             // fetchMorePubByAuthor(data.publicationID, data.createdBy)   //function call
             // const interestArray = [];
             // data.interestData.filter((obj) => {
@@ -467,13 +467,18 @@ const PublicationDetailMob = (props) => {
                 {isMobile && <div className="row">
                     <section className="bottom-section-mob">
                         <div className="top-hr-colored"></div>
-                        <div className="col-12 py-2">
-                            <ListItemText primary={<span className='fs-15 fw-bold'>Get The Thinkly App</span>}
-                                secondary={<span className='fs-12'>Read all Publications and more on the App</span>} />
-                            <button className='float-right downloadLink-button' style={{ marginTop: '-45px' }}>
-                                <a href={process.env.NEXT_PUBLIC_DYNAMIC_OPEN_IN_APP + `https://thinkly.me/${PublicationPenName}`}> OPEN IN APP </a>
-                            </button>
-                        </div>
+                        {PublicationDetails.publicationPayType === 'Paid' ?
+                            <div className="col-12 py-2">
+                                <form name="paymentGatewayrazorpay" onSubmit={handleSubmit(onSubmit)}>
+                                    <ListItemText primary={<span className='fs-15 fw-bold'>Subscribe to {PublicationDetails.publicationName}</span>}
+                                        secondary={<span className='fs-12'>&#x20b9;{PublicationDetails.publicationPrice} {PublicationDetails.publicationPlan[0].planName}</span>} />
+                                    <button type='submit' className='float-right downloadLink-button' style={{ marginTop: '-45px' }}> Subscribe </button>
+                                </form>
+                            </div> : <div className='col-12 py-2'>
+                                <ListItemText primary={<span className='fs-15 fw-bold'>Subscribe to {PublicationDetails.publicationName}</span>}
+                                    secondary={<span className='fs-12'>Subscribe for Free</span>} />
+                                <button type='submit' className='float-right downloadLink-button' data-toggle='modal' data-target='#userContactInfo' style={{ marginTop: '-45px' }}> Subscribe </button>
+                            </div>}
                     </section>
                 </div>}
             </> : <div className='grid place-items-center h-screen'>
