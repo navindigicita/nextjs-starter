@@ -27,6 +27,7 @@ const NewPublication = (props) => {
     const [shortDescription, setshortDescription] = useState('');
     const [description, setdescription] = useState('');
     const [webUrl, setwebUrl] = useState('');  //store publication pen  name
+    const [disabled, setDisabled] = useState(false); // to disable input
     const [privateView, setPrivateView] = useState(false) //store private view data true or false (as setcommentView in thinkly)
 
     const [subscriptionSlide, setsubscriptionSlide] = useState(false);
@@ -54,6 +55,7 @@ const NewPublication = (props) => {
             setaboutSlide(true) //call about data slide beacuse it's edit call
             setthinklyRemoteConfigData(props.thinklyRemoteConfigData)
         } else if (props.authorID !== undefined && props.label !== undefined) {
+            console.log("inside else if",props.label);
             setPageType(props.label)
             setAuthorID(props.authorID)
             $('#newPublication').modal('show')
@@ -85,6 +87,7 @@ const NewPublication = (props) => {
                     setshortDescription(response.about)  //short description of publication
                     setdescription(response.description)  //long description of publication
                     const penName_pub = response.publicationProfileUrl.substring(response.publicationProfileUrl.lastIndexOf('/') + 1)
+                    setDisabled(true);
                     setwebUrl(penName_pub)  //pename of publication
                     setPrivateView(response.isPrivate)  //store fetched boolean value for course's view
                     setPlanPrice(response.publicationPrice)  //plan price
@@ -95,19 +98,23 @@ const NewPublication = (props) => {
             })
     }
 
-    const closeFunction = () => {
+    const closeFunction = (e) => {
+        window.location.reload(false);
         if (publicationID !== 0) {
             props.onChangeCallback(false)
-        } else if (descriptionSlide || subscriptionSlide || InterestSlide) {
-            $('#closeConfirmation').modal('show')
+        } else if(e === e && descriptionSlide || subscriptionSlide || InterestSlide){
+            $('#closeConfirmation').modal('show')       
         }
         else {
-            clearAllState() //function call for clear all state
-            // if (!descriptionSlide) {
-            $('#newPublication').modal('hide')
-            window.location.reload();
+        console.log("inside else closeFunction");
+        $('#newPublication').modal('hide')
+        clearAllState() //function call for clear all state
+        setPageType(props.label)
+        // window.location.reload(false);
+        setwelcomeSlide(true)
+            // if(successSlide){
+            // window.location.reload(false);
             // }
-            setwelcomeSlide(true)
         }
     }
 
@@ -134,7 +141,6 @@ const NewPublication = (props) => {
         clearAllState()
         $('#closeConfirmation').modal('hide')
         window.location.reload(false);
-
     }
 
     const hideWelcomeAndShowAbout = () => {
@@ -205,7 +211,6 @@ const NewPublication = (props) => {
     }
 
     const hideDescriptionAndShowPlan = () => {
-        console.log(ImageNames);
         setLoader(false)
         if (shortDescription === '') {
             document.getElementById('shortDescriptionError').innerHTML = `please Enter about the ${pageType}`
@@ -443,7 +448,7 @@ const NewPublication = (props) => {
         <div id="newPublication" class="modal fade in" tabIndex={-1} role="dialog" data-backdrop="static">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content modal-background">
-                    <button type="button" class="close text-right pr-2" onClick={() => closeFunction()} >&times;</button>
+                    <button type="button" class="close text-right pr-2"  onClick={() => closeFunction()} >&times;</button>
                     {welcomeSlide ? <div class="modal-body px-5">
                         <h6 className='text-center fs-18 fw-bold'>Create Your {pageType !== undefined && pageType.charAt(0).toUpperCase() + pageType.slice(1)}</h6>
                         <p className='text-center fs-15 mb-2'> Thinkly provides a one stop solution for all your {pageType} needs.</p>
@@ -523,7 +528,7 @@ const NewPublication = (props) => {
                             <ListItemText primary={<h6 className='fs-15 fw-bold'>{pageType === 'course' ? 'Unique Web Link*' : 'Web Link*'}</h6>}
                                 secondary={<h6 className='fs-12'>Unique url for your {pageType}. Choose wisely! This cannot be changed after the {pageType} is created.</h6>} />
 
-                            <input type="text" className='interest-textbox' maxLength={15} value={webUrl} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px' }} disabled={publicationID > 0 ? true : false} />
+                            <input type="text" className='interest-textbox' maxLength={15} value={webUrl} disabled={disabled} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px', cursor: disabled ? 'not-allowed' : 'pointer' }} />
                             <span className='fixed-text-input'>www.thinkly.me/</span>
 
                             {(webUrl === '' || webUrl.length === 0) && <div id="UrlError" className='error-msg'></div>}
@@ -649,10 +654,12 @@ const NewPublication = (props) => {
                 <div className="modal-content">
                     <button type="button" className="close text-right pr-2" data-dismiss="modal">&times;</button>
                     <div className="modal-body">
-                        <p className='text-center fs-22 fw-bold'>Are you sure you want to close this modal?</p>
-                        <p className='text-center mb-5'>If you select OK then you will lose all data</p>
+                        <p className='text-center fs-22 fw-mid-bold'>Are you sure you want to close this modal?</p>
+                        <p className='text-center fs-18 mb-5'>If you select Ok then you will lose all data</p>
                         <div className="text-center d-flex justify-content-center">
-                            <button className='primary-border-button mr-4' data-dismiss="modal" onClick={() => setDescriptionSlide(true)}>Cancel</button>
+                            {/* <button className='primary-border-button mr-4' data-dismiss="modal" onClick={() => setDescriptionSlide(true)}>Cancel</button>
+                            <button className='primary-bg-button' onClick={() => handleOkClose()}>Ok</button> */}
+                            <button className='primary-border-button mr-4' data-dismiss="modal" onClick={(e) => closeFunction(e)}>Cancel</button>
                             <button className='primary-bg-button' onClick={() => handleOkClose()}>Ok</button>
                         </div>
                     </div>

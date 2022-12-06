@@ -79,6 +79,9 @@ const NewThinkly = (props) => {
     const [inputValue, setInputValue] = useState(moment().format("DD-MM-YYYY hh:mm A"));  //scheduler
     const [enableScheduleButton, setEnableScheduleButton] = useState(false) //to show/hide schedule ok button
     const [showScheduled, setShowScheduled] = useState(false)  //to hide/show scheduler dateTime on Interest slide(also api call)
+    // const [disabled, setdisabled] = useState(false)
+    const [bool1, setBool1] = useState(false);
+    const [bool2, setBool2] = useState(false);
 
     useEffect(() => {
         if (props.thinklyID !== undefined && props.authorID !== undefined && props.thinklyRemoteConfigData !== undefined) {
@@ -657,6 +660,8 @@ const NewThinkly = (props) => {
     }
 
     const hideInterestAndShowSuccess = (event) => {
+        // setdisabled(true)
+        setBool1(true); //disable button 1
         if (arrayList.length === 0 && arrayList.length < 1) {
             document.getElementById('NoInterestError').innerHTML = 'Interest should be greater than 0'
         } else if (arrayList.length > 3) {
@@ -829,6 +834,8 @@ const NewThinkly = (props) => {
     }
 
     const backToSeettingOrContent = () => {
+        // setdisabled(true)
+        setBool2(true); //disable button 2
         if (thinklyRemoteConfigJson !== undefined && thinklyRemoteConfigJson.contest.length > 0) {
             setInterestSlide(false)
             setsettingSlide(true)
@@ -1087,8 +1094,8 @@ const NewThinkly = (props) => {
                         {arrayList.length === 0 && arrayList.length < 1 && <div id="NoInterestError" className='error-msg text-center'></div>}
                         {arrayList.length > 3 && <div id="InterestError" className='error-msg text-center'></div>}
                         <div className='text-center my-4'>
-                            <button className='primary-border-button mr-4' onClick={() => backToSeettingOrContent()}> BACK </button>
-                            <button className='height-button primary-bg-color fc-white fw-mid' disabled={publishLoader} style={{ width: '40%', border: "transparent", borderTopLeftRadius: "4px", borderBottomLeftRadius: "4px" }} onClick={() => hideInterestAndShowSuccess()}>
+                            <button className='primary-border-button mr-4' disabled={bool1} onClick={() => backToSeettingOrContent()}> BACK </button>
+                            <button className='height-button primary-bg-color fc-white fw-mid' disabled={bool2} style={{ width: '40%', border: "transparent", borderTopLeftRadius: "4px", borderBottomLeftRadius: "4px" }} onClick={() => hideInterestAndShowSuccess()}>
                                 {publishLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#fff' }} /> : showScheduled ? 'Schedule Publish' : 'Publish'}
                             </button>
                             {/* schedule button */}
