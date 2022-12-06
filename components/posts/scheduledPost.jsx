@@ -101,6 +101,7 @@ const ScheduledPost = (props) => {
             .then((res) => {
                 if (res.data.responseCode === '00') {
                     const response = res.data.responseData.ThinklyDetails
+                    fetchScheduledList(AuthorID)
                     fetchPublicationDetailByID(response)
                 }
             })
@@ -119,6 +120,7 @@ const ScheduledPost = (props) => {
         Axios.get(`${BASE_URL_THINKLY}Publication/GetPublicationDetailsByID/${response.PublicationID}`, config)
             .then((res) => {
                 if (res.data.responseCode === '00') {
+                    console.log("inside Publication/GetPublicationDetailsByID",res.data);
                     const pubDetail = res.data.responseData
                     insertUpdateDraft(response, pubDetail)
                 }

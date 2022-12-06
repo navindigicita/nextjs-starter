@@ -84,7 +84,6 @@ const Draft = (props) => {
     }
 
     const handleEditButton = (id) => {
-        console.log("inside", id);
         setDraftId(id)
         setEditDraft(true)
     }

@@ -107,7 +107,6 @@ const NewPublication = (props) => {
             $('#closeConfirmation').modal('show')       
         }
         else {
-<<<<<<< HEAD
         console.log("inside else closeFunction");
         $('#newPublication').modal('hide')
         clearAllState() //function call for clear all state
@@ -116,12 +115,6 @@ const NewPublication = (props) => {
         setwelcomeSlide(true)
             // if(successSlide){
             // window.location.reload(false);
-=======
-            clearAllState() //function call for clear all state
-            // if (!descriptionSlide) {
-            $('#newPublication').modal('hide')
-            window.location.reload();
->>>>>>> 806d187b4b79b1f5beca2fdb03f5da10ef49737b
             // }
         }
     }
@@ -536,11 +529,7 @@ const NewPublication = (props) => {
                             <ListItemText primary={<h6 className='fs-15 fw-bold'>{pageType === 'course' ? 'Unique Web Link*' : 'Web Link*'}</h6>}
                                 secondary={<h6 className='fs-12'>Unique url for your {pageType}. Choose wisely! This cannot be changed after the {pageType} is created.</h6>} />
 
-<<<<<<< HEAD
                             <input type="text" className='interest-textbox' maxLength={15} value={webUrl} disabled={disabled} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px', cursor: disabled ? 'not-allowed' : 'pointer' }} />
-=======
-                            <input type="text" className='interest-textbox' maxLength={15} value={webUrl} onChange={(e) => fetchPenName(e)} style={{ paddingLeft: '124px' }} disabled={publicationID > 0 ? true : false} />
->>>>>>> 806d187b4b79b1f5beca2fdb03f5da10ef49737b
                             <span className='fixed-text-input'>www.thinkly.me/</span>
 
                             {(webUrl === '' || webUrl.length === 0) && <div id="UrlError" className='error-msg'></div>}

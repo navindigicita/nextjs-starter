@@ -100,6 +100,14 @@ const RedeemModal = (props) => {
             });
     }
 
+    useEffect(() => {
+        console.log("inside useEffect");
+        if(UserBalance !== undefined){
+            props.onChangeCallback(authorID)//recall for bal reflection
+            props.onChangeCallback1(authorID)
+        }
+    }, [UserBalance])
+    
     const handleRedeemNowModal = (Stars, CatalogueID, index, CatalogueName) => {
         setCouponStarCount(Stars)
         setCouponCatID(CatalogueID)
@@ -111,9 +119,9 @@ const RedeemModal = (props) => {
         $('#redeemNowModal').modal('hide')
         $('#redeemModal').modal('hide')
         // forceUpdate();
-        props.onChangeCallback(authorID)//recall for bal reflection
-        props.onChangeCallback1(authorID)
-        window.location.reload(false);
+        // props.onChangeCallback(authorID)//recall for bal reflection
+        // props.onChangeCallback1(authorID)
+        // window.location.reload(false);
     }
 
     return (<>
