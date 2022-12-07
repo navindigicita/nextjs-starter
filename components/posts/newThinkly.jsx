@@ -73,15 +73,15 @@ const NewThinkly = (props) => {
     const [draftID, setdraftID] = useState(0)
     const [thinklyURL, setthinklyURL] = useState()  //storing thinkly url from create thinkly api response
     const [copyLinkMsg, setcopyLinkMsg] = useState(false) //text copy statement hide and show
-    const [thinklyRemoteConfigJson, setthinklyRemoteConfigJson] = useState() //sotre props data of remote config
+    const [thinklyRemoteConfigJson, setthinklyRemoteConfigJson] = useState() //store props data of remote config
 
     const [selectedDate, setSeclectedDate] = useState(moment()); //scheduler
     const [inputValue, setInputValue] = useState(moment().format("DD-MM-YYYY hh:mm A"));  //scheduler
     const [enableScheduleButton, setEnableScheduleButton] = useState(false) //to show/hide schedule ok button
     const [showScheduled, setShowScheduled] = useState(false)  //to hide/show scheduler dateTime on Interest slide(also api call)
-    // const [disabled, setdisabled] = useState(false)
-    const [bool1, setBool1] = useState(false);
-    const [bool2, setBool2] = useState(false);
+
+    const [disabledBackBtn, setdisabledBackBtn] = useState(true) //to show/hide schedule Back button(interest slide)
+    const [disabledSchduleDropdown, setdisabledSchduleDropdown] = useState(true) //to show/hide schedule drop down(interest slide)
 
     useEffect(() => {
         if (props.thinklyID !== undefined && props.authorID !== undefined && props.thinklyRemoteConfigData !== undefined) {
@@ -246,13 +246,11 @@ const NewThinkly = (props) => {
             clearAllSlideCatch() //catch clear function call(state clearance)
             if (successSlide) {
                 window.location.reload(false);
-                // router.push('/Thinkly')
             }
             setselectTypeSlide(true)
             $('#createThinkly').modal('hide')
             { newThinklyID !== 0 && props.onChangeCallback(false) }
             // props.onChangeCallback(false)
-            { }
         }
     }
 
@@ -299,7 +297,7 @@ const NewThinkly = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                DeviceID: '123456',
+                DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,//'123456',
                 UserID: author_id
             },
             data: {
@@ -409,7 +407,7 @@ const NewThinkly = (props) => {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                "DeviceID": "1234523434654523466",
+                "DeviceID": process.env.NEXT_PUBLIC_DEVICE_ID,//"1234523434654523466",
                 "UserID": LoggedInID
             },
             data: {
@@ -496,7 +494,7 @@ const NewThinkly = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                DeviceID: "123456",
+                DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,//"123456",
                 UserID: LoggedInID,
                 contentType: 'application/json'
             },
@@ -531,7 +529,7 @@ const NewThinkly = (props) => {
                     $('#draftModal').modal('hide')
                     $('#createThinkly').modal('hide')
                     clearAllSlideCatch()  //to clear all data from popup
-                    //window.location.reload(false);
+                    window.location.reload(false);
                 }
             })
             .catch((err) => {
@@ -660,13 +658,15 @@ const NewThinkly = (props) => {
     }
 
     const hideInterestAndShowSuccess = (event) => {
-        // setdisabled(true)
-        setBool1(true); //disable button 1
+        // setdisabledSchduleDropdown(false) //disable schedule later dropdown
+        // setdisabledBackBtn(false)  //disable back button
         if (arrayList.length === 0 && arrayList.length < 1) {
             document.getElementById('NoInterestError').innerHTML = 'Interest should be greater than 0'
         } else if (arrayList.length > 3) {
             document.getElementById('InterestError').innerHTML = 'Interest should be less than or equal to 3'
         } else {
+            setdisabledBackBtn(false)  //disable back button
+            setdisabledSchduleDropdown(false) //disable schedule later dropdown
             setpublishLoader(true)
             var contentDataType = ""
             if (PostType === 'Blog') {
@@ -685,7 +685,7 @@ const NewThinkly = (props) => {
         var config = {
             method: 'POST',
             headers: {
-                DeviceID: "123456",
+                DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,//"123456",
                 UserID: LoggedInID,
                 contentType: 'application/json'
             },
@@ -736,7 +736,7 @@ const NewThinkly = (props) => {
             var config = {
                 method: 'POST',
                 headers: {
-                    DeviceID: "123456",
+                    DeviceID: process.env.NEXT_PUBLIC_DEVICE_ID,//"123456",
                     UserID: LoggedInID,
                     contentType: 'application/json'
                 },
@@ -774,6 +774,7 @@ const NewThinkly = (props) => {
                         $('#createThinkly').modal('hide')
                         setselectTypeSlide(true)
                         clearAllSlideCatch()
+                        window.location.reload(false);//to refresh page
                     }
                 })
                 .catch((err) => {
@@ -834,8 +835,6 @@ const NewThinkly = (props) => {
     }
 
     const backToSeettingOrContent = () => {
-        // setdisabled(true)
-        setBool2(true); //disable button 2
         if (thinklyRemoteConfigJson !== undefined && thinklyRemoteConfigJson.contest.length > 0) {
             setInterestSlide(false)
             setsettingSlide(true)
@@ -846,14 +845,15 @@ const NewThinkly = (props) => {
     }
 
     const handleScheduleSend = () => {
+        setdisabledBackBtn(false)  //disable cancel button
         $('#scheduleModal').modal('hide')
         setShowScheduled(true)
+
     }
 
     const handleDateTime = (date, value) => {
         setSeclectedDate(date); //to show on picker
         setInputValue(value) //selected date and time also show on picker
-
         var todaysDateTime = new Date()  //current datetime
         // todaysDateTime.setTime(todaysDateTime.getTime() + 1 * 60 * 60 * 1000);  // Now Add 1 hours to todaysDateTime and set estimated time for comparision
         todaysDateTime.setTime(todaysDateTime.getMinutes() + 5)
@@ -1094,16 +1094,29 @@ const NewThinkly = (props) => {
                         {arrayList.length === 0 && arrayList.length < 1 && <div id="NoInterestError" className='error-msg text-center'></div>}
                         {arrayList.length > 3 && <div id="InterestError" className='error-msg text-center'></div>}
                         <div className='text-center my-4'>
-                            <button className='primary-border-button mr-4' disabled={bool1} onClick={() => backToSeettingOrContent()}> BACK </button>
-                            <button className='height-button primary-bg-color fc-white fw-mid' disabled={bool2} style={{ width: '40%', border: "transparent", borderTopLeftRadius: "4px", borderBottomLeftRadius: "4px" }} onClick={() => hideInterestAndShowSuccess()}>
+                            {/* <button className='primary-border-button mr-4' onClick={() => backToSeettingOrContent()}> BACK </button> */}
+                            {!disabledBackBtn ? <button style={{ cursor: 'not-allowed' }} className='fw-mid fc-white border-radius-4 border-none bg-gray fs-20 text-center w-40 height-button mr-4'>BACK</button> :
+                                <button className='primary-border-button mr-4' onClick={() => backToSeettingOrContent()}>BACK</button>}
+
+                            <button className='height-button primary-bg-color fc-white fw-mid' style={{ width: '40%', border: "transparent", borderTopLeftRadius: "4px", borderBottomLeftRadius: "4px" }} onClick={() => hideInterestAndShowSuccess()}>
                                 {publishLoader ? <CircularProgress style={{ width: '20px', height: '20px', color: '#fff' }} /> : showScheduled ? 'Schedule Publish' : 'Publish'}
                             </button>
                             {/* schedule button */}
-                            <button className='height-button primary-bg-color fc-white fw-mid dropdown-toggle' id='drop' style={{ width: "6%", border: "transparent", borderLeft: "1px solid #fff", borderBottomRightRadius: "4px", borderTopRightRadius: "4px" }} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></button>
+
+                            {/* <button className='height-button primary-bg-color fc-white fw-mid dropdown-toggle' id='drop' style={{ width: "6%", border: "transparent", borderLeft: "1px solid #fff", borderBottomRightRadius: "4px", borderTopRightRadius: "4px" }} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></button>
                             <ul className="dropdown-menu" id='schedule' style={{ backgroundColor: "#ffe7cc", border: "none" }} >
                                 <li data-target="#scheduleModal" data-toggle="modal">Schedule for later</li>
-                            </ul>
+                            </ul> */}
+                            {!disabledSchduleDropdown ? <> <button className='height-button bg-gray fc-white fw-mid dropdown-toggle' id='drop' style={{ width: "6%", border: "transparent", borderLeft: "1px solid #fff", borderBottomRightRadius: "4px", borderTopRightRadius: "4px", cursor: 'not-allowed' }} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></button>
+                                <ul className="dropdown-menu" id='schedule' style={{ border: "none" }} >
+                                    <li data-target="#scheduleModal" data-toggle="modal">Schedule for later</li>
+                                </ul></> : <><button className='height-button primary-bg-color fc-white fw-mid dropdown-toggle' id='drop' style={{ width: "6%", border: "transparent", borderLeft: "1px solid #fff", borderBottomRightRadius: "4px", borderTopRightRadius: "4px" }} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></button>
+                                <ul className="dropdown-menu" id='schedule' style={{ backgroundColor: "#ffe7cc", border: "none" }} >
+                                    <li data-target="#scheduleModal" data-toggle="modal">Schedule for later</li>
+                                </ul></>}
+
                         </div>
+                        {/* Show or hide Schedule */}
                         {showScheduled && <div className='row d-flex'>
                             <p className='mx-auto my-auto'>Scheduled to be published on <b>{inputValue}</b></p>
                             <button type='button' class='close' style={{ marginRight: '2.5rem' }} onClick={() => CancelSchedule()}>&times;</button>
@@ -1123,10 +1136,10 @@ const NewThinkly = (props) => {
         </div>
 
         {/* schedule Modal */}
-        <div id="scheduleModal" class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content modal-background">
-                    <button type="button" class="close text-right pr-2" data-dismiss="modal">&times;</button>
+        <div id="scheduleModal" className="modal fade in" tabindex="-1" role="dialog" data-backdrop="static">
+            <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content modal-background">
+                    <button type="button" className="close text-right pr-2" data-dismiss="modal">&times;</button>
                     <div className="modal-body py-1 px-5">
                         <p className='text-center fs-22 fw-bold'>Schedule for later</p>
                         <p className='text-center fw-mid fs-18 mt-1'>Please select date and time </p>
@@ -1144,7 +1157,9 @@ const NewThinkly = (props) => {
                             </MuiPickersUtilsProvider>
                         </div>
                         <div className='text-center my-3'>
-                            <button className='primary-border-button mr-4 w-30' data-dismiss="modal">Cancel</button>
+                            {/* <button className='primary-border-button mr-4 w-30' data-dismiss="modal">Cancel</button> */}
+                            {!disabledBackBtn ? <button style={{ cursor: 'not-allowed' }} className='fw-mid fc-white border-radius-4 border-none bg-lightgray fs-20 text-center w-40 height-button mr-4'>Cancel</button> :
+                                <button className='primary-border-button mr-4  w-30' data-dismiss="modal" >Cancel</button>}
                             {!enableScheduleButton ? <button style={{ cursor: 'not-allowed' }} className='fw-mid fc-white border-radius-4 border-none bg-lightgray fs-20 text-center w-30 height-button'>Ok</button> :
                                 <button className='primary-bg-button w-30' onClick={() => handleScheduleSend()}>Ok</button>}
                         </div>
