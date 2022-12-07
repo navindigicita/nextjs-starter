@@ -1107,9 +1107,9 @@ const NewThinkly = (props) => {
                             <ul className="dropdown-menu" id='schedule' style={{ backgroundColor: "#ffe7cc", border: "none" }} >
                                 <li data-target="#scheduleModal" data-toggle="modal">Schedule for later</li>
                             </ul> */}
-                            {!disabledSchduleDropdown ? <> <button className='height-button bg-gray fc-white fw-mid dropdown-toggle' id='drop' style={{ width: "6%", border: "transparent", borderLeft: "1px solid #fff", borderBottomRightRadius: "4px", borderTopRightRadius: "4px", cursor: 'not-allowed' }} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></button>
+                            {!disabledSchduleDropdown ? <> <button className='height-button bg-gray fc-white fw-mid dropdown-toggle' id='drop' style={{ width: "6%", border: "transparent", borderLeft: "1px solid #fff", borderBottomRightRadius: "4px", borderTopRightRadius: "4px", cursor: 'not-allowed' }}  aria-haspopup="true" aria-expanded="false" ></button>
                                 <ul className="dropdown-menu" id='schedule' style={{ border: "none" }} >
-                                    <li data-target="#scheduleModal" data-toggle="modal">Schedule for later</li>
+                                    {/* <li data-target="#scheduleModal" data-toggle="modal">Schedule for later</li> */}
                                 </ul></> : <><button className='height-button primary-bg-color fc-white fw-mid dropdown-toggle' id='drop' style={{ width: "6%", border: "transparent", borderLeft: "1px solid #fff", borderBottomRightRadius: "4px", borderTopRightRadius: "4px" }} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></button>
                                 <ul className="dropdown-menu" id='schedule' style={{ backgroundColor: "#ffe7cc", border: "none" }} >
                                     <li data-target="#scheduleModal" data-toggle="modal">Schedule for later</li>
